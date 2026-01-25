@@ -5,8 +5,15 @@ const UrgencyBanner: React.FC = () => {
     background: 'linear-gradient(90deg, #00F0FF 0%, #00F0FF 100%)',
     padding: '10px 20px',
     textAlign: 'center',
-    position: 'relative',
-    zIndex: 1000,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 101,
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
 
   const textStyle: React.CSSProperties = {

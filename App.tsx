@@ -54,6 +54,7 @@ function App() {
         <div style={styles.gridOverlay} />
         <div style={styles.content}>
           <UrgencyBanner />
+          <div style={{ height: '40px' }} /> {/* Spacer for fixed banner */}
           <Navbar />
           <main>
             <Routes>

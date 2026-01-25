@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
 
   const navStyle: React.CSSProperties = {
     position: 'fixed',
-    top: 0,
+    top: scrolled ? 0 : 40, // Account for urgency banner
     left: 0,
     right: 0,
     zIndex: 100,

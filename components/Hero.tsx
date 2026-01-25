@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PERSONAL_INFO } from '../constants';
-import { ArrowDownRight, Github, Linkedin } from 'lucide-react';
+import { ArrowDownRight, Github, Linkedin, Music2 } from 'lucide-react';
 
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -189,14 +189,14 @@ const Hero: React.FC = () => {
       {/* Social links */}
       <div style={socialLinksStyle} className="hide-mobile">
         <a
-          href="https://github.com/jojiShiotsuki"
+          href="https://tiktok.com/@_shiotsuki"
           target="_blank"
           rel="noopener noreferrer"
           style={socialLinkStyle}
           onMouseEnter={(e) => { e.currentTarget.style.color = '#00F0FF'; e.currentTarget.style.transform = 'translateX(4px)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
         >
-          <Github size={20} />
+          <Music2 size={20} />
         </a>
         <a
           href="https://linkedin.com/in/jojishiotsuki"
@@ -207,6 +207,16 @@ const Hero: React.FC = () => {
           onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
         >
           <Linkedin size={20} />
+        </a>
+        <a
+          href="https://github.com/jojiShiotsuki"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={socialLinkStyle}
+          onMouseEnter={(e) => { e.currentTarget.style.color = '#00F0FF'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+        >
+          <Github size={20} />
         </a>
         <div style={{ width: '1px', height: '60px', background: 'rgba(245, 240, 232, 0.2)' }} />
       </div>

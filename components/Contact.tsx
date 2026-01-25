@@ -128,8 +128,8 @@ const Contact: React.FC = () => {
         </h2>
 
         <p style={descStyle}>
-          Whether you need a high-performance WordPress site or a custom application,
-          I'm ready to help you hit your goals.
+          Ready to turn your website into a lead-generating machine?
+          Let's talk about how I can help you get more customers.
         </p>
 
         <div style={ctaContainerStyle}>

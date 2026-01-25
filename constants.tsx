@@ -20,8 +20,8 @@ export const PERSONAL_INFO = {
   role: "Senior WordPress Developer & Software Engineer",
   email: "jojishiotsuki0@gmail.com",
   location: "Cebu, Philippines",
-  tagline: "I Build High-Performance Websites That Turn Visitors Into Revenue.",
-  subHeadline: "Helping construction, real estate, and e-commerce businesses scale in the US, Australia and Philippines through SEO-first development and custom software solutions.",
+  tagline: "I Build Websites That Generate Leads While You Sleep.",
+  subHeadline: "Helping construction, real estate, and e-commerce businesses in the US, Australia and Philippines turn their websites into 24/7 lead generation machines through SEO-first development.",
   availability: "Available for projects"
 };
 
@@ -46,37 +46,37 @@ export const SERVICES: Service[] = [
   {
     id: 'wordpress',
     title: 'Custom WordPress Dev',
-    description: 'Bespoke themes and plugins using Bricks, Elementor, or Divi. No bloat, just speed and conversion-focused design.',
+    description: 'Lead-generating websites built with Bricks, Elementor, or Divi. Fast-loading, conversion-optimized, and designed to turn visitors into paying customers.',
     icon: Layout
   },
   {
     id: 'webapp',
     title: 'Full-Stack Applications',
-    description: 'When WordPress isn\'t enough. Custom React/Node.js applications for complex business logic, portals, and SaaS products.',
+    description: 'Custom React/Node.js applications for complex business needs. Portals, dashboards, and SaaS products that scale with your growth.',
     icon: Code2
   },
   {
     id: 'seo',
     title: 'SEO & Performance',
-    description: 'Technical SEO and core web vitals optimization to ensure you rank locally and load instantly on all devices.',
+    description: 'Dominate local search and get found by customers ready to buy. Technical SEO that puts you on page 1 and keeps you there.',
     icon: LineChart
   },
   {
     id: 'ecommerce',
     title: 'E-commerce Solutions',
-    description: 'High-converting WooCommerce stores optimized for sales, integrated with payment gateways and inventory systems.',
+    description: 'WooCommerce stores built to sell. Optimized checkout flows, abandoned cart recovery, and integrations that maximize every transaction.',
     icon: ShoppingCart
   },
   {
     id: 'maintenance',
     title: 'Maintenance & Support',
-    description: 'Keep your business secure. Regular updates, backups, and security monitoring so you never face downtime.',
+    description: 'Never lose a lead to downtime. 24/7 monitoring, automatic backups, and security updates so your site keeps generating revenue.',
     icon: Wrench
   },
   {
     id: 'ai',
     title: 'AI Integrations',
-    description: 'Leverage OpenAI and Anthropic to automate customer support, content generation, and data analysis.',
+    description: 'Automate lead follow-up, customer support, and content creation. AI that works while you focus on closing deals.',
     icon: Bot
   }
 ];

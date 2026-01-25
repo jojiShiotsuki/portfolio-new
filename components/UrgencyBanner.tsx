@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const UrgencyBanner: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY < 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const bannerStyle: React.CSSProperties = {
     background: 'linear-gradient(90deg, #00F0FF 0%, #00F0FF 100%)',
     padding: '10px 20px',
     textAlign: 'center',
     position: 'fixed',
-    top: 0,
+    top: isVisible ? 0 : -40,
     left: 0,
     right: 0,
     zIndex: 101,
@@ -14,6 +24,7 @@ const UrgencyBanner: React.FC = () => {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    transition: 'top 0.3s ease',
   };
 
   const textStyle: React.CSSProperties = {

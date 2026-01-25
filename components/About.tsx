@@ -147,7 +147,7 @@ const About: React.FC = () => {
     { icon: Target, value: '600+', label: 'Days Sober', color: '#00F0FF' },
     { icon: Dumbbell, value: 'Daily', label: 'Gym & Running', color: '#FF6B4A' },
     { icon: Award, value: 'Continuous', label: 'Learning', color: '#00F0FF' },
-    { icon: MapPin, value: 'Global', label: 'US & PH Clients', color: '#FF6B4A' },
+    { icon: MapPin, value: 'Global', label: 'US, AU & PH Clients', color: '#FF6B4A' },
   ];
 
   return (

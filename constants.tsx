@@ -1,14 +1,15 @@
-import { 
-  Github, 
-  Linkedin, 
-  Globe, 
-  Instagram, 
-  Code2, 
-  Layout, 
-  LineChart, 
-  ShoppingCart, 
-  Wrench, 
-  Bot 
+import {
+  Github,
+  Linkedin,
+  Globe,
+  Instagram,
+  Code2,
+  Layout,
+  LineChart,
+  ShoppingCart,
+  Wrench,
+  Bot,
+  Music2
 } from 'lucide-react';
 import { NavItem, SocialLink, Project, Experience, Service } from './types';
 
@@ -32,6 +33,7 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const SOCIAL_LINKS: SocialLink[] = [
+  { platform: 'TikTok', url: 'https://tiktok.com/@jojishiotsuki', icon: Music2 },
   { platform: 'LinkedIn', url: 'https://linkedin.com/in/jojishiotsuki', icon: Linkedin },
   { platform: 'GitHub', url: 'https://github.com/jojiShiotsuki', icon: Github },
   { platform: 'Website', url: 'https://jojishiotsuki.com', icon: Globe },

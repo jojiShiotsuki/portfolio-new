@@ -21,7 +21,7 @@ export const PERSONAL_INFO = {
   email: "jojishiotsuki0@gmail.com",
   location: "Cebu, Philippines",
   tagline: "I Build High-Performance Websites That Turn Visitors Into Revenue.",
-  subHeadline: "Helping construction, real estate, and e-commerce businesses scale in the US and Philippines through SEO-first development and custom software solutions.",
+  subHeadline: "Helping construction, real estate, and e-commerce businesses scale in the US, Australia and Philippines through SEO-first development and custom software solutions.",
   availability: "Available for projects"
 };
 

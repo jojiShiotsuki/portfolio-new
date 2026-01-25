@@ -33,7 +33,7 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { platform: 'TikTok', url: 'https://tiktok.com/@jojishiotsuki', icon: Music2 },
+  { platform: 'TikTok', url: 'https://tiktok.com/@_shiotsuki', icon: Music2 },
   { platform: 'LinkedIn', url: 'https://linkedin.com/in/jojishiotsuki', icon: Linkedin },
   { platform: 'GitHub', url: 'https://github.com/jojiShiotsuki', icon: Github },
   { platform: 'Website', url: 'https://jojishiotsuki.com', icon: Globe },

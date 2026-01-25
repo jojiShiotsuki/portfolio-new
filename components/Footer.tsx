@@ -2,35 +2,110 @@ import React from 'react';
 import { SOCIAL_LINKS, PERSONAL_INFO } from '../constants';
 
 const Footer: React.FC = () => {
-  return (
-    <footer className="bg-slate-950 border-t border-slate-900 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          
-          <div className="text-center md:text-left">
-            <span className="font-bold text-xl text-white tracking-tighter">
-              JS<span className="text-primary-500">.</span>
-            </span>
-            <p className="text-slate-500 text-sm mt-2">
-              © {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.
-            </p>
-          </div>
+  const footerStyle: React.CSSProperties = {
+    padding: '48px',
+    background: '#0a0a0a',
+    borderTop: '1px solid rgba(245, 240, 232, 0.05)',
+  };
 
-          <div className="flex space-x-6">
-            {SOCIAL_LINKS.map((social) => (
-              <a
-                key={social.platform}
-                href={social.url}
-                target="_blank"
-                rel="noreferrer"
-                className="text-slate-400 hover:text-white transition-colors"
-                aria-label={social.platform}
-              >
-                <social.icon size={20} />
-              </a>
-            ))}
+  const containerStyle: React.CSSProperties = {
+    maxWidth: '1400px',
+    margin: '0 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '24px',
+  };
+
+  const logoStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '14px',
+    fontWeight: 700,
+    color: '#00F0FF',
+    letterSpacing: '2px',
+  };
+
+  const copyrightStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '11px',
+    color: 'rgba(245, 240, 232, 0.3)',
+    letterSpacing: '1px',
+    marginTop: '8px',
+  };
+
+  const socialContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    gap: '24px',
+    alignItems: 'center',
+  };
+
+  const socialLinkStyle: React.CSSProperties = {
+    color: 'rgba(245, 240, 232, 0.4)',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '40px',
+    height: '40px',
+    border: '1px solid rgba(245, 240, 232, 0.1)',
+  };
+
+  const dividerStyle: React.CSSProperties = {
+    width: '1px',
+    height: '24px',
+    background: 'rgba(245, 240, 232, 0.1)',
+  };
+
+  const creditsStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '10px',
+    color: 'rgba(245, 240, 232, 0.2)',
+    letterSpacing: '1px',
+    textTransform: 'uppercase',
+  };
+
+  return (
+    <footer style={footerStyle}>
+      <div style={containerStyle}>
+        <div>
+          <div style={logoStyle}>
+            <span style={{ color: '#FF6B4A' }}>[</span>
+            JOJI.DEV
+            <span style={{ color: '#FF6B4A' }}>]</span>
           </div>
-          
+          <div style={copyrightStyle}>
+            &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}
+          </div>
+        </div>
+
+        <div style={socialContainerStyle}>
+          {SOCIAL_LINKS.map((social) => (
+            <a
+              key={social.platform}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={socialLinkStyle}
+              aria-label={social.platform}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#00F0FF';
+                e.currentTarget.style.borderColor = '#00F0FF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)';
+                e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.1)';
+              }}
+            >
+              <social.icon size={18} />
+            </a>
+          ))}
+
+          <div style={dividerStyle} />
+
+          <div style={creditsStyle}>
+            Cebu, Philippines
+          </div>
         </div>
       </div>
     </footer>

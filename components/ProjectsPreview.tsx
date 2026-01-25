@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
-import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
+import { Github, ArrowUpRight, ArrowRight } from 'lucide-react';
 
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -227,7 +228,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   );
 };
 
-const Projects: React.FC = () => {
+const ProjectsPreview: React.FC = () => {
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
     background: '#0a0a0a',
@@ -240,6 +241,11 @@ const Projects: React.FC = () => {
 
   const headerStyle: React.CSSProperties = {
     marginBottom: '80px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexWrap: 'wrap',
+    gap: '24px',
   };
 
   const labelStyle: React.CSSProperties = {
@@ -263,28 +269,101 @@ const Projects: React.FC = () => {
     color: '#f5f0e8',
   };
 
+  const viewAllStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '13px',
+    color: '#f5f0e8',
+    textDecoration: 'none',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    padding: '16px 32px',
+    border: '1px solid rgba(245, 240, 232, 0.2)',
+    transition: 'all 0.3s ease',
+  };
+
+  // Only show first 2 projects on homepage
+  const previewProjects = PROJECTS.slice(0, 2);
+
   return (
     <section id="projects" style={sectionStyle}>
       <div style={containerStyle}>
         <div style={headerStyle}>
-          <div style={labelStyle}>
-            <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
-            Selected Work
+          <div>
+            <div style={labelStyle}>
+              <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+              Selected Work
+            </div>
+            <h2 style={titleStyle}>
+              Featured<br />
+              <span style={{ color: 'transparent', WebkitTextStroke: '2px #FF6B4A' }}>Projects</span>
+            </h2>
           </div>
-          <h2 style={titleStyle}>
-            Featured<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: '2px #FF6B4A' }}>Projects</span>
-          </h2>
+
+          <Link
+            to="/projects"
+            style={viewAllStyle}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#00F0FF';
+              e.currentTarget.style.color = '#00F0FF';
+              e.currentTarget.style.background = 'rgba(0, 240, 255, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+              e.currentTarget.style.color = '#f5f0e8';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            View All Projects
+            <ArrowRight size={16} />
+          </Link>
         </div>
 
         <div>
-          {PROJECTS.map((project, index) => (
+          {previewProjects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
+        </div>
+
+        {/* CTA to view all */}
+        <div style={{ textAlign: 'center', marginTop: '80px' }}>
+          <Link
+            to="/projects"
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              fontSize: '14px',
+              fontWeight: 700,
+              color: '#0a0a0a',
+              background: '#00F0FF',
+              padding: '20px 48px',
+              textDecoration: 'none',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '12px',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#f5f0e8';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 10px 40px rgba(0, 240, 255, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#00F0FF';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            Explore All {PROJECTS.length} Projects
+            <ArrowRight size={18} />
+          </Link>
         </div>
       </div>
     </section>
   );
 };
 
-export default Projects;
+export default ProjectsPreview;

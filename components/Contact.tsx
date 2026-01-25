@@ -1,55 +1,177 @@
 import React from 'react';
-import Button from './Button';
 import { PERSONAL_INFO } from '../constants';
-import { Mail, Calendar, ArrowRight } from 'lucide-react';
+import { Mail, ArrowUpRight } from 'lucide-react';
 
 const Contact: React.FC = () => {
+  const sectionStyle: React.CSSProperties = {
+    padding: '200px 48px',
+    background: '#0a0a0a',
+    position: 'relative',
+    overflow: 'hidden',
+  };
+
+  const containerStyle: React.CSSProperties = {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    textAlign: 'center',
+    position: 'relative',
+    zIndex: 1,
+  };
+
+  const labelStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '12px',
+    color: '#00F0FF',
+    letterSpacing: '4px',
+    textTransform: 'uppercase',
+    marginBottom: '32px',
+  };
+
+  const titleStyle: React.CSSProperties = {
+    fontFamily: "'Syne', sans-serif",
+    fontSize: 'clamp(48px, 8vw, 100px)',
+    fontWeight: 800,
+    lineHeight: 1,
+    letterSpacing: '-3px',
+    color: '#f5f0e8',
+    marginBottom: '32px',
+  };
+
+  const descStyle: React.CSSProperties = {
+    fontFamily: "'Syne', sans-serif",
+    fontSize: '20px',
+    lineHeight: 1.7,
+    color: 'rgba(245, 240, 232, 0.5)',
+    maxWidth: '600px',
+    margin: '0 auto 64px',
+  };
+
+  const ctaContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '24px',
+    flexWrap: 'wrap',
+  };
+
+  const primaryCtaStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '14px',
+    fontWeight: 700,
+    color: '#0a0a0a',
+    background: '#00F0FF',
+    padding: '24px 48px',
+    textDecoration: 'none',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  };
+
+  const secondaryCtaStyle: React.CSSProperties = {
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '14px',
+    fontWeight: 400,
+    color: '#f5f0e8',
+    background: 'transparent',
+    padding: '24px 48px',
+    textDecoration: 'none',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
+    border: '1px solid rgba(245, 240, 232, 0.2)',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  };
+
+  const emailDisplayStyle: React.CSSProperties = {
+    marginTop: '80px',
+    fontFamily: "'Space Mono', monospace",
+    fontSize: '14px',
+    color: 'rgba(245, 240, 232, 0.3)',
+    letterSpacing: '2px',
+  };
+
   return (
-    <section id="contact" className="py-24 bg-gradient-to-b from-slate-900 to-slate-950">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        
-        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-          Ready to scale your business?
+    <section id="contact" style={sectionStyle}>
+      {/* Background elements */}
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '800px',
+        height: '800px',
+        background: 'radial-gradient(circle, rgba(0, 240, 255, 0.03) 0%, transparent 60%)',
+        pointerEvents: 'none',
+      }} />
+      <div style={{
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        right: '0',
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent)',
+      }} />
+
+      <div style={containerStyle}>
+        <div style={labelStyle}>Get In Touch</div>
+
+        <h2 style={titleStyle}>
+          Let's Build<br />
+          <span style={{ color: 'transparent', WebkitTextStroke: '2px #00F0FF' }}>Together</span>
         </h2>
-        <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
-          Whether you need a high-performance WordPress site or a custom application, 
+
+        <p style={descStyle}>
+          Whether you need a high-performance WordPress site or a custom application,
           I'm ready to help you hit your goals.
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-6">
-          <a 
-            href={`mailto:${PERSONAL_INFO.email}`} 
-            className="flex items-center justify-center gap-3 p-8 bg-slate-800 rounded-2xl border border-slate-700 hover:border-primary-500/50 hover:bg-slate-800/80 transition-all group w-full sm:w-auto"
+        <div style={ctaContainerStyle}>
+          <a
+            href={`mailto:${PERSONAL_INFO.email}`}
+            style={primaryCtaStyle}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#f5f0e8';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 240, 255, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#00F0FF';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
           >
-            <div className="h-12 w-12 rounded-full bg-slate-900 flex items-center justify-center text-primary-400 group-hover:scale-110 transition-transform">
-              <Mail size={24} />
-            </div>
-            <div className="text-left">
-              <p className="text-sm text-slate-400">Email Me</p>
-              <p className="text-lg font-bold text-white">{PERSONAL_INFO.email}</p>
-            </div>
+            <Mail size={18} />
+            Send Email
           </a>
-
-          <a 
-            href="#" 
-            className="flex items-center justify-center gap-3 p-8 bg-gradient-to-br from-primary-900/20 to-accent-900/20 rounded-2xl border border-primary-500/30 hover:border-primary-500/60 transition-all group w-full sm:w-auto"
+          <a
+            href="https://linkedin.com/in/jojishiotsuki"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={secondaryCtaStyle}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#FF6B4A';
+              e.currentTarget.style.color = '#FF6B4A';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+              e.currentTarget.style.color = '#f5f0e8';
+            }}
           >
-             <div className="h-12 w-12 rounded-full bg-primary-600 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-              <Calendar size={24} />
-            </div>
-            <div className="text-left">
-              <p className="text-sm text-primary-200">Book a Call</p>
-              <p className="text-lg font-bold text-white">Free Consultation</p>
-            </div>
+            Connect on LinkedIn
+            <ArrowUpRight size={18} />
           </a>
         </div>
-        
-        <div className="mt-16 p-6 bg-slate-900/50 rounded-lg inline-block border border-slate-800">
-            <p className="text-slate-500 text-sm">
-                Looking for the agency site? Visit <a href="https://sparkyourdesigns.com" className="text-primary-400 hover:underline">Spark Your Designs</a>
-            </p>
-        </div>
 
+        <div style={emailDisplayStyle}>
+          {PERSONAL_INFO.email}
+        </div>
       </div>
     </section>
   );

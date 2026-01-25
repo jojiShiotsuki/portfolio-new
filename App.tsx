@@ -8,6 +8,8 @@ import ProjectsPreview from './components/ProjectsPreview';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectsPage from './components/ProjectsPage';
+import UrgencyBanner from './components/UrgencyBanner';
+import StickyCTA from './components/StickyCTA';
 
 const styles: Record<string, React.CSSProperties> = {
   app: {
@@ -51,6 +53,7 @@ function App() {
       <div style={styles.app}>
         <div style={styles.gridOverlay} />
         <div style={styles.content}>
+          <UrgencyBanner />
           <Navbar />
           <main>
             <Routes>
@@ -59,6 +62,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <StickyCTA />
         </div>
       </div>
     </BrowserRouter>

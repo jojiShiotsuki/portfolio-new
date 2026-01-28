@@ -67,7 +67,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
 
   const descStyle: React.CSSProperties = {
     fontFamily: "'Syne', sans-serif",
-    fontSize: '16px',
+    fontSize: '18px',
     lineHeight: 1.8,
     color: 'rgba(245, 240, 232, 0.5)',
     marginBottom: '32px',

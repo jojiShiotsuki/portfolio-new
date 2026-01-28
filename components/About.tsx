@@ -42,7 +42,7 @@ const About: React.FC = () => {
 
   const textStyle: React.CSSProperties = {
     fontFamily: "'Syne', sans-serif",
-    fontSize: '17px',
+    fontSize: '18px',
     lineHeight: 1.9,
     color: 'rgba(245, 240, 232, 0.5)',
     marginBottom: '24px',

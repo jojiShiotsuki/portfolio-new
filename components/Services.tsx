@@ -45,7 +45,7 @@ const Services: React.FC = () => {
 
   const descriptionStyle: React.CSSProperties = {
     fontFamily: "'Syne', sans-serif",
-    fontSize: '18px',
+    fontSize: '20px',
     lineHeight: 1.8,
     color: 'rgba(245, 240, 232, 0.5)',
     maxWidth: '500px',
@@ -97,7 +97,7 @@ const Services: React.FC = () => {
 
   const cardDescStyle: React.CSSProperties = {
     fontFamily: "'Syne', sans-serif",
-    fontSize: '15px',
+    fontSize: '16px',
     lineHeight: 1.7,
     color: 'rgba(245, 240, 232, 0.4)',
   };

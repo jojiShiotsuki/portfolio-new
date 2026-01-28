@@ -70,7 +70,7 @@ const ChatBot: React.FC = () => {
   const containerStyle: React.CSSProperties = {
     position: 'fixed',
     bottom: '24px',
-    right: '24px',
+    left: '24px',
     zIndex: 1000,
     fontFamily: "'Syne', sans-serif",
   };
@@ -92,7 +92,7 @@ const ChatBot: React.FC = () => {
   const chatWindowStyle: React.CSSProperties = {
     position: 'absolute',
     bottom: '80px',
-    right: '0',
+    left: '0',
     width: '360px',
     maxWidth: 'calc(100vw - 48px)',
     height: '500px',
@@ -242,7 +242,7 @@ const ChatBot: React.FC = () => {
             width: calc(100vw - 32px) !important;
             height: calc(100vh - 100px) !important;
             bottom: 70px !important;
-            right: -8px !important;
+            left: -8px !important;
           }
         }
       `}</style>

@@ -9,7 +9,6 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectsPage from './components/ProjectsPage';
 import UrgencyBanner from './components/UrgencyBanner';
-import StickyCTA from './components/StickyCTA';
 import ChatBot from './components/ChatBot';
 
 const styles: Record<string, React.CSSProperties> = {
@@ -64,7 +63,6 @@ function App() {
             </Routes>
           </main>
           <Footer />
-          <StickyCTA />
           <ChatBot />
         </div>
       </div>

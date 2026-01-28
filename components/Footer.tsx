@@ -66,9 +66,9 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer style={footerStyle}>
-      <div style={containerStyle}>
-        <div>
+    <footer style={footerStyle} className="site-footer">
+      <div style={containerStyle} className="footer-container">
+        <div className="footer-brand">
           <div style={logoStyle}>
             <span style={{ color: '#FF6B4A' }}>[</span>
             JOJI.DEV
@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div style={socialContainerStyle}>
+        <div style={socialContainerStyle} className="footer-social">
           {SOCIAL_LINKS.map((social) => (
             <a
               key={social.platform}
@@ -101,13 +101,43 @@ const Footer: React.FC = () => {
             </a>
           ))}
 
-          <div style={dividerStyle} />
+          <div style={dividerStyle} className="footer-divider" />
 
-          <div style={creditsStyle}>
+          <div style={creditsStyle} className="footer-location">
             Cebu, Philippines
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .site-footer {
+            padding: 32px 24px !important;
+          }
+          .footer-container {
+            flex-direction: column !important;
+            text-align: center !important;
+            gap: 24px !important;
+          }
+          .footer-social {
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            gap: 16px !important;
+          }
+          .footer-divider {
+            display: none !important;
+          }
+          .footer-location {
+            width: 100% !important;
+            margin-top: 8px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .site-footer {
+            padding: 24px 16px !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 };

@@ -55,11 +55,16 @@ const StickyCTA: React.FC = () => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className="sticky-cta">
       <style>{`
         @keyframes pulse {
           0%, 100% { transform: scale(1); opacity: 1; }
           50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        @media (max-width: 768px) {
+          .sticky-cta {
+            display: none !important;
+          }
         }
       `}</style>
       <a

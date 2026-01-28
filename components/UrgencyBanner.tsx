@@ -45,11 +45,32 @@ const UrgencyBanner: React.FC = () => {
   };
 
   return (
-    <div style={bannerStyle}>
-      <p style={textStyle}>
+    <div style={bannerStyle} className="urgency-banner">
+      <p style={textStyle} className="urgency-text">
         Currently booking for February
         <span style={highlightStyle}>2 SPOTS LEFT</span>
       </p>
+
+      <style>{`
+        @media (max-width: 480px) {
+          .urgency-banner {
+            padding: 8px 12px !important;
+            height: auto !important;
+            min-height: 36px !important;
+          }
+          .urgency-text {
+            font-size: 10px !important;
+            letter-spacing: 0.5px !important;
+            line-height: 1.4 !important;
+          }
+          .urgency-text span {
+            display: inline-block !important;
+            margin-left: 6px !important;
+            font-size: 9px !important;
+            padding: 2px 6px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

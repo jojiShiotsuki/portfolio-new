@@ -17,7 +17,11 @@
       "mcp__playwright__browser_press_key",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nUpdate experience section\n\n- Replace Best Roofing Now with Freelance Web Developer\n- Remove Shiotsuki Interior entry\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nFix hero text cutoff on mobile\n\nReduce font size and padding on smaller screens to prevent\n\"Experiences\" from being cut off\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix horizontal scroll on mobile\n\n- Add overflow-x: hidden to html and #root\n- Hide floating gradients and vertical text on mobile\n- Reduce padding on all sections for mobile viewports\n- Add responsive styles for About, Services, Contact, ProjectsPreview\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix horizontal scroll on mobile\n\n- Add overflow-x: hidden to html and #root\n- Hide floating gradients and vertical text on mobile\n- Reduce padding on all sections for mobile viewports\n- Add responsive styles for About, Services, Contact, ProjectsPreview\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_evaluate",
+      "WebSearch"
     ]
   }
 }

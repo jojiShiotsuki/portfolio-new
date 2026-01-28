@@ -289,6 +289,12 @@ const Hero: React.FC = () => {
       <style>{`
         @media (max-width: 768px) {
           .hide-mobile { display: none !important; }
+          #home { padding: 100px 24px 60px !important; }
+          #home h1 { font-size: clamp(36px, 12vw, 80px) !important; letter-spacing: -2px !important; }
+        }
+        @media (max-width: 480px) {
+          #home { padding: 90px 16px 50px !important; }
+          #home h1 { font-size: clamp(32px, 11vw, 60px) !important; letter-spacing: -1px !important; }
         }
       `}</style>
     </section>

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(copy \"C:\\\\Apps\\\\portfolio-new\\\\.playwright-mcp\\\\spark-your-designs-screenshot.png\" \"C:\\\\Apps\\\\portfolio-new\\\\public\\\\spark-your-designs-screenshot.png\")",
+      "mcp__playwright__browser_close",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Spark Your Designs to portfolio\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix broken project images with local screenshots\n\nReplace external image URLs with local screenshots for:\n- Pundok Studios\n- Knock Knock Heating & Cooling\n- Correct Electric\n- Abacus Home Services\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Trade Titans screenshot\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Maid To Please screenshot\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nUpdate testimonials and add YOU% Nutrition\n\n- Remove testimonials from Vertex and Maid To Please\n- Update Pundok Studios testimonial: Harley, Head Barber\n- Update Spark Your Designs testimonial: Noura, Head Graphic Designer\n- Add YOU% Nutrition project \\(pro bono, #1 SEO rankings\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npm run dev:*)",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_press_key",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nUpdate experience section\n\n- Replace Best Roofing Now with Freelance Web Developer\n- Remove Shiotsuki Interior entry\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix hero text cutoff on mobile\n\nReduce font size and padding on smaller screens to prevent\n\"Experiences\" from being cut off\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix horizontal scroll on mobile\n\n- Add overflow-x: hidden to html and #root\n- Hide floating gradients and vertical text on mobile\n- Reduce padding on all sections for mobile viewports\n- Add responsive styles for About, Services, Contact, ProjectsPreview\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}

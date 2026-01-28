@@ -173,6 +173,15 @@ const Contact: React.FC = () => {
           {PERSONAL_INFO.email}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          #contact { padding: 100px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          #contact { padding: 80px 16px !important; }
+        }
+      `}</style>
     </section>
   );
 };

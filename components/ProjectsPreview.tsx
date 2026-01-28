@@ -362,6 +362,15 @@ const ProjectsPreview: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          #projects { padding: 80px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          #projects { padding: 60px 16px !important; }
+        }
+      `}</style>
     </section>
   );
 };

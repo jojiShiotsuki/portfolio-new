@@ -243,6 +243,12 @@ const About: React.FC = () => {
             gap: 80px !important;
           }
         }
+        @media (max-width: 768px) {
+          #about { padding: 80px 24px !important; }
+        }
+        @media (max-width: 480px) {
+          #about { padding: 60px 16px !important; }
+        }
       `}</style>
     </section>
   );

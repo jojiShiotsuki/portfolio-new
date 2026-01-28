@@ -162,9 +162,13 @@ const Services: React.FC = () => {
           }
         }
         @media (max-width: 768px) {
+          #services { padding: 80px 24px !important; }
           .services-grid {
             grid-template-columns: 1fr !important;
           }
+        }
+        @media (max-width: 480px) {
+          #services { padding: 60px 16px !important; }
         }
       `}</style>
     </section>

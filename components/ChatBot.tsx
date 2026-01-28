@@ -6,7 +6,7 @@ interface Message {
   content: string;
 }
 
-const WORKER_URL = 'YOUR_CLOUDFLARE_WORKER_URL'; // Replace with your worker URL
+const WORKER_URL = 'https://gemini-proxy.shiotsuji1.workers.dev';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

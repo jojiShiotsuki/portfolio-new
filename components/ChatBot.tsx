@@ -237,10 +237,15 @@ const ChatBot: React.FC = () => {
       </button>
 
       <style>{`
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
+          .chatbot-container {
+            bottom: 24px !important;
+            right: 16px !important;
+          }
           .chatbot-container > div:first-child {
             width: calc(100vw - 32px) !important;
-            height: calc(100vh - 100px) !important;
+            height: 60vh !important;
+            max-height: 400px !important;
             bottom: 70px !important;
             right: -8px !important;
           }

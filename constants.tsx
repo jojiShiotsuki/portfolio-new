@@ -307,11 +307,11 @@ export const PROJECTS: Project[] = [
 
 export const EXPERIENCE: Experience[] = [
   {
-    id: 'best-roofing',
-    role: 'Full-Stack WordPress Developer',
-    company: 'Best Roofing Now',
+    id: 'freelance',
+    role: 'Freelance Web Developer & SEO Specialist',
+    company: 'Self-Employed',
     period: 'Oct 2024 - Present',
-    description: 'Driving web infrastructure and SEO strategy for a major roofing company.'
+    description: 'Building lead-generating websites and implementing SEO strategies for clients in construction, home services, and local businesses.'
   },
   {
     id: 'polianna',
@@ -326,13 +326,6 @@ export const EXPERIENCE: Experience[] = [
     company: '100Devs',
     period: 'Jun 2023 - May 2024',
     description: 'Intensive full-stack bootcamp mastering the MERN stack and software engineering principles.'
-  },
-  {
-    id: 'interior',
-    role: 'Flooring Specialist',
-    company: 'Shiotsuki Interior',
-    period: 'Mar 2022 - May 2023',
-    description: 'Gained deep construction industry insight while optimizing operational workflows.'
   },
   {
     id: 'toyota',

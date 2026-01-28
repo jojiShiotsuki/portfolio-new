@@ -127,7 +127,7 @@ const Services: React.FC = () => {
             </h2>
           </div>
           <p style={descriptionStyle}>
-            Technical excellence meets marketing strategy. I don't just write code; I build business assets that drive revenue.
+            Websites and web apps that help your business get found and make it easy for customers to reach you.
           </p>
         </div>
 

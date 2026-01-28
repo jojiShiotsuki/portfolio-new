@@ -128,8 +128,8 @@ const Contact: React.FC = () => {
         </h2>
 
         <p style={descStyle}>
-          Ready to turn your website into a lead-generating machine?
-          Let's talk about how I can help you get more customers.
+          Need a website or want to improve the one you have?
+          Send me a message and let's figure out what you need.
         </p>
 
         <div style={ctaContainerStyle}>

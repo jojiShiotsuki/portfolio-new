@@ -176,17 +176,16 @@ const About: React.FC = () => {
           </h2>
 
           <p style={textStyle}>
-            My path hasn't been linear, and that's my biggest asset. I started in leadership at{' '}
-            <span style={highlightStyle}>Toyota</span>, learning the importance of process and reliability.
+            I started in retail management at{' '}
+            <span style={highlightStyle}>Toyota</span>, then ran my own businesses before getting into web development.
           </p>
           <p style={textStyle}>
-            After running my own businesses and working in the construction industry, I realized most
-            businesses struggle to bridge the gap between "having a website" and{' '}
-            <span style={{ color: '#00F0FF' }}>"getting sales."</span>
+            Most businesses I've worked with have the same problem: they have a website, but it's not bringing in{' '}
+            <span style={{ color: '#00F0FF' }}>actual customers.</span>
           </p>
           <p style={textStyle}>
-            Now I combine <span style={{ color: '#FF6B4A', fontWeight: 700 }}>full-stack engineering</span> with
-            conversion psychology to build websites that actually drive revenue.
+            I focus on fixing that—building sites that <span style={{ color: '#FF6B4A', fontWeight: 700 }}>rank well</span> and
+            make it easy for people to get in touch.
           </p>
 
           <div style={statsGridStyle}>

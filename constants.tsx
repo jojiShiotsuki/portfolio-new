@@ -191,7 +191,7 @@ export const PROJECTS: Project[] = [
       author: "Client Testimonial",
       role: "Trade Titans Host"
     },
-    image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-81.png',
+    image: '/tradetitans-screenshot.png',
     link: 'https://tradetitans.live-website.com/'
   },
   {

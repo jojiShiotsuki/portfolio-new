@@ -264,7 +264,7 @@ export const PROJECTS: Project[] = [
       author: "Client Testimonial",
       role: "Maid To Please Owner"
     },
-    image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-90.png',
+    image: '/maidtoplease-screenshot.png',
     link: 'https://shirazr.sg-host.com/'
   },
   {

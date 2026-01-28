@@ -266,6 +266,28 @@ export const PROJECTS: Project[] = [
     },
     image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-90.png',
     link: 'https://shirazr.sg-host.com/'
+  },
+  {
+    id: 'spark-your-designs',
+    title: 'Spark Your Designs',
+    category: 'Websites',
+    description: 'A professional website for a Cebu-based web design and digital services company. Built to establish credibility and convert visitors into clients seeking custom web solutions.',
+    challenge: 'Spark Your Designs needed a website that would showcase their expertise in custom web design, branding, and SEO while building trust with potential clients. The site needed to clearly communicate their services and make it easy for businesses to get in touch.',
+    solution: 'Developed a clean, professional website that highlights their core services: custom website design, branding, SEO optimization, and e-commerce solutions. Implemented clear service descriptions, prominent contact information, and trust signals including client testimonials and a 4.9-star rating display.',
+    tech: ['WordPress', 'Custom Design', 'SEO', 'Responsive Design'],
+    results: [
+      'Professional online presence established for local web design agency',
+      'Clear service offerings for custom websites, branding, and SEO',
+      '4.9-star rating prominently featured for social proof',
+      'Streamlined contact flow for lead generation'
+    ],
+    testimonial: {
+      quote: "Clear, direct communication and a structured approach to project delivery. Our new website has generated measurable improvements in leads and sales.",
+      author: "Client Testimonial",
+      role: "Spark Your Designs"
+    },
+    image: '/spark-your-designs-screenshot.png',
+    link: 'https://syd.jojishiotsuki.com/'
   }
 ];
 

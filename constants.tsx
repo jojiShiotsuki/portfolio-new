@@ -147,7 +147,7 @@ export const PROJECTS: Project[] = [
       author: "Client Testimonial",
       role: "Pundok Studios Owner"
     },
-    image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-71-1.png',
+    image: '/pundok-screenshot.png',
     link: 'https://pundokstudios.com/'
   },
   {
@@ -169,7 +169,7 @@ export const PROJECTS: Project[] = [
       author: "Client Testimonial",
       role: "Knock Knock HVAC Owner"
     },
-    image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-84.png',
+    image: '/knockknock-screenshot.png',
     link: 'https://knockknockair.com/'
   },
   {
@@ -225,7 +225,7 @@ export const PROJECTS: Project[] = [
       'Clear user journeys for 3 distinct buyer personas',
       'Mobile-responsive design for on-site decision makers'
     ],
-    image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-69-1.png',
+    image: '/correct-electric-screenshot.png',
     link: 'https://key-customers-179321.framer.app/'
   },
   {
@@ -242,7 +242,7 @@ export const PROJECTS: Project[] = [
       'Service discovery simplified with visual card navigation',
       'Mobile-first design for urgent searches on any device'
     ],
-    image: 'https://jojishiotsuki.com/wp-content/uploads/2025/10/Untitled-design-78.png',
+    image: '/abacus-screenshot.png',
     link: 'https://diligent-vision-590775.framer.app/'
   },
   {

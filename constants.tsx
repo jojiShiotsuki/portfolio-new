@@ -308,7 +308,7 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCE: Experience[] = [
   {
     id: 'freelance',
-    role: 'Freelance WordPress & Web Development',
+    role: 'Freelance WordPress & Web Developer',
     company: 'Self-Employed',
     period: 'Oct 2024 - Present',
     description: 'Building lead-generating websites and implementing SEO strategies for clients in construction, home services, and local businesses.'

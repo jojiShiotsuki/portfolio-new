@@ -290,11 +290,26 @@ const Hero: React.FC = () => {
         @media (max-width: 768px) {
           .hide-mobile { display: none !important; }
           #home { padding: 100px 24px 60px !important; }
-          #home h1 { font-size: clamp(36px, 12vw, 80px) !important; letter-spacing: -2px !important; }
+          #home h1 {
+            font-size: clamp(32px, 10vw, 70px) !important;
+            letter-spacing: -1px !important;
+            line-height: 1 !important;
+          }
         }
         @media (max-width: 480px) {
           #home { padding: 90px 16px 50px !important; }
-          #home h1 { font-size: clamp(32px, 11vw, 60px) !important; letter-spacing: -1px !important; }
+          #home h1 {
+            font-size: clamp(28px, 9vw, 50px) !important;
+            letter-spacing: -1px !important;
+            line-height: 1.05 !important;
+          }
+        }
+        @media (max-width: 375px) {
+          #home h1 {
+            font-size: 28px !important;
+            letter-spacing: 0px !important;
+            line-height: 1.1 !important;
+          }
         }
       `}</style>
     </section>

@@ -98,11 +98,6 @@ export const PROJECTS: Project[] = [
       'Bulk import handles 500+ items in seconds',
       'Quarterly goal completion rate increased by 40%'
     ],
-    testimonial: {
-      quote: "Vertex transformed how I manage my entire workflow. The natural language parsing alone saves me hours every week.",
-      author: "Personal Project",
-      role: "Available for Demo"
-    },
     image: '/vertex-screenshot.png',
     github: 'https://github.com/jojiShiotsuki'
   },
@@ -144,8 +139,8 @@ export const PROJECTS: Project[] = [
     ],
     testimonial: {
       quote: "We went from hoping customers would find us to having a waitlist. Joji understood exactly what we needed to dominate local search.",
-      author: "Client Testimonial",
-      role: "Pundok Studios Owner"
+      author: "Harley",
+      role: "Head Barber"
     },
     image: '/pundok-screenshot.png',
     link: 'https://pundokstudios.com/'
@@ -259,11 +254,6 @@ export const PROJECTS: Project[] = [
       'Service area pages rank top 5 for 25+ local keywords',
       'Phone call volume decreased 40% (shifted to online booking)'
     ],
-    testimonial: {
-      quote: "After 30 years, we finally have a website that works as hard as we do. The booking calculator alone has transformed our business.",
-      author: "Client Testimonial",
-      role: "Maid To Please Owner"
-    },
     image: '/maidtoplease-screenshot.png',
     link: 'https://shirazr.sg-host.com/'
   },
@@ -283,11 +273,33 @@ export const PROJECTS: Project[] = [
     ],
     testimonial: {
       quote: "Clear, direct communication and a structured approach to project delivery. Our new website has generated measurable improvements in leads and sales.",
-      author: "Client Testimonial",
-      role: "Spark Your Designs"
+      author: "Noura",
+      role: "Head Graphic Designer"
     },
     image: '/spark-your-designs-screenshot.png',
     link: 'https://syd.jojishiotsuki.com/'
+  },
+  {
+    id: 'youpercent',
+    title: 'YOU% Nutrition',
+    category: 'Websites',
+    description: 'A pro bono website build for a nutrition and dietitian service in Cebu City. Includes 3 months of free SEO that achieved #1 rankings for key local keywords.',
+    challenge: 'YOU% Nutrition needed an online presence to reach clients seeking diet therapy, weight management, and exercise nutrition guidance. Without a website, they were invisible to potential clients searching for nutritionists in Cebu City.',
+    solution: 'Built a clean, conversion-focused WordPress website highlighting their virtual consultation services. Implemented a comprehensive 3-month SEO strategy targeting local keywords. Created service pages, a blog for content marketing, and clear CTAs for booking consultations.',
+    tech: ['WordPress', 'Local SEO', 'Content Strategy', 'Responsive Design'],
+    results: [
+      '#1 Google ranking for "nutritionist in Cebu City"',
+      '#1 ranking achieved on targeted blog post',
+      'Professional online presence established',
+      'Virtual consultation bookings enabled'
+    ],
+    testimonial: {
+      quote: "The entire process was very well laid out. From the very first call with them, we were already informed about what we could expect, the deliverables for each week, etc. I can confidently say that with their services, the site they will develop or optimize for you will definitely have improvements. Communication is also never an issue with these guys. Time-bounded, clear, direct, and easy to plan with.",
+      author: "Sam",
+      role: "Owner of YOU%"
+    },
+    image: '/youpercent-screenshot.png',
+    link: 'https://youpercent.com/'
   }
 ];
 

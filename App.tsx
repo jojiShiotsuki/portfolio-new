@@ -2,9 +2,12 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import About from './components/About';
+import Results from './components/Results';
 import Services from './components/Services';
+import HowItWorks from './components/HowItWorks';
+import WhoIWorkWith from './components/WhoIWorkWith';
 import ProjectsPreview from './components/ProjectsPreview';
+import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectsPage from './components/ProjectsPage';
@@ -41,7 +44,10 @@ const styles: Record<string, React.CSSProperties> = {
 const HomePage: React.FC = () => (
   <>
     <Hero />
+    <Results />
     <Services />
+    <HowItWorks />
+    <WhoIWorkWith />
     <ProjectsPreview />
     <About />
     <Contact />

@@ -74,6 +74,16 @@ const Footer: React.FC = () => {
             JOJI.DEV
             <span style={{ color: '#FF6B4A' }}>]</span>
           </div>
+          <div style={{
+            ...copyrightStyle,
+            fontSize: '12px',
+            color: 'rgba(245, 240, 232, 0.4)',
+            marginTop: '12px',
+            maxWidth: '400px',
+            lineHeight: 1.6,
+          }}>
+            I help Australian tradies get found on Google and generate leads.
+          </div>
           <div style={copyrightStyle}>
             &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}
           </div>
@@ -104,7 +114,7 @@ const Footer: React.FC = () => {
           <div style={dividerStyle} className="footer-divider" />
 
           <div style={creditsStyle} className="footer-location">
-            Cebu, Philippines
+            Australia | United States | Philippines
           </div>
         </div>
       </div>

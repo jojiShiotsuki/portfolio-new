@@ -1,6 +1,6 @@
 import React from 'react';
 import { EXPERIENCE } from '../constants';
-import { MapPin, Target, Award, Dumbbell } from 'lucide-react';
+import { MapPin, Clock, Award, Code2 } from 'lucide-react';
 
 const About: React.FC = () => {
   const sectionStyle: React.CSSProperties = {
@@ -144,10 +144,10 @@ const About: React.FC = () => {
   };
 
   const stats = [
-    { icon: Target, value: '600+', label: 'Days Sober', color: '#00F0FF' },
-    { icon: Dumbbell, value: 'Daily', label: 'Gym & Running', color: '#FF6B4A' },
-    { icon: Award, value: 'Continuous', label: 'Learning', color: '#00F0FF' },
-    { icon: MapPin, value: 'Global', label: 'US, AU & PH Clients', color: '#FF6B4A' },
+    { icon: Code2, value: '600+', label: 'Hours of Dev Experience', color: '#00F0FF' },
+    { icon: Clock, value: 'Daily', label: 'Updates to Skills', color: '#FF6B4A' },
+    { icon: Award, value: '#1', label: 'Google Rankings', color: '#00F0FF' },
+    { icon: MapPin, value: 'Global', label: 'AU, US & PH Clients', color: '#FF6B4A' },
   ];
 
   return (
@@ -171,21 +171,24 @@ const About: React.FC = () => {
             About
           </div>
           <h2 style={titleStyle}>
-            The<br />
-            <span style={{ color: '#00F0FF' }}>Journey</span>
+            Why Tradies<br />
+            <span style={{ color: '#00F0FF' }}>Trust Me</span>
           </h2>
 
           <p style={textStyle}>
-            I started in retail management at{' '}
-            <span style={highlightStyle}>Toyota</span>, then ran my own businesses before getting into web development.
+            I'm not just another web developer.
           </p>
           <p style={textStyle}>
-            Most businesses I've worked with have the same problem: they have a website, but it's not bringing in{' '}
-            <span style={{ color: '#00F0FF' }}>actual customers.</span>
+            I've spent <span style={highlightStyle}>2+ years working with a US roofing company</span>, so I understand the construction industry. I know tradies are busy running jobs — not messing around with websites.
           </p>
           <p style={textStyle}>
-            I focus on fixing that—building sites that <span style={{ color: '#FF6B4A', fontWeight: 700 }}>rank well</span> and
-            make it easy for people to get in touch.
+            That's why I handle everything:<br />
+            <span style={{ color: '#00F0FF' }}>No tech jargon.</span>{' '}
+            <span style={{ color: '#FF6B4A', fontWeight: 700 }}>No endless back-and-forth.</span>{' '}
+            Just a website that ranks and brings you customers.
+          </p>
+          <p style={textStyle}>
+            I've ranked local businesses <span style={{ color: '#00F0FF', fontWeight: 700 }}>#1 on Google</span>. I'll do the same for you.
           </p>
 
           <div style={statsGridStyle}>

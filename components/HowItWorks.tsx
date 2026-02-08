@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
-import { SERVICES } from '../constants';
+import { Search, PhoneCall, Rocket } from 'lucide-react';
 
-const Services: React.FC = () => {
-  const [hoveredService, setHoveredService] = useState<string | null>(null);
+const steps = [
+  {
+    id: 'audit',
+    number: '01',
+    icon: Search,
+    title: 'Free Website Audit',
+    description: 'I review your current website (or lack of one) and show you exactly what\'s hurting your Google rankings and costing you leads.',
+  },
+  {
+    id: 'strategy',
+    number: '02',
+    icon: PhoneCall,
+    title: 'Custom Strategy',
+    description: 'We jump on a quick call. I learn about your business and create a plan to get you ranking and generating leads.',
+  },
+  {
+    id: 'launch',
+    number: '03',
+    icon: Rocket,
+    title: 'Launch & Rank',
+    description: 'I build your new site in 2 weeks. You start showing up on Google. Customers start calling.',
+  },
+];
+
+const HowItWorks: React.FC = () => {
+  const [hoveredStep, setHoveredStep] = useState<string | null>(null);
 
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
+    background: '#0a0a0a',
     position: 'relative',
   };
 
   const containerStyle: React.CSSProperties = {
     maxWidth: '1400px',
     margin: '0 auto',
-  };
-
-  const headerStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '80px',
-    marginBottom: '100px',
-    alignItems: 'end',
   };
 
   const labelStyle: React.CSSProperties = {
@@ -41,14 +58,7 @@ const Services: React.FC = () => {
     lineHeight: 1,
     letterSpacing: '-2px',
     color: '#f5f0e8',
-  };
-
-  const descriptionStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
-    fontSize: '20px',
-    lineHeight: 1.8,
-    color: 'rgba(245, 240, 232, 0.5)',
-    maxWidth: '500px',
+    marginBottom: '80px',
   };
 
   const gridStyle: React.CSSProperties = {
@@ -62,12 +72,12 @@ const Services: React.FC = () => {
     background: isHovered ? '#141414' : '#0a0a0a',
     padding: '48px',
     transition: 'all 0.4s ease',
-    cursor: 'pointer',
+    cursor: 'default',
     position: 'relative',
     overflow: 'hidden',
   });
 
-  const cardNumberStyle: React.CSSProperties = {
+  const numberStyle: React.CSSProperties = {
     fontFamily: "'Space Mono', monospace",
     fontSize: '12px',
     color: 'rgba(245, 240, 232, 0.2)',
@@ -86,7 +96,7 @@ const Services: React.FC = () => {
     border: `1px solid ${isHovered ? '#00F0FF' : 'rgba(245, 240, 232, 0.1)'}`,
   });
 
-  const cardTitleStyle = (isHovered: boolean): React.CSSProperties => ({
+  const stepTitleStyle = (isHovered: boolean): React.CSSProperties => ({
     fontFamily: "'Syne', sans-serif",
     fontSize: '24px',
     fontWeight: 700,
@@ -95,7 +105,7 @@ const Services: React.FC = () => {
     transition: 'color 0.3s ease',
   });
 
-  const cardDescStyle: React.CSSProperties = {
+  const descStyle: React.CSSProperties = {
     fontFamily: "'Syne', sans-serif",
     fontSize: '16px',
     lineHeight: 1.7,
@@ -113,66 +123,50 @@ const Services: React.FC = () => {
   });
 
   return (
-    <section id="services" style={sectionStyle}>
+    <section id="how-it-works" style={sectionStyle}>
       <div style={containerStyle}>
-        <div style={headerStyle} className="services-header">
-          <div>
-            <div style={labelStyle}>
-              <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
-              Services
-            </div>
-            <h2 style={titleStyle}>
-              What I Build<br />
-              <span style={{ color: '#00F0FF' }}>for Tradies</span>
-            </h2>
-          </div>
-          <p style={descriptionStyle}>
-            Everything you need to get found on Google and turn website visitors into paying customers.
-          </p>
+        <div style={labelStyle}>
+          <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+          Process
         </div>
+        <h2 style={titleStyle}>
+          How It<br />
+          <span style={{ color: '#00F0FF' }}>Works</span>
+        </h2>
 
-        <div style={gridStyle} className="services-grid">
-          {SERVICES.map((service, index) => (
+        <div style={gridStyle} className="hiw-grid">
+          {steps.map((step) => (
             <div
-              key={service.id}
-              style={cardStyle(hoveredService === service.id)}
-              onMouseEnter={() => setHoveredService(service.id)}
-              onMouseLeave={() => setHoveredService(null)}
+              key={step.id}
+              style={cardStyle(hoveredStep === step.id)}
+              onMouseEnter={() => setHoveredStep(step.id)}
+              onMouseLeave={() => setHoveredStep(null)}
             >
-              <div style={cardNumberStyle}>0{index + 1}</div>
-              <div style={iconContainerStyle(hoveredService === service.id)}>
-                <service.icon size={28} />
+              <div style={numberStyle}>{step.number}</div>
+              <div style={iconContainerStyle(hoveredStep === step.id)}>
+                <step.icon size={28} />
               </div>
-              <h3 style={cardTitleStyle(hoveredService === service.id)}>{service.title}</h3>
-              <p style={cardDescStyle}>{service.description}</p>
-              <div style={accentLineStyle(hoveredService === service.id)} />
+              <h3 style={stepTitleStyle(hoveredStep === step.id)}>{step.title}</h3>
+              <p style={descStyle}>{step.description}</p>
+              <div style={accentLineStyle(hoveredStep === step.id)} />
             </div>
           ))}
         </div>
       </div>
 
       <style>{`
-        @media (max-width: 1024px) {
-          .services-header {
-            grid-template-columns: 1fr !important;
-            gap: 40px !important;
-          }
-          .services-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
         @media (max-width: 768px) {
-          #services { padding: 80px 24px !important; }
-          .services-grid {
+          #how-it-works { padding: 80px 24px !important; }
+          .hiw-grid {
             grid-template-columns: 1fr !important;
           }
         }
         @media (max-width: 480px) {
-          #services { padding: 60px 16px !important; }
+          #how-it-works { padding: 60px 16px !important; }
         }
       `}</style>
     </section>
   );
 };
 
-export default Services;
+export default HowItWorks;

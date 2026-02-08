@@ -3,12 +3,9 @@ import {
   Linkedin,
   Globe,
   Instagram,
-  Code2,
   Layout,
   LineChart,
-  ShoppingCart,
   Wrench,
-  Bot,
   Music2
 } from 'lucide-react';
 import { NavItem, SocialLink, Project, Experience, Service } from './types';
@@ -17,18 +14,18 @@ import { NavItem, SocialLink, Project, Experience, Service } from './types';
 
 export const PERSONAL_INFO = {
   name: "Joji Shiotsuki",
-  role: "Senior WordPress Developer & Software Engineer",
+  role: "Web Developer for Australian Tradies",
   email: "jojishiotsuki0@gmail.com",
   location: "Cebu, Philippines",
-  tagline: "I Build Websites That Actually Get You Customers.",
-  subHeadline: "Helping construction, real estate, and e-commerce businesses in the US, Australia and Philippines get more leads through websites that rank well and convert.",
+  tagline: "I Help Australian Tradies Get Found on Google",
+  subHeadline: "I build websites for roofers, plumbers, electricians, and builders that rank on Google and turn visitors into paying customers. No fluff. Just results.",
   availability: "Available for projects"
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'About', href: '#about' },
+  { label: 'Results', href: '#results' },
   { label: 'Services', href: '#services' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -44,40 +41,22 @@ export const SOCIAL_LINKS: SocialLink[] = [
 
 export const SERVICES: Service[] = [
   {
-    id: 'wordpress',
-    title: 'Custom WordPress Dev',
-    description: 'WordPress sites built with Bricks, Elementor, or Divi. Fast, clean, and designed to get you more inquiries.',
+    id: 'websites',
+    title: 'Lead-Generating Websites',
+    description: 'Custom WordPress websites built specifically for tradies. Mobile-friendly, fast-loading, and designed to turn visitors into calls. Your site will look professional and work 24/7 to bring you customers.',
     icon: Layout
   },
   {
-    id: 'webapp',
-    title: 'Full-Stack Applications',
-    description: 'Custom React/Node.js applications for when WordPress isn\'t enough. Portals, dashboards, and web apps.',
-    icon: Code2
-  },
-  {
     id: 'seo',
-    title: 'SEO & Performance',
-    description: 'Get found on Google when people search for what you do. Local SEO, technical fixes, and speed optimization.',
+    title: 'Get Found on Google',
+    description: 'What\'s the point of a website if no one finds it? I optimise your site so you show up when customers search "roofer near me" or "plumber [your city]". More visibility = more jobs.',
     icon: LineChart
-  },
-  {
-    id: 'ecommerce',
-    title: 'E-commerce Solutions',
-    description: 'WooCommerce stores that work. Clean checkout, cart recovery, and payment integrations set up properly.',
-    icon: ShoppingCart
   },
   {
     id: 'maintenance',
     title: 'Maintenance & Support',
-    description: 'Keep your site running. Monitoring, backups, security updates, and fixes when things break.',
+    description: 'I don\'t disappear after launch. Get ongoing support, updates, and tweaks to keep your site running smoothly. You focus on the jobs — I\'ll handle the website.',
     icon: Wrench
-  },
-  {
-    id: 'ai',
-    title: 'AI Integrations',
-    description: 'Chatbots, automated follow-ups, and AI tools to help with repetitive tasks.',
-    icon: Bot
   }
 ];
 
@@ -308,24 +287,24 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCE: Experience[] = [
   {
     id: 'freelance',
-    role: 'Freelance WordPress & Web Developer',
+    role: 'Freelance Web Developer for Tradies',
     company: 'Self-Employed',
     period: 'Oct 2024 - Present',
-    description: 'Building lead-generating websites and implementing SEO strategies for clients in construction, home services, and local businesses.'
+    description: 'Building lead-generating websites and implementing SEO strategies for tradies and construction businesses in Australia and the US.'
   },
   {
     id: 'polianna',
     role: 'Web Developer',
-    company: 'Polianna, LLC',
+    company: 'US Roofing Company',
     period: 'May 2024 - Oct 2024',
-    description: 'Specialized in SEO implementation and site speed optimization services.'
+    description: 'Website maintenance, development, and digital presence management for a US-based roofing company.'
   },
   {
     id: '100devs',
     role: 'Software Engineer',
     company: '100Devs',
     period: 'Jun 2023 - May 2024',
-    description: 'Intensive full-stack bootcamp mastering the MERN stack and software engineering principles.'
+    description: 'Full-stack development training mastering modern web technologies and software engineering principles.'
   },
   {
     id: 'toyota',

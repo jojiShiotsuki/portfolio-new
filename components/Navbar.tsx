@@ -100,10 +100,9 @@ const Navbar: React.FC = () => {
 
   // Navigation items - mix of hash links and route links
   const navItems = [
-    { label: 'About', href: isHomePage ? '#about' : '/#about', isRoute: !isHomePage },
+    { label: 'Results', href: isHomePage ? '#results' : '/#results', isRoute: !isHomePage },
     { label: 'Services', href: isHomePage ? '#services' : '/#services', isRoute: !isHomePage },
-    { label: 'Projects', href: '/projects', isRoute: true },
-    { label: 'Contact', href: isHomePage ? '#contact' : '/#contact', isRoute: !isHomePage },
+    { label: 'About', href: isHomePage ? '#about' : '/#about', isRoute: !isHomePage },
   ];
 
   return (
@@ -147,7 +146,7 @@ const Navbar: React.FC = () => {
             )
           ))}
           <a
-            href={`mailto:${PERSONAL_INFO.email}`}
+            href={isHomePage ? '#contact' : '/#contact'}
             style={ctaStyle}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#FF6B4A';
@@ -160,7 +159,7 @@ const Navbar: React.FC = () => {
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            Let's Talk
+            Free Audit
           </a>
         </div>
 
@@ -229,7 +228,7 @@ const Navbar: React.FC = () => {
             )
           ))}
           <a
-            href={`mailto:${PERSONAL_INFO.email}`}
+            href={isHomePage ? '#contact' : '/#contact'}
             onClick={() => setIsOpen(false)}
             style={{
               ...ctaStyle,
@@ -237,7 +236,7 @@ const Navbar: React.FC = () => {
               marginTop: '8px',
             }}
           >
-            Let's Talk
+            Free Audit
           </a>
         </div>
       )}

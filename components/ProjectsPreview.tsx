@@ -294,12 +294,22 @@ const ProjectsPreview: React.FC = () => {
           <div>
             <div style={labelStyle}>
               <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
-              Selected Work
+              Portfolio
             </div>
             <h2 style={titleStyle}>
-              Featured<br />
+              Other<br />
               <span style={{ color: 'transparent', WebkitTextStroke: '2px #FF6B4A' }}>Projects</span>
             </h2>
+            <p style={{
+              fontFamily: "'Syne', sans-serif",
+              fontSize: '18px',
+              lineHeight: 1.7,
+              color: 'rgba(245, 240, 232, 0.5)',
+              marginTop: '24px',
+              maxWidth: '500px',
+            }}>
+              While I specialise in tradie websites, here's some other work I've done showcasing my technical skills.
+            </p>
           </div>
 
           <Link

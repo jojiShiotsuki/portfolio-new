@@ -183,7 +183,7 @@ const Hero: React.FC = () => {
 
       {/* Vertical text */}
       <div style={verticalTextStyle} className="hide-mobile">
-        Available for Projects // 2024-2025
+        Available for Projects // 2025
       </div>
 
       {/* Social links */}
@@ -229,13 +229,13 @@ const Hero: React.FC = () => {
 
         <h1 style={headlineStyle}>
           <span style={{ animation: 'fadeInUp 0.8s ease-out 0.1s forwards', opacity: 0, display: 'block' }}>
-            Building
+            I Help
           </span>
           <span style={{ ...accentTextStyle, animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
-            Digital
+            Aussie Tradies
           </span>
           <span style={{ animation: 'fadeInUp 0.8s ease-out 0.3s forwards', opacity: 0, display: 'block' }}>
-            Experiences
+            Get Found
           </span>
         </h1>
 
@@ -258,11 +258,11 @@ const Hero: React.FC = () => {
               e.currentTarget.style.boxShadow = 'none';
             }}
           >
-            Start a Project
+            Get a Free Website Audit
             <ArrowDownRight size={18} />
           </a>
           <a
-            href="#projects"
+            href="#results"
             style={secondaryCtaStyle}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = '#00F0FF';
@@ -273,7 +273,7 @@ const Hero: React.FC = () => {
               e.currentTarget.style.color = '#f5f0e8';
             }}
           >
-            View Work
+            See My Results
           </a>
         </div>
       </div>

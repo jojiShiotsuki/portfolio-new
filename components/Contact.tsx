@@ -120,21 +120,20 @@ const Contact: React.FC = () => {
       }} />
 
       <div style={containerStyle}>
-        <div style={labelStyle}>Get In Touch</div>
+        <div style={labelStyle}>Let's Go</div>
 
         <h2 style={titleStyle}>
-          Let's Build<br />
-          <span style={{ color: 'transparent', WebkitTextStroke: '2px #00F0FF' }}>Together</span>
+          Ready to Get<br />
+          <span style={{ color: 'transparent', WebkitTextStroke: '2px #00F0FF' }}>More Leads?</span>
         </h2>
 
         <p style={descStyle}>
-          Need a website or want to improve the one you have?
-          Send me a message and let's figure out what you need.
+          Get a free website audit. I'll show you exactly what's stopping you from ranking on Google — and how to fix it.
         </p>
 
         <div style={ctaContainerStyle}>
           <a
-            href={`mailto:${PERSONAL_INFO.email}`}
+            href={`mailto:${PERSONAL_INFO.email}?subject=Free%20Website%20Audit%20Request`}
             style={primaryCtaStyle}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = '#f5f0e8';
@@ -148,7 +147,7 @@ const Contact: React.FC = () => {
             }}
           >
             <Mail size={18} />
-            Send Email
+            Get Your Free Audit
           </a>
           <a
             href="https://linkedin.com/in/jojishiotsuki"
@@ -170,7 +169,7 @@ const Contact: React.FC = () => {
         </div>
 
         <div style={emailDisplayStyle}>
-          {PERSONAL_INFO.email}
+          Or email me directly: {PERSONAL_INFO.email}
         </div>
       </div>
 

@@ -55,13 +55,21 @@ const HomePage: React.FC = () => (
 );
 
 function App() {
+  const [scrolled, setScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <BrowserRouter>
       <div style={styles.app}>
         <div style={styles.gridOverlay} />
         <div style={styles.content}>
           <UrgencyBanner />
-          <div style={{ height: '40px' }} /> {/* Spacer for fixed banner */}
+          <div style={{ height: scrolled ? '0px' : '40px', transition: 'height 0.3s ease' }} />
           <Navbar />
           <main>
             <Routes>

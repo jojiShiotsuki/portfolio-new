@@ -234,7 +234,7 @@ const Results: React.FC = () => {
   const stats = [
     { value: '#1', label: 'Google\nRanking\nAchieved' },
     { value: '60%', label: 'More\nWalk-ins &\nBookings' },
-    { value: '2+', label: 'Years in\nConstruction\nIndustry' },
+    { value: 'More', label: 'Inquiries\n& Bookings\nGenerated' },
     { value: '100%', label: 'Client\nSatisfaction' },
   ];
 
@@ -396,7 +396,110 @@ const Results: React.FC = () => {
           </div>
         </div>
 
-        {/* Case Study 2: US Roofing Company */}
+        {/* Case Study 2: You% Nutrition */}
+        <div style={{ ...caseStudyStyle, gridTemplateColumns: '1fr 1.2fr' }} className="results-case-study">
+          <div style={caseStudyContentStyle}>
+            <div style={caseStudyLabelStyle}>Case Study</div>
+            <h3 style={caseStudyTitleStyle}>You% Nutrition</h3>
+
+            <div style={detailStyle}>
+              <span style={detailLabelStyle}>Client:</span>
+              You% Nutrition (Health & Wellness Business)
+            </div>
+            <div style={detailStyle}>
+              <span style={detailLabelStyle}>Challenge:</span>
+              Website was too simple with poor usability — no clear booking buttons, limited pages, and low online exposure
+            </div>
+            <div style={resultHighlightStyle}>
+              Increased Google visibility and generated more inquiries & bookings (local + international)
+            </div>
+
+            <div style={{ marginTop: '24px' }}>
+              <a
+                href="https://youpercent.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "'Space Mono', monospace",
+                  fontSize: '11px',
+                  color: '#f5f0e8',
+                  textDecoration: 'none',
+                  letterSpacing: '2px',
+                  textTransform: 'uppercase',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 0',
+                  borderBottom: '1px solid rgba(245, 240, 232, 0.2)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#00F0FF';
+                  e.currentTarget.style.borderColor = '#00F0FF';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#f5f0e8';
+                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+                }}
+              >
+                View Live Site <ArrowUpRight size={14} />
+              </a>
+            </div>
+          </div>
+
+          <div style={imageContainerStyle}>
+            <img
+              src="/youpercent-screenshot.png"
+              alt="You% Nutrition website"
+              style={imageStyle}
+            />
+            <div style={captionStyle}>
+              <span style={{ flex: 1 }}>The You% Nutrition website — redesigned for better usability and conversions</span>
+            </div>
+          </div>
+        </div>
+
+        {/* You% Nutrition Testimonial */}
+        <div style={testimonialStyle} className="results-testimonial">
+          <Quote size={32} style={{ color: 'rgba(0, 240, 255, 0.2)', marginBottom: '20px' }} />
+          <p style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: '20px',
+            lineHeight: 1.8,
+            color: 'rgba(245, 240, 232, 0.7)',
+            fontStyle: 'italic',
+            marginBottom: '24px',
+          }}>
+            We had more inquiries and bookings due to the reach. They know their stuff but also learn about your business so they can project what you hope to achieve.
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '1px',
+              background: '#FF6B4A',
+            }} />
+            <div>
+              <div style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: '16px',
+                fontWeight: 700,
+                color: '#f5f0e8',
+              }}>
+                Owner
+              </div>
+              <div style={{
+                fontFamily: "'Space Mono', monospace",
+                fontSize: '11px',
+                color: '#FF6B4A',
+                letterSpacing: '1px',
+              }}>
+                You% Nutrition
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Case Study 3: US Roofing Company */}
         <div style={caseStudy2Style}>
           <div style={caseStudyLabelStyle}>Ongoing Project</div>
           <h3 style={{ ...caseStudyTitleStyle, fontSize: 'clamp(24px, 3vw, 32px)' }}>

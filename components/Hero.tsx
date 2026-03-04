@@ -181,7 +181,7 @@ const Hero: React.FC = () => {
     <section id="home" style={containerStyle}>
       {/* Floating gradient */}
       <div style={{ ...floatingElementStyle, top: '10%', right: '20%' }} className="hide-mobile" />
-      <div style={{ ...floatingElementStyle, bottom: '20%', left: '10%', background: `radial-gradient(circle, rgba(245, 183, 49, 0.1) 0%, transparent 70%)` }} className="hide-mobile" />
+      <div style={{ ...floatingElementStyle, bottom: '20%', left: '10%', background: `radial-gradient(circle, ${theme.accentBorder} 0%, transparent 70%)` }} className="hide-mobile" />
 
       {/* Vertical text */}
       <div style={verticalTextStyle} className="hide-mobile">

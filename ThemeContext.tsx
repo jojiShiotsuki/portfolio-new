@@ -17,7 +17,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const stored = localStorage.getItem('theme');
       if (stored === 'light' || stored === 'dark') return stored;
     } catch {}
-    return 'dark';
+    return 'light';
   });
 
   const theme = mode === 'dark' ? darkTheme : lightTheme;
@@ -33,6 +33,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     root.style.setProperty('--charcoal', theme.bgTertiary);
     root.style.setProperty('--graphite', theme.bgTertiary);
     root.style.setProperty('--cyan', theme.accent);
+    root.style.setProperty('--cyan-dim', theme.accentDim);
+    root.style.setProperty('--coral', theme.accentLight);
+    root.style.setProperty('--coral-dim', `${theme.accentLight}33`);
     root.style.setProperty('--cream-muted', theme.textMuted);
   }, [mode, theme]);
 

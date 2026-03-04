@@ -346,7 +346,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
                   alignItems: 'flex-start',
                   gap: '10px',
                   padding: '12px 16px',
-                  background: 'rgba(245, 183, 49, 0.05)',
+                  background: theme.accentBorder,
                   border: `1px solid ${theme.accentBorder}`,
                 }}>
                   <CheckCircle size={16} style={{ flexShrink: 0, marginTop: '2px', color: theme.accent }} />
@@ -361,7 +361,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
           <div style={{
             marginBottom: '28px',
             padding: '24px',
-            background: 'rgba(245, 183, 49, 0.05)',
+            background: theme.accentBorder,
             borderLeft: `3px solid ${theme.accentLight}`,
           }}>
             <p style={{

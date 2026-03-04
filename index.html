@@ -16,27 +16,31 @@
             document.documentElement.setAttribute('data-theme', t);
             if (t === 'light') {
               document.documentElement.style.setProperty('--black', '#FFFFFF');
-              document.documentElement.style.setProperty('--cream', '#2A2A28');
+              document.documentElement.style.setProperty('--cream', '#2A2820');
             }
           } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.setProperty('--black', '#FFFFFF');
+            document.documentElement.style.setProperty('--cream', '#2A2820');
           }
         } catch(e) {
-          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.documentElement.style.setProperty('--black', '#FFFFFF');
+          document.documentElement.style.setProperty('--cream', '#2A2820');
         }
       })();
     </script>
     <style>
       :root {
-        --black: #0F1A2E;
-        --charcoal: #1B2A4A;
-        --graphite: #1B2A4A;
-        --cream: #F7F7F5;
-        --cream-muted: #D4D4D0;
-        --cyan: #E8A317;
-        --cyan-dim: #E8A31733;
-        --coral: #F5B731;
-        --coral-dim: #F5B73133;
+        --black: #FFFFFF;
+        --charcoal: #EBE8E2;
+        --graphite: #EBE8E2;
+        --cream: #2A2820;
+        --cream-muted: #9C9890;
+        --cyan: #5F7161;
+        --cyan-dim: rgba(95, 113, 97, 0.15);
+        --coral: #8D9A7C;
+        --coral-dim: #8D9A7C33;
 
         --font-display: 'Bricolage Grotesque', sans-serif;
         --font-body: 'Instrument Sans', sans-serif;

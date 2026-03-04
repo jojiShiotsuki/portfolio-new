@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { Github, ArrowUpRight, ArrowLeft, CheckCircle } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
+  const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   const cardStyle: React.CSSProperties = {
-    background: '#0f0f0f',
-    border: '1px solid rgba(245, 240, 232, 0.08)',
+    background: theme.bgSecondary,
+    border: `1px solid ${theme.borderPrimary}`,
     overflow: 'hidden',
     transition: 'all 0.4s ease',
     cursor: 'pointer',
@@ -47,19 +49,19 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
   };
 
   const categoryStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '10px',
-    color: '#FF6B4A',
+    color: theme.accentLight,
     letterSpacing: '2px',
     textTransform: 'uppercase',
     marginBottom: '12px',
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: '28px',
     fontWeight: 800,
-    color: isHovered ? '#00F0FF' : '#f5f0e8',
+    color: isHovered ? theme.accent : theme.textPrimary,
     letterSpacing: '-1px',
     marginBottom: '16px',
     lineHeight: 1.2,
@@ -67,10 +69,10 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
   };
 
   const descStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '14px',
     lineHeight: 1.7,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     marginBottom: '24px',
   };
 
@@ -82,12 +84,12 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
   };
 
   const techTagStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '9px',
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
     letterSpacing: '1px',
     padding: '6px 10px',
-    border: '1px solid rgba(245, 240, 232, 0.1)',
+    border: `1px solid ${theme.borderPrimary}`,
     textTransform: 'uppercase',
   };
 
@@ -97,9 +99,9 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
   };
 
   const linkStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '10px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     textDecoration: 'none',
     letterSpacing: '1px',
     textTransform: 'uppercase',
@@ -107,7 +109,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
     alignItems: 'center',
     gap: '6px',
     padding: '10px 16px',
-    border: '1px solid rgba(245, 240, 232, 0.2)',
+    border: `1px solid ${theme.borderHover}`,
     transition: 'all 0.3s ease',
   };
 
@@ -115,10 +117,10 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
     position: 'absolute',
     top: '16px',
     left: '16px',
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
     fontWeight: 700,
-    color: '#00F0FF',
+    color: theme.accent,
     background: 'rgba(0, 0, 0, 0.6)',
     padding: '8px 12px',
     backdropFilter: 'blur(10px)',
@@ -128,7 +130,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
   const detailsOverlayStyle: React.CSSProperties = {
     position: 'absolute',
     inset: 0,
-    background: 'rgba(10, 10, 10, 0.98)',
+    background: theme.bgMobileMenu,
     padding: '28px',
     display: 'flex',
     flexDirection: 'column',
@@ -164,7 +166,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
             <span key={t} style={techTagStyle}>{t}</span>
           ))}
           {project.tech.length > 4 && (
-            <span style={{ ...techTagStyle, color: '#00F0FF' }}>+{project.tech.length - 4}</span>
+            <span style={{ ...techTagStyle, color: theme.accent }}>+{project.tech.length - 4}</span>
           )}
         </div>
 
@@ -178,12 +180,12 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
                 style={linkStyle}
                 onClick={(e) => e.stopPropagation()}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#00F0FF';
-                  e.currentTarget.style.color = '#00F0FF';
+                  e.currentTarget.style.borderColor = theme.accent;
+                  e.currentTarget.style.color = theme.accent;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
-                  e.currentTarget.style.color = '#f5f0e8';
+                  e.currentTarget.style.borderColor = theme.borderHover;
+                  e.currentTarget.style.color = theme.textPrimary;
                 }}
               >
                 Live <ArrowUpRight size={12} />
@@ -197,12 +199,12 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
                 style={linkStyle}
                 onClick={(e) => e.stopPropagation()}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#00F0FF';
-                  e.currentTarget.style.color = '#00F0FF';
+                  e.currentTarget.style.borderColor = theme.accent;
+                  e.currentTarget.style.color = theme.accent;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
-                  e.currentTarget.style.color = '#f5f0e8';
+                  e.currentTarget.style.borderColor = theme.borderHover;
+                  e.currentTarget.style.color = theme.textPrimary;
                 }}
               >
                 Code <Github size={12} />
@@ -213,11 +215,11 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
           <button
             onClick={() => setShowDetails(!showDetails)}
             style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: '10px',
-              color: showDetails ? '#0a0a0a' : '#00F0FF',
-              background: showDetails ? '#00F0FF' : 'rgba(0, 240, 255, 0.1)',
-              border: '1px solid #00F0FF',
+              color: showDetails ? theme.bgPrimary : theme.accent,
+              background: showDetails ? theme.accent : theme.accentBorder,
+              border: `1px solid ${theme.accent}`,
               padding: '10px 16px',
               cursor: 'pointer',
               textTransform: 'uppercase',
@@ -229,14 +231,14 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
             }}
             onMouseEnter={(e) => {
               if (!showDetails) {
-                e.currentTarget.style.background = '#00F0FF';
-                e.currentTarget.style.color = '#0a0a0a';
+                e.currentTarget.style.background = theme.accent;
+                e.currentTarget.style.color = theme.bgPrimary;
               }
             }}
             onMouseLeave={(e) => {
               if (!showDetails) {
-                e.currentTarget.style.background = 'rgba(0, 240, 255, 0.1)';
-                e.currentTarget.style.color = '#00F0FF';
+                e.currentTarget.style.background = theme.accentBorder;
+                e.currentTarget.style.color = theme.accent;
               }
             }}
           >
@@ -257,11 +259,11 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
           <button
             onClick={() => setShowDetails(false)}
             style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: '10px',
-              color: 'rgba(245, 240, 232, 0.5)',
+              color: theme.textSecondary,
               background: 'transparent',
-              border: '1px solid rgba(245, 240, 232, 0.2)',
+              border: `1px solid ${theme.borderHover}`,
               padding: '8px 16px',
               cursor: 'pointer',
               textTransform: 'uppercase',
@@ -271,15 +273,15 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
             Close ✕
           </button>
         </div>
-        <h3 style={{ ...titleStyle, color: '#00F0FF', marginBottom: '24px', fontSize: '24px' }}>{project.title}</h3>
+        <h3 style={{ ...titleStyle, color: theme.accent, marginBottom: '24px', fontSize: '24px' }}>{project.title}</h3>
 
         {project.challenge && (
           <div style={{ marginBottom: '28px' }}>
             <h4 style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
               fontWeight: 700,
-              color: '#FF6B4A',
+              color: theme.accentLight,
               marginBottom: '12px',
               letterSpacing: '2px',
               textTransform: 'uppercase',
@@ -287,10 +289,10 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
               ◆ The Challenge
             </h4>
             <p style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Instrument Sans', sans-serif",
               fontSize: '15px',
               lineHeight: 1.8,
-              color: 'rgba(245, 240, 232, 0.7)',
+              color: theme.textSecondary,
             }}>{project.challenge}</p>
           </div>
         )}
@@ -298,10 +300,10 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
         {project.solution && (
           <div style={{ marginBottom: '28px' }}>
             <h4 style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
               fontWeight: 700,
-              color: '#00F0FF',
+              color: theme.accent,
               marginBottom: '12px',
               letterSpacing: '2px',
               textTransform: 'uppercase',
@@ -309,10 +311,10 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
               ◆ The Solution
             </h4>
             <p style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Instrument Sans', sans-serif",
               fontSize: '15px',
               lineHeight: 1.8,
-              color: 'rgba(245, 240, 232, 0.7)',
+              color: theme.textSecondary,
             }}>{project.solution}</p>
           </div>
         )}
@@ -320,10 +322,10 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
         {project.results && (
           <div style={{ marginBottom: '28px' }}>
             <h4 style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
               fontWeight: 700,
-              color: '#00F0FF',
+              color: theme.accent,
               marginBottom: '16px',
               letterSpacing: '2px',
               textTransform: 'uppercase',
@@ -337,17 +339,17 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
             }}>
               {project.results.map((result, i) => (
                 <div key={i} style={{
-                  fontFamily: "'Syne', sans-serif",
+                  fontFamily: "'Bricolage Grotesque', sans-serif",
                   fontSize: '13px',
-                  color: '#f5f0e8',
+                  color: theme.textPrimary,
                   display: 'flex',
                   alignItems: 'flex-start',
                   gap: '10px',
                   padding: '12px 16px',
-                  background: 'rgba(0, 240, 255, 0.05)',
-                  border: '1px solid rgba(0, 240, 255, 0.15)',
+                  background: 'rgba(245, 183, 49, 0.05)',
+                  border: `1px solid ${theme.accentBorder}`,
                 }}>
-                  <CheckCircle size={16} style={{ flexShrink: 0, marginTop: '2px', color: '#00F0FF' }} />
+                  <CheckCircle size={16} style={{ flexShrink: 0, marginTop: '2px', color: theme.accent }} />
                   <span style={{ lineHeight: 1.5 }}>{result}</span>
                 </div>
               ))}
@@ -359,21 +361,21 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
           <div style={{
             marginBottom: '28px',
             padding: '24px',
-            background: 'rgba(255, 107, 74, 0.05)',
-            borderLeft: '3px solid #FF6B4A',
+            background: 'rgba(245, 183, 49, 0.05)',
+            borderLeft: `3px solid ${theme.accentLight}`,
           }}>
             <p style={{
-              fontFamily: "'Syne', sans-serif",
+              fontFamily: "'Instrument Sans', sans-serif",
               fontSize: '15px',
               fontStyle: 'italic',
               lineHeight: 1.8,
-              color: 'rgba(245, 240, 232, 0.8)',
+              color: theme.textPrimary,
               marginBottom: '16px',
             }}>"{project.testimonial.quote}"</p>
             <div style={{
-              fontFamily: "'Space Mono', monospace",
+              fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
-              color: '#FF6B4A',
+              color: theme.accentLight,
               letterSpacing: '1px',
             }}>
               — {project.testimonial.author}, {project.testimonial.role}
@@ -387,7 +389,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ ...linkStyle, background: '#00F0FF', color: '#0a0a0a', border: 'none' }}
+              style={{ ...linkStyle, background: theme.accent, color: theme.bgPrimary, border: 'none' }}
             >
               View Live <ArrowUpRight size={12} />
             </a>
@@ -409,6 +411,7 @@ const ProjectGridCard: React.FC<{ project: Project; index: number }> = ({ projec
 };
 
 const ProjectsPage: React.FC = () => {
+  const { theme } = useTheme();
   const [filter, setFilter] = useState<string>('all');
 
   // Get unique categories
@@ -435,9 +438,9 @@ const ProjectsPage: React.FC = () => {
   };
 
   const backLinkStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     textDecoration: 'none',
     letterSpacing: '2px',
     textTransform: 'uppercase',
@@ -449,9 +452,9 @@ const ProjectsPage: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.accent,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '24px',
@@ -461,20 +464,20 @@ const ProjectsPage: React.FC = () => {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(48px, 8vw, 100px)',
     fontWeight: 800,
     lineHeight: 0.95,
     letterSpacing: '-3px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '40px',
   };
 
   const descStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '18px',
     lineHeight: 1.7,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     maxWidth: '600px',
   };
 
@@ -486,11 +489,11 @@ const ProjectsPage: React.FC = () => {
   };
 
   const filterBtnStyle = (isActive: boolean): React.CSSProperties => ({
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: isActive ? '#0a0a0a' : 'rgba(245, 240, 232, 0.5)',
-    background: isActive ? '#00F0FF' : 'transparent',
-    border: `1px solid ${isActive ? '#00F0FF' : 'rgba(245, 240, 232, 0.15)'}`,
+    color: isActive ? theme.bgPrimary : theme.textSecondary,
+    background: isActive ? theme.accent : 'transparent',
+    border: `1px solid ${isActive ? theme.accent : theme.borderPrimary}`,
     padding: '12px 24px',
     cursor: 'pointer',
     letterSpacing: '2px',
@@ -509,7 +512,7 @@ const ProjectsPage: React.FC = () => {
     gap: '48px',
     marginTop: '60px',
     paddingTop: '40px',
-    borderTop: '1px solid rgba(245, 240, 232, 0.08)',
+    borderTop: `1px solid ${theme.borderPrimary}`,
   };
 
   const statStyle: React.CSSProperties = {
@@ -517,17 +520,17 @@ const ProjectsPage: React.FC = () => {
   };
 
   const statValueStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: '48px',
     fontWeight: 800,
-    color: '#00F0FF',
+    color: theme.accent,
     lineHeight: 1,
   };
 
   const statLabelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
     letterSpacing: '2px',
     textTransform: 'uppercase',
     marginTop: '8px',
@@ -540,21 +543,21 @@ const ProjectsPage: React.FC = () => {
           <Link
             to="/"
             style={backLinkStyle}
-            onMouseEnter={(e) => { e.currentTarget.style.color = '#00F0FF'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.5)'; }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = theme.textSecondary; }}
           >
             <ArrowLeft size={16} />
             Back to Home
           </Link>
 
           <div style={labelStyle}>
-            <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+            <span style={{ width: '40px', height: '1px', background: theme.accent }} />
             Portfolio
           </div>
 
           <h1 style={titleStyle}>
             All<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: '2px #FF6B4A' }}>Projects</span>
+            <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.accentLight}` }}>Projects</span>
           </h1>
 
           <p style={descStyle}>
@@ -572,14 +575,14 @@ const ProjectsPage: React.FC = () => {
               style={filterBtnStyle(filter === cat)}
               onMouseEnter={(e) => {
                 if (filter !== cat) {
-                  e.currentTarget.style.borderColor = '#00F0FF';
-                  e.currentTarget.style.color = '#00F0FF';
+                  e.currentTarget.style.borderColor = theme.accent;
+                  e.currentTarget.style.color = theme.accent;
                 }
               }}
               onMouseLeave={(e) => {
                 if (filter !== cat) {
-                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.15)';
-                  e.currentTarget.style.color = 'rgba(245, 240, 232, 0.5)';
+                  e.currentTarget.style.borderColor = theme.borderPrimary;
+                  e.currentTarget.style.color = theme.textSecondary;
                 }
               }}
             >

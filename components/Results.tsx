@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const carouselImages = [
   {
@@ -15,6 +16,7 @@ const carouselImages = [
 ];
 
 const Results: React.FC = () => {
+  const { theme } = useTheme();
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -27,7 +29,7 @@ const Results: React.FC = () => {
 
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
-    background: '#0f0f0f',
+    background: theme.bgSecondary,
     position: 'relative',
     overflow: 'hidden',
   };
@@ -38,9 +40,9 @@ const Results: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.accent,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '24px',
@@ -50,12 +52,12 @@ const Results: React.FC = () => {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 800,
     lineHeight: 1,
     letterSpacing: '-2px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '80px',
   };
 
@@ -70,8 +72,8 @@ const Results: React.FC = () => {
   const imageContainerStyle: React.CSSProperties = {
     position: 'relative',
     overflow: 'hidden',
-    background: '#141414',
-    border: '1px solid rgba(0, 240, 255, 0.1)',
+    background: theme.bgTertiary,
+    border: `1px solid ${theme.accentBorder}`,
   };
 
   const imageStyle: React.CSSProperties = {
@@ -82,13 +84,13 @@ const Results: React.FC = () => {
   };
 
   const captionStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     letterSpacing: '1px',
     padding: '16px 24px',
-    background: 'rgba(0, 240, 255, 0.03)',
-    borderTop: '1px solid rgba(0, 240, 255, 0.1)',
+    background: theme.accentBorder,
+    borderTop: `1px solid ${theme.accentBorder}`,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -96,8 +98,8 @@ const Results: React.FC = () => {
 
   const carouselBtnStyle: React.CSSProperties = {
     background: 'transparent',
-    border: '1px solid rgba(0, 240, 255, 0.3)',
-    color: '#00F0FF',
+    border: `1px solid ${theme.accentBorder}`,
+    color: theme.accent,
     width: '32px',
     height: '32px',
     display: 'flex',
@@ -112,7 +114,7 @@ const Results: React.FC = () => {
   const dotStyle = (isActive: boolean): React.CSSProperties => ({
     width: isActive ? '24px' : '8px',
     height: '8px',
-    background: isActive ? '#00F0FF' : 'rgba(245, 240, 232, 0.2)',
+    background: isActive ? theme.accent : theme.textMuted,
     transition: 'all 0.3s ease',
     cursor: 'pointer',
     border: 'none',
@@ -124,56 +126,56 @@ const Results: React.FC = () => {
   };
 
   const caseStudyLabelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: '#FF6B4A',
+    color: theme.accentLight,
     letterSpacing: '3px',
     textTransform: 'uppercase',
     marginBottom: '16px',
   };
 
   const caseStudyTitleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(28px, 4vw, 40px)',
     fontWeight: 800,
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     letterSpacing: '-1px',
     marginBottom: '24px',
     lineHeight: 1.1,
   };
 
   const detailStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '16px',
     lineHeight: 1.8,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     marginBottom: '12px',
   };
 
   const detailLabelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: '#00F0FF',
+    color: theme.accent,
     letterSpacing: '1px',
     textTransform: 'uppercase',
     marginRight: '8px',
   };
 
   const resultHighlightStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '18px',
     fontWeight: 700,
-    color: '#00F0FF',
+    color: theme.accent,
     marginTop: '24px',
     padding: '20px 24px',
-    background: 'rgba(0, 240, 255, 0.05)',
-    border: '1px solid rgba(0, 240, 255, 0.15)',
+    background: theme.accentBorder,
+    border: `1px solid ${theme.accentBorder}`,
   };
 
   const testimonialStyle: React.CSSProperties = {
     padding: '40px 48px',
-    background: 'rgba(0, 240, 255, 0.03)',
-    border: '1px solid rgba(0, 240, 255, 0.1)',
+    background: theme.accentBorder,
+    border: `1px solid ${theme.accentBorder}`,
     marginBottom: '48px',
     position: 'relative',
   };
@@ -182,12 +184,12 @@ const Results: React.FC = () => {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
     gap: '2px',
-    background: 'rgba(245, 240, 232, 0.1)',
+    background: theme.borderPrimary,
     marginTop: '48px',
   };
 
   const statCardStyle = (isHovered: boolean): React.CSSProperties => ({
-    background: isHovered ? '#141414' : '#0a0a0a',
+    background: isHovered ? theme.bgCardHover : theme.bgPrimary,
     padding: '48px 32px',
     textAlign: 'center',
     transition: 'all 0.4s ease',
@@ -197,18 +199,18 @@ const Results: React.FC = () => {
   });
 
   const statValueStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(32px, 4vw, 48px)',
     fontWeight: 800,
-    color: '#00F0FF',
+    color: theme.accent,
     lineHeight: 1,
     marginBottom: '16px',
   };
 
   const statLabelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     letterSpacing: '2px',
     textTransform: 'uppercase',
     lineHeight: 1.6,
@@ -220,14 +222,14 @@ const Results: React.FC = () => {
     left: 0,
     width: isHovered ? '100%' : '0%',
     height: '2px',
-    background: '#00F0FF',
+    background: theme.accent,
     transition: 'width 0.4s ease',
   });
 
   const caseStudy2Style: React.CSSProperties = {
     padding: '48px',
-    background: 'rgba(245, 240, 232, 0.02)',
-    border: '1px solid rgba(245, 240, 232, 0.08)',
+    background: theme.bgPrimary,
+    border: `1px solid ${theme.borderPrimary}`,
     marginBottom: '0',
   };
 
@@ -242,12 +244,12 @@ const Results: React.FC = () => {
     <section id="results" style={sectionStyle}>
       <div style={containerStyle}>
         <div style={labelStyle}>
-          <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+          <span style={{ width: '40px', height: '1px', background: theme.accent }} />
           Proof
         </div>
         <h2 style={titleStyle}>
           Results That<br />
-          <span style={{ color: '#00F0FF' }}>Speak</span>
+          <span style={{ color: theme.accent }}>Speak</span>
         </h2>
 
         {/* Case Study 1: Pundok Studios */}
@@ -277,7 +279,7 @@ const Results: React.FC = () => {
                 <button
                   style={carouselBtnStyle}
                   onClick={() => setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0, 240, 255, 0.1)'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = theme.accentBorder; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   aria-label="Previous image"
                 >
@@ -296,7 +298,7 @@ const Results: React.FC = () => {
                 <button
                   style={carouselBtnStyle}
                   onClick={() => setCurrentSlide((prev) => (prev + 1) % carouselImages.length)}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0, 240, 255, 0.1)'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = theme.accentBorder; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                   aria-label="Next image"
                 >
@@ -328,9 +330,9 @@ const Results: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '11px',
-                  color: '#f5f0e8',
+                  color: theme.textPrimary,
                   textDecoration: 'none',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
@@ -338,16 +340,16 @@ const Results: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   padding: '12px 0',
-                  borderBottom: '1px solid rgba(245, 240, 232, 0.2)',
+                  borderBottom: `1px solid ${theme.borderHover}`,
                   transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#00F0FF';
-                  e.currentTarget.style.borderColor = '#00F0FF';
+                  e.currentTarget.style.color = theme.accent;
+                  e.currentTarget.style.borderColor = theme.accent;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#f5f0e8';
-                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+                  e.currentTarget.style.color = theme.textPrimary;
+                  e.currentTarget.style.borderColor = theme.borderHover;
                 }}
               >
                 View Live Site <ArrowUpRight size={14} />
@@ -358,12 +360,12 @@ const Results: React.FC = () => {
 
         {/* Testimonial */}
         <div style={testimonialStyle} className="results-testimonial">
-          <Quote size={32} style={{ color: 'rgba(0, 240, 255, 0.2)', marginBottom: '20px' }} />
+          <Quote size={32} style={{ color: theme.accentDim, marginBottom: '20px' }} />
           <p style={{
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: '20px',
             lineHeight: 1.8,
-            color: 'rgba(245, 240, 232, 0.7)',
+            color: theme.textSecondary,
             fontStyle: 'italic',
             marginBottom: '24px',
           }}>
@@ -373,21 +375,21 @@ const Results: React.FC = () => {
             <div style={{
               width: '40px',
               height: '1px',
-              background: '#FF6B4A',
+              background: theme.accentLight,
             }} />
             <div>
               <div style={{
-                fontFamily: "'Syne', sans-serif",
+                fontFamily: "'Bricolage Grotesque', sans-serif",
                 fontSize: '16px',
                 fontWeight: 700,
-                color: '#f5f0e8',
+                color: theme.textPrimary,
               }}>
                 Jay the Barber
               </div>
               <div style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "'JetBrains Mono', monospace",
                 fontSize: '11px',
-                color: '#FF6B4A',
+                color: theme.accentLight,
                 letterSpacing: '1px',
               }}>
                 Pundok Studios
@@ -420,9 +422,9 @@ const Results: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '11px',
-                  color: '#f5f0e8',
+                  color: theme.textPrimary,
                   textDecoration: 'none',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
@@ -430,16 +432,16 @@ const Results: React.FC = () => {
                   alignItems: 'center',
                   gap: '8px',
                   padding: '12px 0',
-                  borderBottom: '1px solid rgba(245, 240, 232, 0.2)',
+                  borderBottom: `1px solid ${theme.borderHover}`,
                   transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#00F0FF';
-                  e.currentTarget.style.borderColor = '#00F0FF';
+                  e.currentTarget.style.color = theme.accent;
+                  e.currentTarget.style.borderColor = theme.accent;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#f5f0e8';
-                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+                  e.currentTarget.style.color = theme.textPrimary;
+                  e.currentTarget.style.borderColor = theme.borderHover;
                 }}
               >
                 View Live Site <ArrowUpRight size={14} />
@@ -461,12 +463,12 @@ const Results: React.FC = () => {
 
         {/* You% Nutrition Testimonial */}
         <div style={testimonialStyle} className="results-testimonial">
-          <Quote size={32} style={{ color: 'rgba(0, 240, 255, 0.2)', marginBottom: '20px' }} />
+          <Quote size={32} style={{ color: theme.accentDim, marginBottom: '20px' }} />
           <p style={{
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: "'Instrument Sans', sans-serif",
             fontSize: '20px',
             lineHeight: 1.8,
-            color: 'rgba(245, 240, 232, 0.7)',
+            color: theme.textSecondary,
             fontStyle: 'italic',
             marginBottom: '24px',
           }}>
@@ -476,21 +478,21 @@ const Results: React.FC = () => {
             <div style={{
               width: '40px',
               height: '1px',
-              background: '#FF6B4A',
+              background: theme.accentLight,
             }} />
             <div>
               <div style={{
-                fontFamily: "'Syne', sans-serif",
+                fontFamily: "'Bricolage Grotesque', sans-serif",
                 fontSize: '16px',
                 fontWeight: 700,
-                color: '#f5f0e8',
+                color: theme.textPrimary,
               }}>
                 Owner
               </div>
               <div style={{
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "'JetBrains Mono', monospace",
                 fontSize: '11px',
-                color: '#FF6B4A',
+                color: theme.accentLight,
                 letterSpacing: '1px',
               }}>
                 You% Nutrition

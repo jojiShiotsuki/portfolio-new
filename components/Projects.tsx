@@ -2,23 +2,25 @@ import React, { useState } from 'react';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { theme } = useTheme();
 
   const cardStyle: React.CSSProperties = {
     display: 'grid',
     gridTemplateColumns: index % 2 === 0 ? '1.2fr 1fr' : '1fr 1.2fr',
     gap: '60px',
     padding: '60px 0',
-    borderBottom: '1px solid rgba(245, 240, 232, 0.08)',
+    borderBottom: `1px solid ${theme.borderPrimary}`,
     alignItems: 'center',
   };
 
   const imageContainerStyle: React.CSSProperties = {
     position: 'relative',
     overflow: 'hidden',
-    background: '#141414',
+    background: theme.bgTertiary,
     order: index % 2 === 0 ? 0 : 1,
   };
 
@@ -36,7 +38,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
     position: 'absolute',
     inset: 0,
     background: isHovered
-      ? 'linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, transparent 50%)'
+      ? `linear-gradient(135deg, ${theme.accentBorder} 0%, transparent 50%)`
       : 'transparent',
     transition: 'all 0.4s ease',
   };
@@ -46,19 +48,19 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   };
 
   const categoryStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: '#FF6B4A',
+    color: theme.accentLight,
     letterSpacing: '3px',
     textTransform: 'uppercase',
     marginBottom: '16px',
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(32px, 4vw, 48px)',
     fontWeight: 800,
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     letterSpacing: '-1px',
     marginBottom: '24px',
     lineHeight: 1.1,
@@ -66,10 +68,10 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   };
 
   const descStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '18px',
     lineHeight: 1.8,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     marginBottom: '32px',
   };
 
@@ -81,12 +83,12 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   };
 
   const techTagStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '10px',
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
     letterSpacing: '1px',
     padding: '8px 12px',
-    border: '1px solid rgba(245, 240, 232, 0.1)',
+    border: `1px solid ${theme.borderPrimary}`,
     textTransform: 'uppercase',
   };
 
@@ -95,9 +97,9 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   };
 
   const resultItemStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.accent,
     marginBottom: '8px',
     display: 'flex',
     alignItems: 'center',
@@ -110,9 +112,9 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   };
 
   const linkStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     textDecoration: 'none',
     letterSpacing: '2px',
     textTransform: 'uppercase',
@@ -120,7 +122,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
     alignItems: 'center',
     gap: '8px',
     padding: '12px 0',
-    borderBottom: '1px solid rgba(245, 240, 232, 0.2)',
+    borderBottom: `1px solid ${theme.borderHover}`,
     transition: 'all 0.3s ease',
   };
 
@@ -138,10 +140,10 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           position: 'absolute',
           top: '24px',
           left: '24px',
-          fontFamily: "'Space Mono', monospace",
+          fontFamily: "'JetBrains Mono', monospace",
           fontSize: '72px',
           fontWeight: 700,
-          color: 'rgba(0, 240, 255, 0.1)',
+          color: theme.accentBorder,
           lineHeight: 1,
         }}>
           0{index + 1}
@@ -150,7 +152,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
 
       <div style={contentStyle}>
         <div style={categoryStyle}>{project.category}</div>
-        <h3 style={{ ...titleStyle, color: isHovered ? '#00F0FF' : '#f5f0e8' }}>
+        <h3 style={{ ...titleStyle, color: isHovered ? theme.accent : theme.textPrimary }}>
           {project.title}
         </h3>
         <p style={descStyle}>{project.description}</p>
@@ -165,7 +167,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           <div style={resultsStyle}>
             {project.results.slice(0, 2).map((result, i) => (
               <div key={i} style={resultItemStyle}>
-                <span style={{ color: '#00F0FF' }}>+</span>
+                <span style={{ color: theme.accent }}>+</span>
                 {result}
               </div>
             ))}
@@ -180,12 +182,12 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
               rel="noopener noreferrer"
               style={linkStyle}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00F0FF';
-                e.currentTarget.style.borderColor = '#00F0FF';
+                e.currentTarget.style.color = theme.accent;
+                e.currentTarget.style.borderColor = theme.accent;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#f5f0e8';
-                e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+                e.currentTarget.style.color = theme.textPrimary;
+                e.currentTarget.style.borderColor = theme.borderHover;
               }}
             >
               View Live <ArrowUpRight size={14} />
@@ -198,12 +200,12 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
               rel="noopener noreferrer"
               style={linkStyle}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00F0FF';
-                e.currentTarget.style.borderColor = '#00F0FF';
+                e.currentTarget.style.color = theme.accent;
+                e.currentTarget.style.borderColor = theme.accent;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#f5f0e8';
-                e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
+                e.currentTarget.style.color = theme.textPrimary;
+                e.currentTarget.style.borderColor = theme.borderHover;
               }}
             >
               Source <Github size={14} />
@@ -228,9 +230,11 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
 };
 
 const Projects: React.FC = () => {
+  const { theme } = useTheme();
+
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
-    background: '#0a0a0a',
+    background: theme.bgPrimary,
   };
 
   const containerStyle: React.CSSProperties = {
@@ -243,9 +247,9 @@ const Projects: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.labelColor,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '24px',
@@ -255,12 +259,12 @@ const Projects: React.FC = () => {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 800,
     lineHeight: 1,
     letterSpacing: '-2px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
   };
 
   return (
@@ -268,12 +272,12 @@ const Projects: React.FC = () => {
       <div style={containerStyle}>
         <div style={headerStyle}>
           <div style={labelStyle}>
-            <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+            <span style={{ width: '40px', height: '1px', background: theme.accent }} />
             Selected Work
           </div>
           <h2 style={titleStyle}>
             Featured<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: '2px #FF6B4A' }}>Projects</span>
+            <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.accentLight}` }}>Projects</span>
           </h2>
         </div>
 

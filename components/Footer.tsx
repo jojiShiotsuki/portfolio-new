@@ -1,11 +1,14 @@
 import React from 'react';
 import { SOCIAL_LINKS, PERSONAL_INFO } from '../constants';
+import { useTheme } from '../ThemeContext';
 
 const Footer: React.FC = () => {
+  const { theme } = useTheme();
+
   const footerStyle: React.CSSProperties = {
     padding: '48px',
-    background: '#0a0a0a',
-    borderTop: '1px solid rgba(245, 240, 232, 0.05)',
+    background: theme.bgPrimary,
+    borderTop: `1px solid ${theme.borderSecondary}`,
   };
 
   const containerStyle: React.CSSProperties = {
@@ -19,17 +22,17 @@ const Footer: React.FC = () => {
   };
 
   const logoStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
     fontWeight: 700,
-    color: '#00F0FF',
+    color: theme.accent,
     letterSpacing: '2px',
   };
 
   const copyrightStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: 'rgba(245, 240, 232, 0.3)',
+    color: theme.textTertiary,
     letterSpacing: '1px',
     marginTop: '8px',
   };
@@ -41,26 +44,26 @@ const Footer: React.FC = () => {
   };
 
   const socialLinkStyle: React.CSSProperties = {
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
     transition: 'all 0.2s ease',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '40px',
     height: '40px',
-    border: '1px solid rgba(245, 240, 232, 0.1)',
+    border: `1px solid ${theme.borderPrimary}`,
   };
 
   const dividerStyle: React.CSSProperties = {
     width: '1px',
     height: '24px',
-    background: 'rgba(245, 240, 232, 0.1)',
+    background: theme.borderPrimary,
   };
 
   const creditsStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '10px',
-    color: 'rgba(245, 240, 232, 0.2)',
+    color: theme.textMuted,
     letterSpacing: '1px',
     textTransform: 'uppercase',
   };
@@ -70,14 +73,14 @@ const Footer: React.FC = () => {
       <div style={containerStyle} className="footer-container">
         <div className="footer-brand">
           <div style={logoStyle}>
-            <span style={{ color: '#FF6B4A' }}>[</span>
+            <span style={{ color: theme.accentLight }}>[</span>
             JOJI.DEV
-            <span style={{ color: '#FF6B4A' }}>]</span>
+            <span style={{ color: theme.accentLight }}>]</span>
           </div>
           <div style={{
             ...copyrightStyle,
             fontSize: '12px',
-            color: 'rgba(245, 240, 232, 0.4)',
+            color: theme.textTertiary,
             marginTop: '12px',
             maxWidth: '400px',
             lineHeight: 1.6,
@@ -99,12 +102,12 @@ const Footer: React.FC = () => {
               style={socialLinkStyle}
               aria-label={social.platform}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#00F0FF';
-                e.currentTarget.style.borderColor = '#00F0FF';
+                e.currentTarget.style.color = theme.accent;
+                e.currentTarget.style.borderColor = theme.accent;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)';
-                e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.1)';
+                e.currentTarget.style.color = theme.textTertiary;
+                e.currentTarget.style.borderColor = theme.borderPrimary;
               }}
             >
               <social.icon size={18} />

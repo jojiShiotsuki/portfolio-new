@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const StickyCTA: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling 500px
       setIsVisible(window.scrollY > 500);
     };
 
@@ -26,11 +27,11 @@ const StickyCTA: React.FC = () => {
   };
 
   const buttonStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
     fontWeight: 700,
-    color: '#0a0a0a',
-    background: '#00F0FF',
+    color: theme.btnPrimaryText,
+    background: theme.accent,
     padding: '18px 32px',
     border: 'none',
     cursor: 'pointer',
@@ -39,7 +40,7 @@ const StickyCTA: React.FC = () => {
     gap: '12px',
     textDecoration: 'none',
     letterSpacing: '1px',
-    boxShadow: '0 4px 30px rgba(0, 240, 255, 0.4)',
+    boxShadow: `0 4px 30px ${theme.accentGlow}`,
     transition: 'all 0.3s ease',
   };
 
@@ -49,7 +50,7 @@ const StickyCTA: React.FC = () => {
     right: '-4px',
     width: '12px',
     height: '12px',
-    background: '#FF6B4A',
+    background: theme.accentLight,
     borderRadius: '50%',
     animation: 'pulse 2s infinite',
   };
@@ -71,14 +72,14 @@ const StickyCTA: React.FC = () => {
         href="#contact"
         style={buttonStyle}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = '#f5f0e8';
+          e.currentTarget.style.background = theme.textPrimary;
           e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 8px 40px rgba(0, 240, 255, 0.5)';
+          e.currentTarget.style.boxShadow = `0 8px 40px ${theme.accentGlow}`;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = '#00F0FF';
+          e.currentTarget.style.background = theme.accent;
           e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 4px 30px rgba(0, 240, 255, 0.4)';
+          e.currentTarget.style.boxShadow = `0 4px 30px ${theme.accentGlow}`;
         }}
       >
         <span style={pulseStyle} />

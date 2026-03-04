@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -16,6 +17,7 @@ const ChatBot: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -39,7 +41,7 @@ const ChatBot: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: userMessage,
-          history: messages.slice(-10) // Send last 10 messages for context
+          history: messages.slice(-10)
         }),
       });
 
@@ -72,20 +74,20 @@ const ChatBot: React.FC = () => {
     bottom: '100px',
     right: '24px',
     zIndex: 1000,
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
   };
 
   const buttonStyle: React.CSSProperties = {
     width: '60px',
     height: '60px',
     borderRadius: '50%',
-    background: '#00F0FF',
+    background: theme.accent,
     border: 'none',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: '0 4px 20px rgba(0, 240, 255, 0.4)',
+    boxShadow: `0 4px 20px ${theme.accentGlow}`,
     transition: 'all 0.3s ease',
   };
 
@@ -97,8 +99,8 @@ const ChatBot: React.FC = () => {
     maxWidth: 'calc(100vw - 48px)',
     height: '500px',
     maxHeight: 'calc(100vh - 120px)',
-    background: '#0a0a0a',
-    border: '1px solid rgba(245, 240, 232, 0.1)',
+    background: theme.chatBg,
+    border: `1px solid ${theme.borderPrimary}`,
     borderRadius: '12px',
     display: 'flex',
     flexDirection: 'column',
@@ -108,8 +110,8 @@ const ChatBot: React.FC = () => {
 
   const headerStyle: React.CSSProperties = {
     padding: '16px 20px',
-    background: '#141414',
-    borderBottom: '1px solid rgba(245, 240, 232, 0.1)',
+    background: theme.chatHeaderBg,
+    borderBottom: `1px solid ${theme.borderPrimary}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -128,8 +130,8 @@ const ChatBot: React.FC = () => {
     maxWidth: '85%',
     padding: '12px 16px',
     borderRadius: isUser ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-    background: isUser ? '#00F0FF' : '#1a1a1a',
-    color: isUser ? '#0a0a0a' : '#f5f0e8',
+    background: isUser ? theme.chatUserMsgBg : theme.chatBotMsgBg,
+    color: isUser ? theme.chatUserMsgText : theme.textPrimary,
     alignSelf: isUser ? 'flex-end' : 'flex-start',
     fontSize: '14px',
     lineHeight: 1.5,
@@ -137,27 +139,27 @@ const ChatBot: React.FC = () => {
 
   const inputContainerStyle: React.CSSProperties = {
     padding: '16px',
-    borderTop: '1px solid rgba(245, 240, 232, 0.1)',
+    borderTop: `1px solid ${theme.borderPrimary}`,
     display: 'flex',
     gap: '12px',
   };
 
   const inputStyle: React.CSSProperties = {
     flex: 1,
-    background: '#141414',
-    border: '1px solid rgba(245, 240, 232, 0.1)',
+    background: theme.chatInputBg,
+    border: `1px solid ${theme.borderPrimary}`,
     borderRadius: '8px',
     padding: '12px 16px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     fontSize: '14px',
     outline: 'none',
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
   };
 
   const sendButtonStyle: React.CSSProperties = {
     width: '44px',
     height: '44px',
-    background: '#00F0FF',
+    background: theme.accent,
     border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',
@@ -174,17 +176,17 @@ const ChatBot: React.FC = () => {
         <div style={chatWindowStyle}>
           <div style={headerStyle}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Bot size={20} color="#00F0FF" />
+              <Bot size={20} color={theme.accent} />
               <div>
-                <div style={{ fontWeight: 700, color: '#f5f0e8', fontSize: '14px' }}>Chat with Joji's AI</div>
-                <div style={{ fontSize: '11px', color: 'rgba(245, 240, 232, 0.5)' }}>Ask me anything</div>
+                <div style={{ fontWeight: 700, color: theme.textPrimary, fontSize: '14px' }}>Chat with Joji's AI</div>
+                <div style={{ fontSize: '11px', color: theme.textSecondary }}>Ask me anything</div>
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
               style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
             >
-              <X size={20} color="rgba(245, 240, 232, 0.5)" />
+              <X size={20} color={theme.textSecondary} />
             </button>
           </div>
 
@@ -217,7 +219,7 @@ const ChatBot: React.FC = () => {
               style={sendButtonStyle}
               disabled={isLoading}
             >
-              <Send size={18} color="#0a0a0a" />
+              <Send size={18} color={theme.btnPrimaryText} />
             </button>
           </div>
         </div>
@@ -233,7 +235,7 @@ const ChatBot: React.FC = () => {
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >
-        {isOpen ? <X size={24} color="#0a0a0a" /> : <MessageCircle size={24} color="#0a0a0a" />}
+        {isOpen ? <X size={24} color={theme.btnPrimaryText} /> : <MessageCircle size={24} color={theme.btnPrimaryText} />}
       </button>
 
       <style>{`

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTheme } from '../ThemeContext';
 
 const UrgencyBanner: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
+  const { theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -12,7 +14,7 @@ const UrgencyBanner: React.FC = () => {
   }, []);
 
   const bannerStyle: React.CSSProperties = {
-    background: 'linear-gradient(90deg, #00F0FF 0%, #00F0FF 100%)',
+    background: `linear-gradient(90deg, ${theme.bannerBg} 0%, ${theme.bannerBg} 100%)`,
     padding: '10px 20px',
     textAlign: 'center',
     position: 'fixed',
@@ -28,17 +30,17 @@ const UrgencyBanner: React.FC = () => {
   };
 
   const textStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '13px',
     fontWeight: 700,
-    color: '#0a0a0a',
+    color: theme.bannerText,
     letterSpacing: '1px',
     margin: 0,
   };
 
   const highlightStyle: React.CSSProperties = {
-    background: '#0a0a0a',
-    color: '#00F0FF',
+    background: theme.bannerBadgeBg,
+    color: theme.bannerBadgeText,
     padding: '2px 8px',
     marginLeft: '8px',
     fontSize: '11px',

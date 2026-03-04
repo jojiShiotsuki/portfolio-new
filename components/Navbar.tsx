@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
+import { useTheme } from '../ThemeContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +10,7 @@ const Navbar: React.FC = () => {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const { mode, theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,7 +22,7 @@ const Navbar: React.FC = () => {
 
   const navStyle: React.CSSProperties = {
     position: 'fixed',
-    top: scrolled ? 0 : 40, // Account for urgency banner
+    top: scrolled ? 0 : 40,
     left: 0,
     right: 0,
     zIndex: 100,
@@ -29,16 +31,16 @@ const Navbar: React.FC = () => {
     justifyContent: 'space-between',
     alignItems: 'center',
     transition: 'all 0.3s ease',
-    background: scrolled ? 'rgba(10, 10, 10, 0.95)' : 'transparent',
+    background: scrolled ? theme.bgOverlay : 'transparent',
     backdropFilter: scrolled ? 'blur(20px)' : 'none',
-    borderBottom: scrolled ? '1px solid rgba(0, 240, 255, 0.1)' : 'none',
+    borderBottom: scrolled ? `1px solid ${theme.accentBorder}` : 'none',
   };
 
   const logoStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
     fontWeight: 700,
-    color: '#00F0FF',
+    color: theme.accent,
     letterSpacing: '2px',
     textDecoration: 'none',
     display: 'flex',
@@ -53,10 +55,10 @@ const Navbar: React.FC = () => {
   };
 
   const linkStyle = (isHovered: boolean): React.CSSProperties => ({
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
     fontWeight: 400,
-    color: isHovered ? '#00F0FF' : '#f5f0e8',
+    color: isHovered ? theme.accent : theme.textPrimary,
     textDecoration: 'none',
     letterSpacing: '2px',
     textTransform: 'uppercase',
@@ -66,11 +68,11 @@ const Navbar: React.FC = () => {
   });
 
   const ctaStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
     fontWeight: 700,
-    color: '#0a0a0a',
-    background: '#00F0FF',
+    color: theme.btnPrimaryText,
+    background: theme.accent,
     padding: '14px 28px',
     textDecoration: 'none',
     letterSpacing: '2px',
@@ -83,22 +85,33 @@ const Navbar: React.FC = () => {
   const statusDotStyle: React.CSSProperties = {
     width: '8px',
     height: '8px',
-    background: '#00F0FF',
+    background: theme.accent,
     borderRadius: '50%',
     animation: 'pulse 2s infinite',
-    boxShadow: '0 0 10px #00F0FF',
+    boxShadow: `0 0 10px ${theme.accent}`,
   };
 
   const mobileMenuBtnStyle: React.CSSProperties = {
     display: 'none',
     background: 'transparent',
-    border: '1px solid rgba(0, 240, 255, 0.3)',
+    border: `1px solid ${theme.accentBorder}`,
     padding: '8px',
     cursor: 'pointer',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
   };
 
-  // Navigation items - mix of hash links and route links
+  const toggleBtnStyle: React.CSSProperties = {
+    background: 'transparent',
+    border: `1px solid ${theme.borderPrimary}`,
+    padding: '8px',
+    cursor: 'pointer',
+    color: theme.textPrimary,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transition: 'all 0.2s ease',
+  };
+
   const navItems = [
     { label: 'Results', href: isHomePage ? '#results' : '/#results', isRoute: !isHomePage },
     { label: 'Services', href: isHomePage ? '#services' : '/#services', isRoute: !isHomePage },
@@ -115,9 +128,9 @@ const Navbar: React.FC = () => {
       `}</style>
       <nav style={navStyle}>
         <Link to="/" style={logoStyle}>
-          <span style={{ color: '#FF6B4A' }}>[</span>
+          <span style={{ color: theme.accentLight }}>[</span>
           JOJI.DEV
-          <span style={{ color: '#FF6B4A' }}>]</span>
+          <span style={{ color: theme.accentLight }}>]</span>
           <span style={statusDotStyle} />
         </Link>
 
@@ -145,16 +158,31 @@ const Navbar: React.FC = () => {
               </a>
             )
           ))}
+          <button
+            onClick={toggleTheme}
+            style={toggleBtnStyle}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = theme.accent;
+              e.currentTarget.style.color = theme.accent;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = theme.borderPrimary;
+              e.currentTarget.style.color = theme.textPrimary;
+            }}
+            aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {mode === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
           <a
             href={isHomePage ? '#contact' : '/#contact'}
             style={ctaStyle}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#FF6B4A';
+              e.currentTarget.style.background = theme.accentLight;
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(255, 107, 74, 0.4)';
+              e.currentTarget.style.boxShadow = `0 4px 20px ${theme.accentGlow}`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#00F0FF';
+              e.currentTarget.style.background = theme.accent;
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
@@ -163,13 +191,23 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          style={mobileMenuBtnStyle}
-          className="mobile-menu-btn"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            onClick={toggleTheme}
+            style={{ ...toggleBtnStyle, display: 'none' }}
+            className="mobile-menu-btn"
+            aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {mode === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            style={mobileMenuBtnStyle}
+            className="mobile-menu-btn"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}
@@ -179,9 +217,9 @@ const Navbar: React.FC = () => {
           top: '80px',
           left: 0,
           right: 0,
-          background: 'rgba(10, 10, 10, 0.98)',
+          background: theme.bgMobileMenu,
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(0, 240, 255, 0.1)',
+          borderBottom: `1px solid ${theme.accentBorder}`,
           padding: '24px',
           zIndex: 99,
           display: 'flex',
@@ -195,14 +233,14 @@ const Navbar: React.FC = () => {
                 to={item.href}
                 onClick={() => setIsOpen(false)}
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '14px',
-                  color: '#f5f0e8',
+                  color: theme.textPrimary,
                   textDecoration: 'none',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
                   padding: '12px 0',
-                  borderBottom: '1px solid rgba(245, 240, 232, 0.1)',
+                  borderBottom: `1px solid ${theme.borderPrimary}`,
                 }}
               >
                 {item.label}
@@ -213,14 +251,14 @@ const Navbar: React.FC = () => {
                 href={item.href}
                 onClick={() => setIsOpen(false)}
                 style={{
-                  fontFamily: "'Space Mono', monospace",
+                  fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '14px',
-                  color: '#f5f0e8',
+                  color: theme.textPrimary,
                   textDecoration: 'none',
                   letterSpacing: '2px',
                   textTransform: 'uppercase',
                   padding: '12px 0',
-                  borderBottom: '1px solid rgba(245, 240, 232, 0.1)',
+                  borderBottom: `1px solid ${theme.borderPrimary}`,
                 }}
               >
                 {item.label}

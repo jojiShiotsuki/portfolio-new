@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { HardHat, Droplets, Zap, Wind, Hammer, TreePine } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const trades = [
   { label: 'Roofers', icon: HardHat },
@@ -12,10 +13,11 @@ const trades = [
 
 const WhoIWorkWith: React.FC = () => {
   const [hoveredTrade, setHoveredTrade] = useState<number | null>(null);
+  const { theme } = useTheme();
 
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
-    background: '#0f0f0f',
+    background: theme.bgSecondary,
     position: 'relative',
     overflow: 'hidden',
   };
@@ -34,9 +36,9 @@ const WhoIWorkWith: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.labelColor,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '24px',
@@ -46,19 +48,19 @@ const WhoIWorkWith: React.FC = () => {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 800,
     lineHeight: 1,
     letterSpacing: '-2px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
   };
 
   const descriptionStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '20px',
     lineHeight: 1.8,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     maxWidth: '500px',
   };
 
@@ -66,11 +68,11 @@ const WhoIWorkWith: React.FC = () => {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '2px',
-    background: 'rgba(245, 240, 232, 0.1)',
+    background: theme.borderPrimary,
   };
 
   const tradeCardStyle = (isHovered: boolean): React.CSSProperties => ({
-    background: isHovered ? '#141414' : '#0a0a0a',
+    background: isHovered ? theme.bgCardHover : theme.bgPrimary,
     padding: '40px 48px',
     display: 'flex',
     alignItems: 'center',
@@ -82,16 +84,16 @@ const WhoIWorkWith: React.FC = () => {
   });
 
   const tradeIconStyle = (isHovered: boolean): React.CSSProperties => ({
-    color: isHovered ? '#00F0FF' : 'rgba(245, 240, 232, 0.3)',
+    color: isHovered ? theme.accent : theme.textTertiary,
     transition: 'all 0.3s ease',
     flexShrink: 0,
   });
 
   const tradeLabelStyle = (isHovered: boolean): React.CSSProperties => ({
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: '20px',
     fontWeight: 700,
-    color: isHovered ? '#f5f0e8' : 'rgba(245, 240, 232, 0.6)',
+    color: isHovered ? theme.textPrimary : theme.textSecondary,
     transition: 'color 0.3s ease',
   });
 
@@ -101,15 +103,15 @@ const WhoIWorkWith: React.FC = () => {
     left: 0,
     width: isHovered ? '100%' : '0%',
     height: '2px',
-    background: '#00F0FF',
+    background: theme.accent,
     transition: 'width 0.4s ease',
   });
 
   const ctaStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '20px',
     lineHeight: 1.8,
-    color: 'rgba(245, 240, 232, 0.6)',
+    color: theme.textSecondary,
     marginTop: '60px',
     textAlign: 'center',
   };
@@ -120,12 +122,12 @@ const WhoIWorkWith: React.FC = () => {
         <div style={headerStyle} className="wiww-header">
           <div>
             <div style={labelStyle}>
-              <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+              <span style={{ width: '40px', height: '1px', background: theme.accent }} />
               Industries
             </div>
             <h2 style={titleStyle}>
               Who I<br />
-              <span style={{ color: '#00F0FF' }}>Work With</span>
+              <span style={{ color: theme.accent }}>Work With</span>
             </h2>
           </div>
           <p style={descriptionStyle}>
@@ -152,7 +154,7 @@ const WhoIWorkWith: React.FC = () => {
           If you're a tradie who wants more leads from Google,{' '}
           <a
             href="#contact"
-            style={{ color: '#00F0FF', textDecoration: 'none', fontWeight: 700 }}
+            style={{ color: theme.accent, textDecoration: 'none', fontWeight: 700 }}
             onMouseEnter={(e) => { e.currentTarget.style.textDecoration = 'underline'; }}
             onMouseLeave={(e) => { e.currentTarget.style.textDecoration = 'none'; }}
           >

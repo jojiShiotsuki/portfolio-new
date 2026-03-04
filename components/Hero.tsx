@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { PERSONAL_INFO } from '../constants';
 import { ArrowDownRight, Github, Linkedin, Music2 } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const { theme } = useTheme();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -32,9 +34,9 @@ const Hero: React.FC = () => {
   };
 
   const taglineStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.accent,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '32px',
@@ -45,26 +47,26 @@ const Hero: React.FC = () => {
   };
 
   const headlineStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(48px, 10vw, 140px)',
     fontWeight: 800,
     lineHeight: 0.9,
     letterSpacing: '-4px',
     marginBottom: '48px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
   };
 
   const accentTextStyle: React.CSSProperties = {
     color: 'transparent',
-    WebkitTextStroke: '2px #00F0FF',
+    WebkitTextStroke: `2px ${theme.headingStroke}`,
     display: 'block',
   };
 
   const descriptionStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '20px',
     lineHeight: 1.7,
-    color: 'rgba(245, 240, 232, 0.6)',
+    color: theme.textSecondary,
     maxWidth: '600px',
     marginBottom: '48px',
     animation: 'fadeInUp 0.8s ease-out 0.3s forwards',
@@ -81,11 +83,11 @@ const Hero: React.FC = () => {
   };
 
   const primaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '13px',
     fontWeight: 700,
-    color: '#0a0a0a',
-    background: '#f5f0e8',
+    color: theme.btnPrimaryText,
+    background: theme.textPrimary,
     padding: '20px 40px',
     textDecoration: 'none',
     letterSpacing: '2px',
@@ -99,16 +101,16 @@ const Hero: React.FC = () => {
   };
 
   const secondaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '13px',
     fontWeight: 400,
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     background: 'transparent',
     padding: '20px 40px',
     textDecoration: 'none',
     letterSpacing: '2px',
     textTransform: 'uppercase',
-    border: '1px solid rgba(245, 240, 232, 0.3)',
+    border: `1px solid ${theme.btnOutlineBorder}`,
     cursor: 'pointer',
     transition: 'all 0.3s ease',
   };
@@ -118,7 +120,7 @@ const Hero: React.FC = () => {
     width: '400px',
     height: '400px',
     borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, transparent 70%)',
+    background: `radial-gradient(circle, ${theme.accentDim} 0%, transparent 70%)`,
     filter: 'blur(60px)',
     transform: `translate(${mousePos.x * 0.02}px, ${mousePos.y * 0.02}px)`,
     transition: 'transform 0.3s ease-out',
@@ -131,10 +133,10 @@ const Hero: React.FC = () => {
     top: '50%',
     transform: 'translateY(-50%) rotate(90deg)',
     transformOrigin: 'center',
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
     letterSpacing: '4px',
-    color: 'rgba(245, 240, 232, 0.2)',
+    color: theme.textMuted,
     textTransform: 'uppercase',
     whiteSpace: 'nowrap',
   };
@@ -151,7 +153,7 @@ const Hero: React.FC = () => {
   };
 
   const socialLinkStyle: React.CSSProperties = {
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
     transition: 'all 0.2s ease',
     cursor: 'pointer',
   };
@@ -172,14 +174,14 @@ const Hero: React.FC = () => {
   const scrollLineStyle: React.CSSProperties = {
     width: '1px',
     height: '60px',
-    background: 'linear-gradient(to bottom, #00F0FF, transparent)',
+    background: `linear-gradient(to bottom, ${theme.accent}, transparent)`,
   };
 
   return (
     <section id="home" style={containerStyle}>
       {/* Floating gradient */}
       <div style={{ ...floatingElementStyle, top: '10%', right: '20%' }} className="hide-mobile" />
-      <div style={{ ...floatingElementStyle, bottom: '20%', left: '10%', background: 'radial-gradient(circle, rgba(255, 107, 74, 0.1) 0%, transparent 70%)' }} className="hide-mobile" />
+      <div style={{ ...floatingElementStyle, bottom: '20%', left: '10%', background: `radial-gradient(circle, rgba(245, 183, 49, 0.1) 0%, transparent 70%)` }} className="hide-mobile" />
 
       {/* Vertical text */}
       <div style={verticalTextStyle} className="hide-mobile">
@@ -193,8 +195,8 @@ const Hero: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           style={socialLinkStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.color = '#00F0FF'; e.currentTarget.style.transform = 'translateX(4px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; e.currentTarget.style.transform = 'translateX(4px)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; e.currentTarget.style.transform = 'translateX(0)'; }}
         >
           <Music2 size={20} />
         </a>
@@ -203,8 +205,8 @@ const Hero: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           style={socialLinkStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.color = '#00F0FF'; e.currentTarget.style.transform = 'translateX(4px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; e.currentTarget.style.transform = 'translateX(4px)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; e.currentTarget.style.transform = 'translateX(0)'; }}
         >
           <Linkedin size={20} />
         </a>
@@ -213,17 +215,17 @@ const Hero: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           style={socialLinkStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.color = '#00F0FF'; e.currentTarget.style.transform = 'translateX(4px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(245, 240, 232, 0.4)'; e.currentTarget.style.transform = 'translateX(0)'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; e.currentTarget.style.transform = 'translateX(4px)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; e.currentTarget.style.transform = 'translateX(0)'; }}
         >
           <Github size={20} />
         </a>
-        <div style={{ width: '1px', height: '60px', background: 'rgba(245, 240, 232, 0.2)' }} />
+        <div style={{ width: '1px', height: '60px', background: theme.textMuted }} />
       </div>
 
       <div style={contentStyle}>
         <div style={taglineStyle}>
-          <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+          <span style={{ width: '40px', height: '1px', background: theme.accent }} />
           {PERSONAL_INFO.role}
         </div>
 
@@ -248,12 +250,12 @@ const Hero: React.FC = () => {
             href="#contact"
             style={primaryCtaStyle}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#00F0FF';
+              e.currentTarget.style.background = theme.accent;
               e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 10px 40px rgba(0, 240, 255, 0.3)';
+              e.currentTarget.style.boxShadow = `0 10px 40px ${theme.accentGlow}`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#f5f0e8';
+              e.currentTarget.style.background = theme.textPrimary;
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
@@ -265,12 +267,12 @@ const Hero: React.FC = () => {
             href="#results"
             style={secondaryCtaStyle}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#00F0FF';
-              e.currentTarget.style.color = '#00F0FF';
+              e.currentTarget.style.borderColor = theme.accent;
+              e.currentTarget.style.color = theme.accent;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.3)';
-              e.currentTarget.style.color = '#f5f0e8';
+              e.currentTarget.style.borderColor = theme.btnOutlineBorder;
+              e.currentTarget.style.color = theme.textPrimary;
             }}
           >
             See My Results
@@ -280,7 +282,7 @@ const Hero: React.FC = () => {
 
       {/* Scroll indicator */}
       <div style={scrollIndicatorStyle} className="hide-mobile">
-        <span style={{ fontFamily: "'Space Mono', monospace", fontSize: '10px', letterSpacing: '2px', color: 'rgba(245, 240, 232, 0.4)' }}>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', letterSpacing: '2px', color: theme.textTertiary }}>
           SCROLL
         </span>
         <div style={scrollLineStyle} />

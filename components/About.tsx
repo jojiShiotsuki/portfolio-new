@@ -1,11 +1,14 @@
 import React from 'react';
 import { EXPERIENCE } from '../constants';
 import { MapPin, Clock, Award, Code2 } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const About: React.FC = () => {
+  const { theme } = useTheme();
+
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
-    background: '#0f0f0f',
+    background: theme.bgSecondary,
     position: 'relative',
     overflow: 'hidden',
   };
@@ -19,9 +22,9 @@ const About: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.labelColor,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '24px',
@@ -31,25 +34,25 @@ const About: React.FC = () => {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(40px, 5vw, 64px)',
     fontWeight: 800,
     lineHeight: 1.1,
     letterSpacing: '-2px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '40px',
   };
 
   const textStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '18px',
     lineHeight: 1.9,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     marginBottom: '24px',
   };
 
   const highlightStyle: React.CSSProperties = {
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     fontWeight: 600,
   };
 
@@ -62,8 +65,8 @@ const About: React.FC = () => {
 
   const statCardStyle: React.CSSProperties = {
     padding: '24px',
-    background: 'rgba(245, 240, 232, 0.02)',
-    border: '1px solid rgba(245, 240, 232, 0.08)',
+    background: theme.borderSecondary,
+    border: `1px solid ${theme.borderPrimary}`,
     transition: 'all 0.3s ease',
   };
 
@@ -73,17 +76,17 @@ const About: React.FC = () => {
   });
 
   const statValueStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: '24px',
     fontWeight: 700,
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '4px',
   };
 
   const statLabelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
     letterSpacing: '1px',
     textTransform: 'uppercase',
   };
@@ -96,7 +99,7 @@ const About: React.FC = () => {
   const timelineItemStyle: React.CSSProperties = {
     position: 'relative',
     paddingBottom: '48px',
-    borderLeft: '1px solid rgba(245, 240, 232, 0.1)',
+    borderLeft: `1px solid ${theme.borderPrimary}`,
     paddingLeft: '40px',
     marginLeft: '0',
   };
@@ -107,47 +110,47 @@ const About: React.FC = () => {
     top: '0',
     width: '12px',
     height: '12px',
-    background: '#00F0FF',
+    background: theme.accent,
     borderRadius: '50%',
-    boxShadow: '0 0 20px rgba(0, 240, 255, 0.4)',
+    boxShadow: `0 0 20px ${theme.accentGlow}`,
   };
 
   const roleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: '20px',
     fontWeight: 700,
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '4px',
   };
 
   const companyStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#FF6B4A',
+    color: theme.accentLight,
     letterSpacing: '1px',
     marginBottom: '8px',
   };
 
   const periodStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '11px',
-    color: 'rgba(245, 240, 232, 0.3)',
+    color: theme.textTertiary,
     letterSpacing: '1px',
     marginBottom: '12px',
   };
 
   const descStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '14px',
     lineHeight: 1.7,
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
   };
 
   const stats = [
-    { icon: Code2, value: '600+', label: 'Hours of Dev Experience', color: '#00F0FF' },
-    { icon: Clock, value: 'Daily', label: 'Updates to Skills', color: '#FF6B4A' },
-    { icon: Award, value: '#1', label: 'Google Rankings', color: '#00F0FF' },
-    { icon: MapPin, value: 'Global', label: 'AU, US & PH Clients', color: '#FF6B4A' },
+    { icon: Code2, value: '600+', label: 'Hours of Dev Experience', color: theme.accent },
+    { icon: Clock, value: 'Daily', label: 'Updates to Skills', color: theme.accentLight },
+    { icon: Award, value: '#1', label: 'Google Rankings', color: theme.accent },
+    { icon: MapPin, value: 'Global', label: 'AU, US & PH Clients', color: theme.accentLight },
   ];
 
   return (
@@ -159,7 +162,7 @@ const About: React.FC = () => {
         right: '-10%',
         width: '500px',
         height: '500px',
-        background: 'radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, transparent 70%)',
+        background: `radial-gradient(circle, ${theme.accentDim} 0%, transparent 70%)`,
         pointerEvents: 'none',
       }} />
 
@@ -167,12 +170,12 @@ const About: React.FC = () => {
         {/* Left Column - Story */}
         <div>
           <div style={labelStyle}>
-            <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+            <span style={{ width: '40px', height: '1px', background: theme.accent }} />
             About
           </div>
           <h2 style={titleStyle}>
             Why Tradies<br />
-            <span style={{ color: '#00F0FF' }}>Trust Me</span>
+            <span style={{ color: theme.accent }}>Trust Me</span>
           </h2>
 
           <p style={textStyle}>
@@ -183,12 +186,12 @@ const About: React.FC = () => {
           </p>
           <p style={textStyle}>
             That's why I handle everything:<br />
-            <span style={{ color: '#00F0FF' }}>No tech jargon.</span>{' '}
-            <span style={{ color: '#FF6B4A', fontWeight: 700 }}>No endless back-and-forth.</span>{' '}
+            <span style={{ color: theme.accent }}>No tech jargon.</span>{' '}
+            <span style={{ color: theme.accentLight, fontWeight: 700 }}>No endless back-and-forth.</span>{' '}
             Just a website that ranks and brings you customers.
           </p>
           <p style={textStyle}>
-            I've ranked local businesses <span style={{ color: '#00F0FF', fontWeight: 700 }}>#1 on Google</span>. I'll do the same for you.
+            I've ranked local businesses <span style={{ color: theme.accent, fontWeight: 700 }}>#1 on Google</span>. I'll do the same for you.
           </p>
 
           <div style={statsGridStyle}>
@@ -198,11 +201,11 @@ const About: React.FC = () => {
                 style={statCardStyle}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = stat.color;
-                  e.currentTarget.style.background = 'rgba(245, 240, 232, 0.04)';
+                  e.currentTarget.style.background = theme.borderPrimary;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.08)';
-                  e.currentTarget.style.background = 'rgba(245, 240, 232, 0.02)';
+                  e.currentTarget.style.borderColor = theme.borderPrimary;
+                  e.currentTarget.style.background = theme.borderSecondary;
                 }}
               >
                 <stat.icon size={24} style={statIconStyle(stat.color)} />
@@ -216,9 +219,9 @@ const About: React.FC = () => {
         {/* Right Column - Timeline */}
         <div style={timelineStyle}>
           <div style={{
-            fontFamily: "'Space Mono', monospace",
+            fontFamily: "'JetBrains Mono', monospace",
             fontSize: '11px',
-            color: 'rgba(245, 240, 232, 0.3)',
+            color: theme.textTertiary,
             letterSpacing: '2px',
             textTransform: 'uppercase',
             marginBottom: '40px',

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, PhoneCall, Rocket } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const steps = [
   {
@@ -27,10 +28,11 @@ const steps = [
 
 const HowItWorks: React.FC = () => {
   const [hoveredStep, setHoveredStep] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
-    background: '#0a0a0a',
+    background: theme.bgPrimary,
     position: 'relative',
   };
 
@@ -40,9 +42,9 @@ const HowItWorks: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.labelColor,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '24px',
@@ -52,12 +54,12 @@ const HowItWorks: React.FC = () => {
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(40px, 6vw, 72px)',
     fontWeight: 800,
     lineHeight: 1,
     letterSpacing: '-2px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '80px',
   };
 
@@ -65,11 +67,11 @@ const HowItWorks: React.FC = () => {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '2px',
-    background: 'rgba(245, 240, 232, 0.1)',
+    background: theme.borderPrimary,
   };
 
   const cardStyle = (isHovered: boolean): React.CSSProperties => ({
-    background: isHovered ? '#141414' : '#0a0a0a',
+    background: isHovered ? theme.bgCardHover : theme.bgPrimary,
     padding: '48px',
     transition: 'all 0.4s ease',
     cursor: 'default',
@@ -78,9 +80,9 @@ const HowItWorks: React.FC = () => {
   });
 
   const numberStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: 'rgba(245, 240, 232, 0.2)',
+    color: theme.textMuted,
     marginBottom: '40px',
   };
 
@@ -91,25 +93,25 @@ const HowItWorks: React.FC = () => {
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: '32px',
-    color: isHovered ? '#00F0FF' : 'rgba(245, 240, 232, 0.4)',
+    color: isHovered ? theme.accent : theme.textTertiary,
     transition: 'all 0.3s ease',
-    border: `1px solid ${isHovered ? '#00F0FF' : 'rgba(245, 240, 232, 0.1)'}`,
+    border: `1px solid ${isHovered ? theme.accent : theme.borderPrimary}`,
   });
 
   const stepTitleStyle = (isHovered: boolean): React.CSSProperties => ({
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: '24px',
     fontWeight: 700,
-    color: isHovered ? '#f5f0e8' : 'rgba(245, 240, 232, 0.8)',
+    color: isHovered ? theme.textPrimary : theme.textSecondary,
     marginBottom: '16px',
     transition: 'color 0.3s ease',
   });
 
   const descStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '16px',
     lineHeight: 1.7,
-    color: 'rgba(245, 240, 232, 0.4)',
+    color: theme.textTertiary,
   };
 
   const accentLineStyle = (isHovered: boolean): React.CSSProperties => ({
@@ -118,7 +120,7 @@ const HowItWorks: React.FC = () => {
     left: 0,
     width: isHovered ? '100%' : '0%',
     height: '2px',
-    background: '#00F0FF',
+    background: theme.accent,
     transition: 'width 0.4s ease',
   });
 
@@ -126,12 +128,12 @@ const HowItWorks: React.FC = () => {
     <section id="how-it-works" style={sectionStyle}>
       <div style={containerStyle}>
         <div style={labelStyle}>
-          <span style={{ width: '40px', height: '1px', background: '#00F0FF' }} />
+          <span style={{ width: '40px', height: '1px', background: theme.accent }} />
           Process
         </div>
         <h2 style={titleStyle}>
           How It<br />
-          <span style={{ color: '#00F0FF' }}>Works</span>
+          <span style={{ color: theme.accent }}>Works</span>
         </h2>
 
         <div style={gridStyle} className="hiw-grid">

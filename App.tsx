@@ -14,31 +14,7 @@ import ProjectsPage from './components/ProjectsPage';
 import UrgencyBanner from './components/UrgencyBanner';
 import StickyCTA from './components/StickyCTA';
 import ChatBot from './components/ChatBot';
-
-const styles: Record<string, React.CSSProperties> = {
-  app: {
-    minHeight: '100vh',
-    position: 'relative',
-  },
-  gridOverlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundImage: `
-      linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px)
-    `,
-    backgroundSize: '100px 100px',
-    pointerEvents: 'none',
-    zIndex: 0,
-  },
-  content: {
-    position: 'relative',
-    zIndex: 1,
-  },
-};
+import { useTheme } from './ThemeContext';
 
 // Home page component
 const HomePage: React.FC = () => (
@@ -56,12 +32,38 @@ const HomePage: React.FC = () => (
 
 function App() {
   const [scrolled, setScrolled] = React.useState(false);
+  const { theme } = useTheme();
 
   React.useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const styles: Record<string, React.CSSProperties> = {
+    app: {
+      minHeight: '100vh',
+      position: 'relative',
+    },
+    gridOverlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundImage: `
+        linear-gradient(${theme.gridOverlayColor} 1px, transparent 1px),
+        linear-gradient(90deg, ${theme.gridOverlayColor} 1px, transparent 1px)
+      `,
+      backgroundSize: '100px 100px',
+      pointerEvents: 'none' as const,
+      zIndex: 0,
+    },
+    content: {
+      position: 'relative',
+      zIndex: 1,
+    },
+  };
 
   return (
     <BrowserRouter>

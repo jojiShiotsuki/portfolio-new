@@ -1,11 +1,14 @@
 import React from 'react';
 import { PERSONAL_INFO } from '../constants';
 import { Mail, ArrowUpRight } from 'lucide-react';
+import { useTheme } from '../ThemeContext';
 
 const Contact: React.FC = () => {
+  const { theme } = useTheme();
+
   const sectionStyle: React.CSSProperties = {
     padding: '200px 48px',
-    background: '#0a0a0a',
+    background: theme.bgPrimary,
     position: 'relative',
     overflow: 'hidden',
   };
@@ -19,29 +22,29 @@ const Contact: React.FC = () => {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '12px',
-    color: '#00F0FF',
+    color: theme.labelColor,
     letterSpacing: '4px',
     textTransform: 'uppercase',
     marginBottom: '32px',
   };
 
   const titleStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Bricolage Grotesque', sans-serif",
     fontSize: 'clamp(48px, 8vw, 100px)',
     fontWeight: 800,
     lineHeight: 1,
     letterSpacing: '-3px',
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     marginBottom: '32px',
   };
 
   const descStyle: React.CSSProperties = {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '20px',
     lineHeight: 1.7,
-    color: 'rgba(245, 240, 232, 0.5)',
+    color: theme.textSecondary,
     maxWidth: '600px',
     margin: '0 auto 64px',
   };
@@ -54,11 +57,11 @@ const Contact: React.FC = () => {
   };
 
   const primaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
     fontWeight: 700,
-    color: '#0a0a0a',
-    background: '#00F0FF',
+    color: theme.btnPrimaryText,
+    background: theme.accent,
     padding: '24px 48px',
     textDecoration: 'none',
     letterSpacing: '2px',
@@ -72,16 +75,16 @@ const Contact: React.FC = () => {
   };
 
   const secondaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
     fontWeight: 400,
-    color: '#f5f0e8',
+    color: theme.textPrimary,
     background: 'transparent',
     padding: '24px 48px',
     textDecoration: 'none',
     letterSpacing: '2px',
     textTransform: 'uppercase',
-    border: '1px solid rgba(245, 240, 232, 0.2)',
+    border: `1px solid ${theme.borderHover}`,
     cursor: 'pointer',
     transition: 'all 0.3s ease',
     display: 'flex',
@@ -91,9 +94,9 @@ const Contact: React.FC = () => {
 
   const emailDisplayStyle: React.CSSProperties = {
     marginTop: '80px',
-    fontFamily: "'Space Mono', monospace",
+    fontFamily: "'JetBrains Mono', monospace",
     fontSize: '14px',
-    color: 'rgba(245, 240, 232, 0.3)',
+    color: theme.textTertiary,
     letterSpacing: '2px',
   };
 
@@ -107,7 +110,7 @@ const Contact: React.FC = () => {
         transform: 'translate(-50%, -50%)',
         width: '800px',
         height: '800px',
-        background: 'radial-gradient(circle, rgba(0, 240, 255, 0.03) 0%, transparent 60%)',
+        background: `radial-gradient(circle, ${theme.accentBorder} 0%, transparent 60%)`,
         pointerEvents: 'none',
       }} />
       <div style={{
@@ -116,7 +119,7 @@ const Contact: React.FC = () => {
         left: '0',
         right: '0',
         height: '1px',
-        background: 'linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent)',
+        background: `linear-gradient(90deg, transparent, ${theme.accentBorder}, transparent)`,
       }} />
 
       <div style={containerStyle}>
@@ -124,7 +127,7 @@ const Contact: React.FC = () => {
 
         <h2 style={titleStyle}>
           Ready to Get<br />
-          <span style={{ color: 'transparent', WebkitTextStroke: '2px #00F0FF' }}>More Leads?</span>
+          <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>More Leads?</span>
         </h2>
 
         <p style={descStyle}>
@@ -136,12 +139,12 @@ const Contact: React.FC = () => {
             href={`mailto:${PERSONAL_INFO.email}?subject=Free%20Website%20Audit%20Request`}
             style={primaryCtaStyle}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f5f0e8';
+              e.currentTarget.style.background = theme.textPrimary;
               e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = '0 20px 60px rgba(0, 240, 255, 0.3)';
+              e.currentTarget.style.boxShadow = `0 20px 60px ${theme.accentGlow}`;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#00F0FF';
+              e.currentTarget.style.background = theme.accent;
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.boxShadow = 'none';
             }}
@@ -155,12 +158,12 @@ const Contact: React.FC = () => {
             rel="noopener noreferrer"
             style={secondaryCtaStyle}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#FF6B4A';
-              e.currentTarget.style.color = '#FF6B4A';
+              e.currentTarget.style.borderColor = theme.accentLight;
+              e.currentTarget.style.color = theme.accentLight;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(245, 240, 232, 0.2)';
-              e.currentTarget.style.color = '#f5f0e8';
+              e.currentTarget.style.borderColor = theme.borderHover;
+              e.currentTarget.style.color = theme.textPrimary;
             }}
           >
             Connect on LinkedIn

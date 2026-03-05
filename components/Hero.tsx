@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
     color: theme.accent,
     letterSpacing: '4px',
     textTransform: 'uppercase',
-    marginBottom: '32px',
+    marginBottom: '24px',
     display: 'flex',
     alignItems: 'center',
     gap: '16px',
@@ -70,11 +70,11 @@ const Hero: React.FC = () => {
 
   const descriptionStyle: React.CSSProperties = {
     fontFamily: "'Instrument Sans', sans-serif",
-    fontSize: '20px',
+    fontSize: '18px',
     lineHeight: 1.7,
     color: theme.textSecondary,
     maxWidth: '600px',
-    marginBottom: '48px',
+    marginBottom: '40px',
     animation: 'fadeInUp 0.8s ease-out 0.3s forwards',
     opacity: 0,
   };
@@ -192,7 +192,7 @@ const Hero: React.FC = () => {
           {PERSONAL_INFO.subHeadline}
         </p>
 
-        <div style={ctaContainerStyle}>
+        <div style={ctaContainerStyle} className="hero-cta-container">
           <InteractiveHoverButton
             text="Book a Call"
             variant="primary"
@@ -217,26 +217,42 @@ const Hero: React.FC = () => {
       <style>{`
         @media (max-width: 768px) {
           .hide-mobile { display: none !important; }
-          #home { padding: 100px 24px 60px !important; }
+          #home { padding: 80px 24px 40px !important; min-height: auto !important; }
           #home h1 {
-            font-size: clamp(32px, 10vw, 70px) !important;
-            letter-spacing: -1px !important;
-            line-height: 1 !important;
+            font-size: clamp(42px, 12vw, 80px) !important;
+            letter-spacing: -2px !important;
+            line-height: 0.95 !important;
+            margin-bottom: 24px !important;
+          }
+          #home p {
+            font-size: 16px !important;
+            margin-bottom: 32px !important;
+          }
+          .hero-cta-container {
+            gap: 16px !important;
           }
         }
         @media (max-width: 480px) {
-          #home { padding: 90px 16px 50px !important; }
+          #home { padding: 80px 16px 32px !important; }
           #home h1 {
-            font-size: clamp(28px, 9vw, 50px) !important;
-            letter-spacing: -1px !important;
-            line-height: 1.05 !important;
+            font-size: clamp(38px, 11vw, 56px) !important;
+            letter-spacing: -1.5px !important;
+            line-height: 1 !important;
+            margin-bottom: 20px !important;
+          }
+          #home p {
+            font-size: 15px !important;
+            margin-bottom: 24px !important;
+          }
+          .hero-cta-container {
+            gap: 12px !important;
           }
         }
         @media (max-width: 375px) {
           #home h1 {
-            font-size: 28px !important;
-            letter-spacing: 0px !important;
-            line-height: 1.1 !important;
+            font-size: 38px !important;
+            letter-spacing: -1px !important;
+            line-height: 1 !important;
           }
         }
       `}</style>

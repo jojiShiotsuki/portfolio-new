@@ -39,58 +39,83 @@ const PixelAssistant: React.FC = () => {
   if (location.pathname === '/talk') return null;
 
   return (
-    <button
-      onClick={() => navigate('/talk')}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        position: 'fixed',
-        bottom: '100px',
-        right: '32px',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '10px 18px 10px 10px',
-        background: hovered ? theme.accent : theme.bgPrimary,
-        border: `1px solid ${hovered ? theme.accent : theme.borderPrimary}`,
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        boxShadow: hovered
-          ? '0 8px 24px rgba(0,0,0,0.15)'
-          : '0 2px 8px rgba(0,0,0,0.08)',
-      }}
-      aria-label="Talk to Joji"
-    >
-      {/* Mini pixel character */}
-      <canvas
-        ref={miniCanvasRef}
-        width={FW * SPRITE_ZOOM}
-        height={FH * SPRITE_ZOOM}
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .pixel-assistant-btn {
+            bottom: 16px !important;
+            right: 16px !important;
+            padding: 8px 14px 8px 8px !important;
+            gap: 6px !important;
+          }
+          .pixel-assistant-btn .pixel-label {
+            font-size: 10px !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .pixel-assistant-btn {
+            padding: 8px !important;
+            border-radius: 50% !important;
+          }
+          .pixel-assistant-btn .pixel-label {
+            display: none !important;
+          }
+        }
+      `}</style>
+      <button
+        className="pixel-assistant-btn"
+        onClick={() => navigate('/talk')}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         style={{
-          width: FW * SPRITE_ZOOM,
-          height: FH * SPRITE_ZOOM,
-          imageRendering: 'pixelated',
-          display: spriteReady ? 'block' : 'none',
+          position: 'fixed',
+          bottom: '100px',
+          right: '32px',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          padding: '10px 18px 10px 10px',
+          background: hovered ? theme.accent : theme.bgPrimary,
+          border: `1px solid ${hovered ? theme.accent : theme.borderPrimary}`,
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          boxShadow: hovered
+            ? '0 8px 24px rgba(0,0,0,0.15)'
+            : '0 2px 8px rgba(0,0,0,0.08)',
         }}
-      />
-      {!spriteReady && (
-        <MessageCircle size={20} color={hovered ? theme.btnPrimaryText : theme.accent} />
-      )}
+        aria-label="Talk to Joji"
+      >
+        {/* Mini pixel character */}
+        <canvas
+          ref={miniCanvasRef}
+          width={FW * SPRITE_ZOOM}
+          height={FH * SPRITE_ZOOM}
+          style={{
+            width: FW * SPRITE_ZOOM,
+            height: FH * SPRITE_ZOOM,
+            imageRendering: 'pixelated',
+            display: spriteReady ? 'block' : 'none',
+          }}
+        />
+        {!spriteReady && (
+          <MessageCircle size={20} color={hovered ? theme.btnPrimaryText : theme.accent} />
+        )}
 
-      <span style={{
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: '11px',
-        fontWeight: 600,
-        letterSpacing: '1.5px',
-        textTransform: 'uppercase',
-        color: hovered ? theme.btnPrimaryText : theme.textPrimary,
-        transition: 'color 0.3s ease',
-        whiteSpace: 'nowrap',
-      }}>
-        Talk to Joji
-      </span>
-    </button>
+        <span className="pixel-label" style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: '11px',
+          fontWeight: 600,
+          letterSpacing: '1.5px',
+          textTransform: 'uppercase',
+          color: hovered ? theme.btnPrimaryText : theme.textPrimary,
+          transition: 'color 0.3s ease',
+          whiteSpace: 'nowrap',
+        }}>
+          Talk to Joji
+        </span>
+      </button>
+    </>
   );
 };
 

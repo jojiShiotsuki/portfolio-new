@@ -39,13 +39,22 @@ const InteractiveHoverButton = React.forwardRef<
   };
 
   return (
+    <>
+    <style>{`
+      @media (max-width: 480px) {
+        .interactive-hover-btn {
+          padding: 16px 28px !important;
+          font-size: 12px !important;
+        }
+      }
+    `}</style>
     <button
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={handleClick}
       className={cn(
-        "relative cursor-pointer overflow-hidden text-center",
+        "interactive-hover-btn relative cursor-pointer overflow-hidden text-center",
         className,
       )}
       style={{
@@ -104,6 +113,7 @@ const InteractiveHoverButton = React.forwardRef<
         transition: 'all 300ms ease',
       }} />
     </button>
+    </>
   );
 });
 

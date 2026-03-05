@@ -1,7 +1,14 @@
 interface Env {
   ANTHROPIC_API_KEY: string;
   ALLOWED_ORIGIN: string;
+  RATE_LIMIT: KVNamespace;
 }
+
+// --- Rate limit config ---
+const MAX_PER_IP_PER_HOUR = 20;    // Messages per IP per hour
+const MAX_GLOBAL_PER_DAY = 500;     // Total messages across all users per day
+const MAX_MESSAGE_LENGTH = 500;     // Characters per message
+const MAX_HISTORY_LENGTH = 30;      // Messages in conversation history
 
 const SYSTEM_PROMPT = `# ROLE & IDENTITY
 
@@ -117,7 +124,6 @@ interface ChatMessage {
 }
 
 function corsHeaders(origin: string, allowedOrigin: string): Record<string, string> {
-  // Allow localhost for dev, and the production domain
   const allowed = origin === allowedOrigin
     || origin.startsWith('http://localhost')
     || origin.startsWith('http://127.0.0.1');
@@ -127,6 +133,47 @@ function corsHeaders(origin: string, allowedOrigin: string): Record<string, stri
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
+}
+
+function isAllowedOrigin(origin: string, allowedOrigin: string): boolean {
+  return origin === allowedOrigin
+    || origin.startsWith('http://localhost')
+    || origin.startsWith('http://127.0.0.1');
+}
+
+// KV key helpers
+function ipKey(ip: string): string {
+  const hour = Math.floor(Date.now() / 3600000);
+  return `ip:${ip}:${hour}`;
+}
+
+function dailyKey(): string {
+  const day = new Date().toISOString().slice(0, 10);
+  return `global:${day}`;
+}
+
+async function checkRateLimit(env: Env, ip: string): Promise<{ allowed: boolean; reason?: string }> {
+  // Check per-IP hourly limit
+  const ipk = ipKey(ip);
+  const ipCount = parseInt(await env.RATE_LIMIT.get(ipk) || '0', 10);
+  if (ipCount >= MAX_PER_IP_PER_HOUR) {
+    return { allowed: false, reason: 'Too many messages. Try again in a bit!' };
+  }
+
+  // Check global daily limit
+  const dk = dailyKey();
+  const globalCount = parseInt(await env.RATE_LIMIT.get(dk) || '0', 10);
+  if (globalCount >= MAX_GLOBAL_PER_DAY) {
+    return { allowed: false, reason: "Joji's assistant is flat out today! Shoot him an email at jojishiotsuki0@gmail.com or book a call at calendly.com/jojishiotsuki0/30min" };
+  }
+
+  // Increment both counters (TTL: IP=1hr, global=24hr)
+  await Promise.all([
+    env.RATE_LIMIT.put(ipk, String(ipCount + 1), { expirationTtl: 3600 }),
+    env.RATE_LIMIT.put(dk, String(globalCount + 1), { expirationTtl: 86400 }),
+  ]);
+
+  return { allowed: true };
 }
 
 export default {
@@ -145,9 +192,29 @@ export default {
       });
     }
 
+    // Strict origin check — block requests from unknown origins
+    if (!isAllowedOrigin(origin, env.ALLOWED_ORIGIN)) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Get client IP
+    const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+
+    // Rate limit check
+    const rateCheck = await checkRateLimit(env, ip);
+    if (!rateCheck.allowed) {
+      return new Response(JSON.stringify({ reply: rateCheck.reason }), {
+        status: 429,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
+
     try {
       const body = await request.json() as { message: string; history?: ChatMessage[] };
-      const { message, history = [] } = body;
+      let { message, history = [] } = body;
 
       if (!message || typeof message !== 'string') {
         return new Response(JSON.stringify({ error: 'Message is required' }), {
@@ -155,6 +222,24 @@ export default {
           headers: { ...headers, 'Content-Type': 'application/json' },
         });
       }
+
+      // Cap message length
+      if (message.length > MAX_MESSAGE_LENGTH) {
+        message = message.slice(0, MAX_MESSAGE_LENGTH);
+      }
+
+      // Cap history length (keep most recent messages)
+      if (history.length > MAX_HISTORY_LENGTH) {
+        history = history.slice(-MAX_HISTORY_LENGTH);
+      }
+
+      // Sanitize history entries
+      history = history
+        .filter((m) => m.role === 'user' || m.role === 'assistant')
+        .map((m) => ({
+          role: m.role,
+          content: typeof m.content === 'string' ? m.content.slice(0, MAX_MESSAGE_LENGTH) : '',
+        }));
 
       // Build messages array for Claude
       const messages = [

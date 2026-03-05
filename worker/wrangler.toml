@@ -4,3 +4,7 @@ compatibility_date = "2024-12-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://jojishiotsuki.com"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "113ddfd576f54d0f80e02f0267a1611b"

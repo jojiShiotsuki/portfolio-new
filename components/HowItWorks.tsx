@@ -246,9 +246,9 @@ const HowItWorks: React.FC = () => {
         {/* CTA */}
         <div style={{ textAlign: 'center', marginTop: '80px' }}>
           <InteractiveHoverButton
-            text="Start My Free Audit"
+            text="Book a Call"
             variant="primary"
-            href="#contact"
+            href="https://calendly.com/jojishiotsuki0/30min"
             style={{ display: 'inline-flex' }}
           />
         </div>

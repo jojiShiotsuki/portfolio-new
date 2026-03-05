@@ -1,0 +1,6 @@
+name = "claude-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://jojishiotsuki.com"

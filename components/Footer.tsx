@@ -1,4 +1,5 @@
 import React from 'react';
+import { Mail } from 'lucide-react';
 import { SOCIAL_LINKS, PERSONAL_INFO } from '../constants';
 import { useTheme } from '../ThemeContext';
 
@@ -93,6 +94,21 @@ const Footer: React.FC = () => {
         </div>
 
         <div style={socialContainerStyle} className="footer-social">
+          <a
+            href={`mailto:${PERSONAL_INFO.email}`}
+            style={socialLinkStyle}
+            aria-label="Email"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = theme.accent;
+              e.currentTarget.style.borderColor = theme.accent;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = theme.textTertiary;
+              e.currentTarget.style.borderColor = theme.borderPrimary;
+            }}
+          >
+            <Mail size={18} />
+          </a>
           {SOCIAL_LINKS.map((social) => (
             <a
               key={social.platform}

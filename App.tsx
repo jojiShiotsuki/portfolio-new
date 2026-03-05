@@ -11,8 +11,10 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectsPage from './components/ProjectsPage';
+import AssistantPage from './components/AssistantPage';
 import UrgencyBanner from './components/UrgencyBanner';
 import StickyCTA from './components/StickyCTA';
+import PixelAssistant from './components/PixelAssistant';
 import { useTheme } from './ThemeContext';
 
 // Home page component
@@ -76,10 +78,12 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/projects" element={<ProjectsPage />} />
+              <Route path="/talk" element={<AssistantPage />} />
             </Routes>
           </main>
           <Footer />
           <StickyCTA />
+          <PixelAssistant />
         </div>
       </div>
     </BrowserRouter>

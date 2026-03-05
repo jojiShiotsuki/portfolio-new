@@ -194,9 +194,9 @@ const Hero: React.FC = () => {
 
         <div style={ctaContainerStyle}>
           <InteractiveHoverButton
-            text="Get a Free Website Audit"
+            text="Book a Call"
             variant="primary"
-            href="#contact"
+            href="https://calendly.com/jojishiotsuki0/30min"
           />
           <InteractiveHoverButton
             text="See My Results"

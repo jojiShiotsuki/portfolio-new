@@ -57,8 +57,9 @@ const InteractiveHoverButton = React.forwardRef<
         padding: '20px 40px',
         background: isPrimary ? theme.textPrimary : 'transparent',
         color: isPrimary ? theme.btnPrimaryText : theme.textPrimary,
-        border: `1px solid ${isPrimary ? theme.textPrimary : theme.btnOutlineBorder}`,
-        borderColor: !isPrimary && hovered ? theme.accent : undefined,
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: !isPrimary && hovered ? theme.accent : (isPrimary ? theme.textPrimary : theme.btnOutlineBorder),
         transition: 'border-color 0.3s ease',
         ...externalStyle,
       }}

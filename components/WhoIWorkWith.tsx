@@ -159,9 +159,9 @@ const WhoIWorkWith: React.FC = () => {
             If you're a tradie who wants more leads from Google, let's talk.
           </p>
           <InteractiveHoverButton
-            text="Get a Free Audit"
+            text="Book a Call"
             variant="primary"
-            href="#contact"
+            href="https://calendly.com/jojishiotsuki0/30min"
             style={{ display: 'inline-flex' }}
           />
         </div>

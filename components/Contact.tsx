@@ -101,9 +101,9 @@ const Contact: React.FC = () => {
 
         <div style={ctaContainerStyle}>
           <InteractiveHoverButton
-            text="Get Your Free Audit"
+            text="Book a Call"
             variant="primary"
-            href={`mailto:${PERSONAL_INFO.email}?subject=Free%20Website%20Audit%20Request`}
+            href="https://calendly.com/jojishiotsuki0/30min"
             style={{ padding: '24px 48px', fontSize: '14px' }}
           />
           <InteractiveHoverButton

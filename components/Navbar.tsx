@@ -136,10 +136,9 @@ const Navbar: React.FC = () => {
           ))}
           <ThemeToggle />
           <InteractiveHoverButton
-            text="Free Audit"
+            text="Book a Call"
             variant="primary"
-            href={isHomePage ? '#contact' : undefined}
-            to={isHomePage ? undefined : '/#contact'}
+            href="https://calendly.com/jojishiotsuki0/30min"
             style={{ padding: '14px 28px', fontSize: '11px' }}
           />
         </div>
@@ -214,10 +213,9 @@ const Navbar: React.FC = () => {
             )
           ))}
           <InteractiveHoverButton
-            text="Free Audit"
+            text="Book a Call"
             variant="primary"
-            href={isHomePage ? '#contact' : undefined}
-            to={isHomePage ? undefined : '/#contact'}
+            href="https://calendly.com/jojishiotsuki0/30min"
             onClick={() => setIsOpen(false)}
             style={{ padding: '14px 28px', fontSize: '11px', marginTop: '8px', width: '100%' }}
           />

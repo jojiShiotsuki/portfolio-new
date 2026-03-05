@@ -55,9 +55,9 @@ const StickyCTA: React.FC = () => {
       <div style={{ position: 'relative' }}>
         <span style={pulseStyle} />
         <InteractiveHoverButton
-          text="LET'S BUILD"
+          text="BOOK A CALL"
           variant="primary"
-          href="#contact"
+          href="https://calendly.com/jojishiotsuki0/30min"
           style={{ padding: '18px 32px', fontSize: '14px', boxShadow: `0 4px 30px ${theme.accentGlow}` }}
         />
       </div>

@@ -20,7 +20,7 @@ const WhoIWorkWith: React.FC = () => {
     <section id="who-i-work-with" style={{ padding: '160px 48px', background: theme.bgPrimary, position: 'relative', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header - centered */}
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+        <div className="wiww-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '12px',
@@ -174,14 +174,17 @@ const WhoIWorkWith: React.FC = () => {
           }
         }
         @media (max-width: 768px) {
-          #who-i-work-with { padding: 80px 24px !important; }
+          #who-i-work-with { padding: 64px 20px !important; }
+          .wiww-header { margin-bottom: 48px !important; }
           .wiww-grid {
             grid-template-columns: 1fr !important;
             gap: 16px !important;
           }
+          .wiww-grid > div { padding: 24px !important; }
         }
         @media (max-width: 480px) {
-          #who-i-work-with { padding: 60px 16px !important; }
+          #who-i-work-with { padding: 48px 16px !important; }
+          .wiww-header { margin-bottom: 40px !important; }
         }
       `}</style>
     </section>

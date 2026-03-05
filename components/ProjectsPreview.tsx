@@ -281,7 +281,7 @@ const ProjectsPreview: React.FC = () => {
   return (
     <section id="projects" style={sectionStyle}>
       <div style={containerStyle}>
-        <div style={headerStyle}>
+        <div className="projects-header" style={headerStyle}>
           <div>
             <div style={labelStyle}>
               <span style={{ width: '40px', height: '1px', background: theme.accent }} />
@@ -318,7 +318,7 @@ const ProjectsPreview: React.FC = () => {
         </div>
 
         {/* CTA to view all */}
-        <div style={{ textAlign: 'center', marginTop: '80px' }}>
+        <div className="projects-cta-bottom" style={{ textAlign: 'center', marginTop: '80px' }}>
           <InteractiveHoverButton
             text={`Explore All ${PROJECTS.length} Projects`}
             variant="primary"
@@ -330,10 +330,13 @@ const ProjectsPreview: React.FC = () => {
 
       <style>{`
         @media (max-width: 768px) {
-          #projects { padding: 80px 24px !important; }
+          #projects { padding: 64px 20px !important; }
+          .projects-header { margin-bottom: 48px !important; }
+          .projects-cta-bottom { margin-top: 48px !important; }
         }
         @media (max-width: 480px) {
-          #projects { padding: 60px 16px !important; }
+          #projects { padding: 48px 16px !important; }
+          .projects-header { margin-bottom: 40px !important; }
         }
       `}</style>
     </section>

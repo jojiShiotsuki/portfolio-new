@@ -38,7 +38,7 @@ const HowItWorks: React.FC = () => {
     <section id="how-it-works" style={{ padding: '160px 48px', background: theme.bgSecondary, position: 'relative', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+        <div className="hiw-header" style={{ textAlign: 'center', marginBottom: '100px' }}>
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '12px',
@@ -244,7 +244,7 @@ const HowItWorks: React.FC = () => {
         </div>
 
         {/* CTA */}
-        <div style={{ textAlign: 'center', marginTop: '80px' }}>
+        <div className="hiw-cta" style={{ textAlign: 'center', marginTop: '80px' }}>
           <InteractiveHoverButton
             text="Book a Call"
             variant="primary"
@@ -256,7 +256,9 @@ const HowItWorks: React.FC = () => {
 
       <style>{`
         @media (max-width: 768px) {
-          #how-it-works { padding: 80px 24px !important; }
+          #how-it-works { padding: 64px 20px !important; }
+          .hiw-header { margin-bottom: 48px !important; }
+          .hiw-cta { margin-top: 48px !important; }
           .hiw-grid {
             grid-template-columns: 1fr !important;
             gap: 60px !important;
@@ -265,7 +267,8 @@ const HowItWorks: React.FC = () => {
           .hiw-arrow { display: none !important; }
         }
         @media (max-width: 480px) {
-          #how-it-works { padding: 60px 16px !important; }
+          #how-it-works { padding: 48px 16px !important; }
+          .hiw-header { margin-bottom: 40px !important; }
         }
       `}</style>
     </section>

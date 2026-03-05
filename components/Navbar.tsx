@@ -98,11 +98,12 @@ const Navbar: React.FC = () => {
     <>
       <style>{`
         @media (max-width: 768px) {
+          .main-nav { padding: 16px 20px !important; }
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
         }
       `}</style>
-      <nav style={navStyle}>
+      <nav className="main-nav" style={navStyle}>
         <Link to="/" style={logoStyle}>
           <span style={{ color: theme.accentLight }}>[</span>
           JOJI.DEV

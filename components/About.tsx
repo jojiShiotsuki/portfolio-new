@@ -249,10 +249,11 @@ const About: React.FC = () => {
           }
         }
         @media (max-width: 768px) {
-          #about { padding: 80px 24px !important; }
+          #about { padding: 64px 20px !important; }
+          .about-container { gap: 48px !important; }
         }
         @media (max-width: 480px) {
-          #about { padding: 60px 16px !important; }
+          #about { padding: 48px 16px !important; }
         }
       `}</style>
     </section>

@@ -37,7 +37,7 @@ const Results: React.FC = () => {
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+        <div className="results-header" style={{ textAlign: 'center', marginBottom: '100px' }}>
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '12px',
@@ -477,14 +477,18 @@ const Results: React.FC = () => {
           }
         }
         @media (max-width: 768px) {
-          #results { padding: 80px 24px !important; }
+          #results { padding: 64px 20px !important; }
+          .results-header { margin-bottom: 48px !important; }
+          .results-case-study { margin-bottom: 60px !important; }
+          .results-ongoing { margin-bottom: 40px !important; padding: 24px 0 !important; }
           .results-stats-grid {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 32px !important;
           }
         }
         @media (max-width: 480px) {
-          #results { padding: 60px 16px !important; }
+          #results { padding: 48px 16px !important; }
+          .results-header { margin-bottom: 40px !important; }
           .results-stats-grid {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 24px !important;

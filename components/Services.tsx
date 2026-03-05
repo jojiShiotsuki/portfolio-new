@@ -18,7 +18,7 @@ const Services: React.FC = () => {
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
         {/* Header - centered */}
-        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+        <div className="services-header" style={{ textAlign: 'center', marginBottom: '100px' }}>
           <div style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '12px',
@@ -163,10 +163,13 @@ const Services: React.FC = () => {
           }
         }
         @media (max-width: 768px) {
-          #services { padding: 80px 24px !important; }
+          #services { padding: 64px 20px !important; }
+          .services-header { margin-bottom: 48px !important; }
+          .services-row { padding: 32px 0 !important; }
         }
         @media (max-width: 480px) {
-          #services { padding: 60px 16px !important; }
+          #services { padding: 48px 16px !important; }
+          .services-header { margin-bottom: 40px !important; }
         }
       `}</style>
     </section>

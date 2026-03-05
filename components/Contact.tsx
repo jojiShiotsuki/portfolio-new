@@ -95,7 +95,7 @@ const Contact: React.FC = () => {
           <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>More Leads?</span>
         </h2>
 
-        <p style={descStyle}>
+        <p className="contact-desc" style={descStyle}>
           Get a free website audit. I'll show you exactly what's stopping you from ranking on Google — and how to fix it.
         </p>
 
@@ -114,17 +114,19 @@ const Contact: React.FC = () => {
           />
         </div>
 
-        <div style={emailDisplayStyle}>
+        <div className="contact-email" style={emailDisplayStyle}>
           Or email me directly: {PERSONAL_INFO.email}
         </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          #contact { padding: 100px 24px !important; }
+          #contact { padding: 64px 20px !important; }
+          .contact-desc { margin-bottom: 40px !important; }
+          .contact-email { margin-top: 40px !important; }
         }
         @media (max-width: 480px) {
-          #contact { padding: 80px 16px !important; }
+          #contact { padding: 48px 16px !important; }
         }
       `}</style>
     </section>

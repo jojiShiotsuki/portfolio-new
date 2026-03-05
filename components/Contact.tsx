@@ -1,7 +1,7 @@
 import React from 'react';
 import { PERSONAL_INFO } from '../constants';
-import { Mail, ArrowUpRight } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const Contact: React.FC = () => {
   const { theme } = useTheme();
@@ -56,41 +56,6 @@ const Contact: React.FC = () => {
     flexWrap: 'wrap',
   };
 
-  const primaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '14px',
-    fontWeight: 700,
-    color: theme.btnPrimaryText,
-    background: theme.accent,
-    padding: '24px 48px',
-    textDecoration: 'none',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-  };
-
-  const secondaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '14px',
-    fontWeight: 400,
-    color: theme.textPrimary,
-    background: 'transparent',
-    padding: '24px 48px',
-    textDecoration: 'none',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    border: `1px solid ${theme.borderHover}`,
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-  };
 
   const emailDisplayStyle: React.CSSProperties = {
     marginTop: '80px',
@@ -135,40 +100,18 @@ const Contact: React.FC = () => {
         </p>
 
         <div style={ctaContainerStyle}>
-          <a
+          <InteractiveHoverButton
+            text="Get Your Free Audit"
+            variant="primary"
             href={`mailto:${PERSONAL_INFO.email}?subject=Free%20Website%20Audit%20Request`}
-            style={primaryCtaStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = theme.textPrimary;
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = `0 20px 60px ${theme.accentGlow}`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = theme.accent;
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <Mail size={18} />
-            Get Your Free Audit
-          </a>
-          <a
+            style={{ padding: '24px 48px', fontSize: '14px' }}
+          />
+          <InteractiveHoverButton
+            text="Connect on LinkedIn"
+            variant="outline"
             href="https://linkedin.com/in/jojishiotsuki"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={secondaryCtaStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = theme.accentLight;
-              e.currentTarget.style.color = theme.accentLight;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = theme.borderHover;
-              e.currentTarget.style.color = theme.textPrimary;
-            }}
-          >
-            Connect on LinkedIn
-            <ArrowUpRight size={18} />
-          </a>
+            style={{ padding: '24px 48px', fontSize: '14px' }}
+          />
         </div>
 
         <div style={emailDisplayStyle}>

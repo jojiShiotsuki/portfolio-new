@@ -13,7 +13,6 @@ import Footer from './components/Footer';
 import ProjectsPage from './components/ProjectsPage';
 import UrgencyBanner from './components/UrgencyBanner';
 import StickyCTA from './components/StickyCTA';
-import ChatBot from './components/ChatBot';
 import { useTheme } from './ThemeContext';
 
 // Home page component
@@ -81,7 +80,6 @@ function App() {
           </main>
           <Footer />
           <StickyCTA />
-          <ChatBot />
         </div>
       </div>
     </BrowserRouter>

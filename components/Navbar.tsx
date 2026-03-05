@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 import { useTheme } from '../ThemeContext';
+import { ThemeToggle } from './ui/theme-toggle';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,20 +69,6 @@ const Navbar: React.FC = () => {
     transition: 'color 0.2s ease',
   });
 
-  const ctaStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '11px',
-    fontWeight: 700,
-    color: theme.btnPrimaryText,
-    background: theme.accent,
-    padding: '14px 28px',
-    textDecoration: 'none',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-  };
 
   const statusDotStyle: React.CSSProperties = {
     width: '8px',
@@ -98,18 +86,6 @@ const Navbar: React.FC = () => {
     padding: '8px',
     cursor: 'pointer',
     color: theme.textPrimary,
-  };
-
-  const toggleBtnStyle: React.CSSProperties = {
-    background: 'transparent',
-    border: `1px solid ${theme.borderPrimary}`,
-    padding: '8px',
-    cursor: 'pointer',
-    color: theme.textPrimary,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.2s ease',
   };
 
   const navItems = [
@@ -158,48 +134,20 @@ const Navbar: React.FC = () => {
               </a>
             )
           ))}
-          <button
-            onClick={toggleTheme}
-            style={toggleBtnStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = theme.accent;
-              e.currentTarget.style.color = theme.accent;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = theme.borderPrimary;
-              e.currentTarget.style.color = theme.textPrimary;
-            }}
-            aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
-          >
-            {mode === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-          <a
-            href={isHomePage ? '#contact' : '/#contact'}
-            style={ctaStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = theme.accentLight;
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = `0 4px 20px ${theme.accentGlow}`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = theme.accent;
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            Free Audit
-          </a>
+          <ThemeToggle />
+          <InteractiveHoverButton
+            text="Free Audit"
+            variant="primary"
+            href={isHomePage ? '#contact' : undefined}
+            to={isHomePage ? undefined : '/#contact'}
+            style={{ padding: '14px 28px', fontSize: '11px' }}
+          />
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={toggleTheme}
-            style={{ ...toggleBtnStyle, display: 'none' }}
-            className="mobile-menu-btn"
-            aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
-          >
-            {mode === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+          <div style={{ display: 'none' }} className="mobile-menu-btn">
+            <ThemeToggle />
+          </div>
           <button
             onClick={() => setIsOpen(!isOpen)}
             style={mobileMenuBtnStyle}
@@ -265,17 +213,14 @@ const Navbar: React.FC = () => {
               </a>
             )
           ))}
-          <a
-            href={isHomePage ? '#contact' : '/#contact'}
+          <InteractiveHoverButton
+            text="Free Audit"
+            variant="primary"
+            href={isHomePage ? '#contact' : undefined}
+            to={isHomePage ? undefined : '/#contact'}
             onClick={() => setIsOpen(false)}
-            style={{
-              ...ctaStyle,
-              textAlign: 'center',
-              marginTop: '8px',
-            }}
-          >
-            Free Audit
-          </a>
+            style={{ padding: '14px 28px', fontSize: '11px', marginTop: '8px', width: '100%' }}
+          />
         </div>
       )}
     </>

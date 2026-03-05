@@ -4,6 +4,7 @@ import { PROJECTS } from '../constants';
 import { Project } from '../types';
 import { Github, ArrowUpRight, ArrowRight } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -273,20 +274,6 @@ const ProjectsPreview: React.FC = () => {
     color: theme.textPrimary,
   };
 
-  const viewAllStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '13px',
-    color: theme.textPrimary,
-    textDecoration: 'none',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '16px 32px',
-    border: `1px solid ${theme.borderHover}`,
-    transition: 'all 0.3s ease',
-  };
 
   // Only show first 2 projects on homepage
   const previewProjects = PROJECTS.slice(0, 2);
@@ -316,23 +303,12 @@ const ProjectsPreview: React.FC = () => {
             </p>
           </div>
 
-          <Link
+          <InteractiveHoverButton
+            text="View All Projects"
+            variant="outline"
             to="/projects"
-            style={viewAllStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = theme.accent;
-              e.currentTarget.style.color = theme.accent;
-              e.currentTarget.style.background = theme.accentBorder;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = theme.borderHover;
-              e.currentTarget.style.color = theme.textPrimary;
-              e.currentTarget.style.background = 'transparent';
-            }}
-          >
-            View All Projects
-            <ArrowRight size={16} />
-          </Link>
+            style={{ padding: '16px 32px' }}
+          />
         </div>
 
         <div>
@@ -343,37 +319,12 @@ const ProjectsPreview: React.FC = () => {
 
         {/* CTA to view all */}
         <div style={{ textAlign: 'center', marginTop: '80px' }}>
-          <Link
+          <InteractiveHoverButton
+            text={`Explore All ${PROJECTS.length} Projects`}
+            variant="primary"
             to="/projects"
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: '14px',
-              fontWeight: 700,
-              color: theme.bgPrimary,
-              background: theme.accent,
-              padding: '20px 48px',
-              textDecoration: 'none',
-              letterSpacing: '2px',
-              textTransform: 'uppercase',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = theme.textPrimary;
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = `0 10px 40px ${theme.accentGlow}`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = theme.accent;
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            Explore All {PROJECTS.length} Projects
-            <ArrowRight size={18} />
-          </Link>
+            style={{ display: 'inline-flex' }}
+          />
         </div>
       </div>
 

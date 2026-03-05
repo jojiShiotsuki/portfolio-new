@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const StickyCTA: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,24 +26,6 @@ const StickyCTA: React.FC = () => {
     pointerEvents: isVisible ? 'auto' : 'none',
   };
 
-  const buttonStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '14px',
-    fontWeight: 700,
-    color: theme.btnPrimaryText,
-    background: theme.accent,
-    padding: '18px 32px',
-    border: 'none',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    textDecoration: 'none',
-    letterSpacing: '1px',
-    boxShadow: `0 4px 30px ${theme.accentGlow}`,
-    transition: 'all 0.3s ease',
-  };
-
   const pulseStyle: React.CSSProperties = {
     position: 'absolute',
     top: '-4px',
@@ -53,6 +35,8 @@ const StickyCTA: React.FC = () => {
     background: theme.accentLight,
     borderRadius: '50%',
     animation: 'pulse 2s infinite',
+    zIndex: 20,
+    pointerEvents: 'none',
   };
 
   return (
@@ -68,24 +52,15 @@ const StickyCTA: React.FC = () => {
           }
         }
       `}</style>
-      <a
-        href="#contact"
-        style={buttonStyle}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = theme.textPrimary;
-          e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = `0 8px 40px ${theme.accentGlow}`;
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = theme.accent;
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = `0 4px 30px ${theme.accentGlow}`;
-        }}
-      >
+      <div style={{ position: 'relative' }}>
         <span style={pulseStyle} />
-        LET'S BUILD
-        <ArrowRight size={18} />
-      </a>
+        <InteractiveHoverButton
+          text="LET'S BUILD"
+          variant="primary"
+          href="#contact"
+          style={{ padding: '18px 32px', fontSize: '14px', boxShadow: `0 4px 30px ${theme.accentGlow}` }}
+        />
+      </div>
     </div>
   );
 };

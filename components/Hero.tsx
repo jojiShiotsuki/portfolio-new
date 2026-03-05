@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { PERSONAL_INFO } from '../constants';
-import { ArrowDownRight, Github, Linkedin, Music2 } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
+import { TikTokIcon } from './ui/tiktok-icon';
 import { useTheme } from '../ThemeContext';
+import { GooeyText } from './ui/gooey-text-morphing';
+import { AnimatedSocialIcons } from './ui/animated-social-icons';
+
+const TRADE_WORDS = ["Tradies", "Plumbers", "Sparkies", "Chippies", "Builders", "Roofers"];
+
+const SOCIAL_ICONS = [
+  { Icon: TikTokIcon, href: "https://tiktok.com/@_shiotsuki" },
+  { Icon: Linkedin, href: "https://linkedin.com/in/jojishiotsuki" },
+  { Icon: Github, href: "https://github.com/jojiShiotsuki" },
+];
 
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -56,12 +68,6 @@ const Hero: React.FC = () => {
     color: theme.textPrimary,
   };
 
-  const accentTextStyle: React.CSSProperties = {
-    color: 'transparent',
-    WebkitTextStroke: `2px ${theme.headingStroke}`,
-    display: 'block',
-  };
-
   const descriptionStyle: React.CSSProperties = {
     fontFamily: "'Instrument Sans', sans-serif",
     fontSize: '20px',
@@ -82,38 +88,6 @@ const Hero: React.FC = () => {
     opacity: 0,
   };
 
-  const primaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '13px',
-    fontWeight: 700,
-    color: theme.btnPrimaryText,
-    background: theme.textPrimary,
-    padding: '20px 40px',
-    textDecoration: 'none',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-  };
-
-  const secondaryCtaStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '13px',
-    fontWeight: 400,
-    color: theme.textPrimary,
-    background: 'transparent',
-    padding: '20px 40px',
-    textDecoration: 'none',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    border: `1px solid ${theme.btnOutlineBorder}`,
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-  };
 
   const floatingElementStyle: React.CSSProperties = {
     position: 'absolute',
@@ -144,18 +118,12 @@ const Hero: React.FC = () => {
   const socialLinksStyle: React.CSSProperties = {
     position: 'absolute',
     left: '48px',
-    bottom: '80px',
+    bottom: '140px',
     display: 'flex',
     flexDirection: 'column',
     gap: '20px',
     animation: 'fadeInUp 0.8s ease-out 0.5s forwards',
     opacity: 0,
-  };
-
-  const socialLinkStyle: React.CSSProperties = {
-    color: theme.textTertiary,
-    transition: 'all 0.2s ease',
-    cursor: 'pointer',
   };
 
   const scrollIndicatorStyle: React.CSSProperties = {
@@ -190,37 +158,10 @@ const Hero: React.FC = () => {
 
       {/* Social links */}
       <div style={socialLinksStyle} className="hide-mobile">
-        <a
-          href="https://tiktok.com/@_shiotsuki"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={socialLinkStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; e.currentTarget.style.transform = 'translateX(4px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; e.currentTarget.style.transform = 'translateX(0)'; }}
-        >
-          <Music2 size={20} />
-        </a>
-        <a
-          href="https://linkedin.com/in/jojishiotsuki"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={socialLinkStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; e.currentTarget.style.transform = 'translateX(4px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; e.currentTarget.style.transform = 'translateX(0)'; }}
-        >
-          <Linkedin size={20} />
-        </a>
-        <a
-          href="https://github.com/jojiShiotsuki"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={socialLinkStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; e.currentTarget.style.transform = 'translateX(4px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; e.currentTarget.style.transform = 'translateX(0)'; }}
-        >
-          <Github size={20} />
-        </a>
-        <div style={{ width: '1px', height: '60px', background: theme.textMuted }} />
+        <AnimatedSocialIcons
+          icons={SOCIAL_ICONS}
+          iconSize={20}
+        />
       </div>
 
       <div style={contentStyle}>
@@ -233,8 +174,14 @@ const Hero: React.FC = () => {
           <span style={{ animation: 'fadeInUp 0.8s ease-out 0.1s forwards', opacity: 0, display: 'block' }}>
             I Help
           </span>
-          <span style={{ ...accentTextStyle, animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
-            Aussie Tradies
+          <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}`, display: 'block', animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
+            Aussie{' '}
+            <GooeyText
+              texts={TRADE_WORDS}
+              morphTime={1.5}
+              cooldownTime={0.5}
+              textStyle={{ color: theme.headingStroke, WebkitTextStroke: 'unset' }}
+            />
           </span>
           <span style={{ animation: 'fadeInUp 0.8s ease-out 0.3s forwards', opacity: 0, display: 'block' }}>
             Get Found
@@ -246,37 +193,16 @@ const Hero: React.FC = () => {
         </p>
 
         <div style={ctaContainerStyle}>
-          <a
+          <InteractiveHoverButton
+            text="Get a Free Website Audit"
+            variant="primary"
             href="#contact"
-            style={primaryCtaStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = theme.accent;
-              e.currentTarget.style.transform = 'translateY(-4px)';
-              e.currentTarget.style.boxShadow = `0 10px 40px ${theme.accentGlow}`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = theme.textPrimary;
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            Get a Free Website Audit
-            <ArrowDownRight size={18} />
-          </a>
-          <a
+          />
+          <InteractiveHoverButton
+            text="See My Results"
+            variant="outline"
             href="#results"
-            style={secondaryCtaStyle}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = theme.accent;
-              e.currentTarget.style.color = theme.accent;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = theme.btnOutlineBorder;
-              e.currentTarget.style.color = theme.textPrimary;
-            }}
-          >
-            See My Results
-          </a>
+          />
         </div>
       </div>
 

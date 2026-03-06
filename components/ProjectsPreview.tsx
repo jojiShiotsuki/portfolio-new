@@ -136,7 +136,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
       onMouseLeave={() => setIsHovered(false)}
     >
       <div style={imageContainerStyle}>
-        <img src={project.image} alt={project.title} style={imageStyle} />
+        <img src={project.image} alt={project.title} loading="lazy" style={imageStyle} />
         <div style={overlayStyle} />
         <div style={{
           position: 'absolute',
@@ -216,17 +216,6 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 968px) {
-          .project-card {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-          .project-card > div {
-            order: 0 !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };
@@ -279,7 +268,7 @@ const ProjectsPreview: React.FC = () => {
   const previewProjects = PROJECTS.slice(0, 2);
 
   return (
-    <section id="projects" style={sectionStyle}>
+    <section id="projects" aria-label="Featured projects" style={sectionStyle}>
       <div style={containerStyle}>
         <div className="projects-header" style={headerStyle}>
           <div>
@@ -328,17 +317,6 @@ const ProjectsPreview: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          #projects { padding: 64px 20px !important; }
-          .projects-header { margin-bottom: 48px !important; }
-          .projects-cta-bottom { margin-top: 48px !important; }
-        }
-        @media (max-width: 480px) {
-          #projects { padding: 48px 16px !important; }
-          .projects-header { margin-bottom: 40px !important; }
-        }
-      `}</style>
     </section>
   );
 };

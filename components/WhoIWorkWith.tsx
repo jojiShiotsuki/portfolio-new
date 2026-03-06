@@ -17,7 +17,7 @@ const WhoIWorkWith: React.FC = () => {
   const { theme } = useTheme();
 
   return (
-    <section id="who-i-work-with" style={{ padding: '160px 48px', background: theme.bgPrimary, position: 'relative', overflow: 'hidden' }}>
+    <section id="who-i-work-with" aria-label="Who I work with" style={{ padding: '160px 48px', background: theme.bgPrimary, position: 'relative', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header - centered */}
         <div className="wiww-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
@@ -167,26 +167,6 @@ const WhoIWorkWith: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 1024px) {
-          .wiww-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-        @media (max-width: 768px) {
-          #who-i-work-with { padding: 64px 20px !important; }
-          .wiww-header { margin-bottom: 48px !important; }
-          .wiww-grid {
-            grid-template-columns: 1fr !important;
-            gap: 16px !important;
-          }
-          .wiww-grid > div { padding: 24px !important; }
-        }
-        @media (max-width: 480px) {
-          #who-i-work-with { padding: 48px 16px !important; }
-          .wiww-header { margin-bottom: 40px !important; }
-        }
-      `}</style>
     </section>
   );
 };

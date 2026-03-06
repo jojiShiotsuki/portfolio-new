@@ -28,15 +28,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     root.setAttribute('data-theme', mode);
 
     // Sync CSS variables used by index.html styles
-    root.style.setProperty('--black', theme.bgPrimary);
-    root.style.setProperty('--cream', theme.textPrimary);
-    root.style.setProperty('--charcoal', theme.bgTertiary);
-    root.style.setProperty('--graphite', theme.bgTertiary);
-    root.style.setProperty('--cyan', theme.accent);
-    root.style.setProperty('--cyan-dim', theme.accentDim);
-    root.style.setProperty('--coral', theme.accentLight);
-    root.style.setProperty('--coral-dim', `${theme.accentLight}33`);
-    root.style.setProperty('--cream-muted', theme.textMuted);
+    root.style.setProperty('--bg-primary', theme.bgPrimary);
+    root.style.setProperty('--text-primary', theme.textPrimary);
+    root.style.setProperty('--bg-secondary', theme.bgTertiary);
+    root.style.setProperty('--bg-tertiary', theme.bgTertiary);
+    root.style.setProperty('--accent', theme.accent);
+    root.style.setProperty('--accent-dim', theme.accentDim);
+    root.style.setProperty('--accent-secondary', theme.accentLight);
+    root.style.setProperty('--accent-secondary-dim', `${theme.accentLight}33`);
+    root.style.setProperty('--text-muted', theme.textMuted);
   }, [mode, theme]);
 
   const toggleTheme = () => {

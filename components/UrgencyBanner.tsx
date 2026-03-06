@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../ThemeContext';
 
 const UrgencyBanner: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const { theme } = useTheme();
+  const tickingRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.scrollY < 50);
+      if (!tickingRef.current) {
+        requestAnimationFrame(() => {
+          setIsVisible(window.scrollY < 50);
+          tickingRef.current = false;
+        });
+        tickingRef.current = true;
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -49,30 +56,10 @@ const UrgencyBanner: React.FC = () => {
   return (
     <div style={bannerStyle} className="urgency-banner">
       <p style={textStyle} className="urgency-text">
-        Currently booking for February
+        {`Currently booking for ${new Date().toLocaleString('default', { month: 'long' })}`}
         <span style={highlightStyle}>2 SPOTS LEFT</span>
       </p>
 
-      <style>{`
-        @media (max-width: 480px) {
-          .urgency-banner {
-            padding: 8px 12px !important;
-            height: auto !important;
-            min-height: 36px !important;
-          }
-          .urgency-text {
-            font-size: 10px !important;
-            letter-spacing: 0.5px !important;
-            line-height: 1.4 !important;
-          }
-          .urgency-text span {
-            display: inline-block !important;
-            margin-left: 6px !important;
-            font-size: 9px !important;
-            padding: 2px 6px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

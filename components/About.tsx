@@ -154,7 +154,7 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="about" style={sectionStyle}>
+    <section id="about" aria-label="About Joji" style={sectionStyle}>
       {/* Background accent */}
       <div style={{
         position: 'absolute',
@@ -241,21 +241,6 @@ const About: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 968px) {
-          .about-container {
-            grid-template-columns: 1fr !important;
-            gap: 80px !important;
-          }
-        }
-        @media (max-width: 768px) {
-          #about { padding: 64px 20px !important; }
-          .about-container { gap: 48px !important; }
-        }
-        @media (max-width: 480px) {
-          #about { padding: 48px 16px !important; }
-        }
-      `}</style>
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
@@ -13,10 +13,17 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const { mode, theme, toggleTheme } = useTheme();
+  const tickingRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      if (!tickingRef.current) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
+          tickingRef.current = false;
+        });
+        tickingRef.current = true;
+      }
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -75,7 +82,7 @@ const Navbar: React.FC = () => {
     height: '8px',
     background: theme.accent,
     borderRadius: '50%',
-    animation: 'pulse 2s infinite',
+    animation: 'pulse-dot 2s infinite',
     boxShadow: `0 0 10px ${theme.accent}`,
   };
 
@@ -96,13 +103,6 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <style>{`
-        @media (max-width: 768px) {
-          .main-nav { padding: 16px 20px !important; }
-          .desktop-nav { display: none !important; }
-          .mobile-menu-btn { display: flex !important; }
-        }
-      `}</style>
       <nav className="main-nav" style={navStyle}>
         <Link to="/" style={logoStyle}>
           <span style={{ color: theme.accentLight }}>[</span>

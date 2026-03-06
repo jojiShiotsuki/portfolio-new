@@ -40,28 +40,6 @@ const PixelAssistant: React.FC = () => {
 
   return (
     <>
-      <style>{`
-        @media (max-width: 768px) {
-          .pixel-assistant-btn {
-            bottom: 16px !important;
-            right: 16px !important;
-            padding: 8px 14px 8px 8px !important;
-            gap: 6px !important;
-          }
-          .pixel-assistant-btn .pixel-label {
-            font-size: 10px !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .pixel-assistant-btn {
-            padding: 8px !important;
-            border-radius: 50% !important;
-          }
-          .pixel-assistant-btn .pixel-label {
-            display: none !important;
-          }
-        }
-      `}</style>
       <button
         className="pixel-assistant-btn"
         onClick={() => navigate('/talk')}
@@ -69,7 +47,7 @@ const PixelAssistant: React.FC = () => {
         onMouseLeave={() => setHovered(false)}
         style={{
           position: 'fixed',
-          bottom: '100px',
+          bottom: '120px',
           right: '32px',
           zIndex: 1000,
           display: 'flex',

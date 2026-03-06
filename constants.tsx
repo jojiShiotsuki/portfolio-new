@@ -77,7 +77,7 @@ export const PROJECTS: Project[] = [
       'Bulk import handles 500+ items in seconds',
       'Quarterly goal completion rate increased by 40%'
     ],
-    image: '/vertex-screenshot.png',
+    image: '/vertex-screenshot.webp',
     github: 'https://github.com/jojiShiotsuki'
   },
   {
@@ -99,7 +99,7 @@ export const PROJECTS: Project[] = [
       author: "Early Adopter",
       role: "Home Service Business Owner"
     },
-    image: '/kontentfire-screenshot.png',
+    image: '/kontentfire-screenshot.webp',
     link: 'https://app.kontentfire.com'
   },
   {
@@ -121,7 +121,7 @@ export const PROJECTS: Project[] = [
       author: "Harley",
       role: "Head Barber"
     },
-    image: '/pundok-screenshot.png',
+    image: '/pundok-screenshot.webp',
     link: 'https://pundokstudios.com/'
   },
   {
@@ -143,7 +143,7 @@ export const PROJECTS: Project[] = [
       author: "Client Testimonial",
       role: "Knock Knock HVAC Owner"
     },
-    image: '/knockknock-screenshot.png',
+    image: '/knockknock-screenshot.webp',
     link: 'https://knockknockair.com/'
   },
   {
@@ -165,7 +165,7 @@ export const PROJECTS: Project[] = [
       author: "Client Testimonial",
       role: "Trade Titans Host"
     },
-    image: '/tradetitans-screenshot.png',
+    image: '/tradetitans-screenshot.webp',
     link: 'https://tradetitans.live-website.com/'
   },
   {
@@ -182,7 +182,7 @@ export const PROJECTS: Project[] = [
       'Testimonials and project gallery for social proof',
       'Modern dark theme with cinematic aesthetic'
     ],
-    image: '/perth-video-screenshot.png',
+    image: '/perth-video-screenshot.webp',
     link: 'https://darkturquoise-woodpecker-593820.hostingersite.com/'
   },
   {
@@ -199,7 +199,7 @@ export const PROJECTS: Project[] = [
       'Clear user journeys for 3 distinct buyer personas',
       'Mobile-responsive design for on-site decision makers'
     ],
-    image: '/correct-electric-screenshot.png',
+    image: '/correct-electric-screenshot.webp',
     link: 'https://key-customers-179321.framer.app/'
   },
   {
@@ -216,7 +216,7 @@ export const PROJECTS: Project[] = [
       'Service discovery simplified with visual card navigation',
       'Mobile-first design for urgent searches on any device'
     ],
-    image: '/abacus-screenshot.png',
+    image: '/abacus-screenshot.webp',
     link: 'https://diligent-vision-590775.framer.app/'
   },
   {
@@ -233,7 +233,7 @@ export const PROJECTS: Project[] = [
       'Service area pages rank top 5 for 25+ local keywords',
       'Phone call volume decreased 40% (shifted to online booking)'
     ],
-    image: '/maidtoplease-screenshot.png',
+    image: '/maidtoplease-screenshot.webp',
     link: 'https://shirazr.sg-host.com/'
   },
   {
@@ -255,7 +255,7 @@ export const PROJECTS: Project[] = [
       author: "Noura",
       role: "Head Graphic Designer"
     },
-    image: '/spark-your-designs-screenshot.png',
+    image: '/spark-your-designs-screenshot.webp',
     link: 'https://syd.jojishiotsuki.com/'
   },
   {
@@ -277,7 +277,7 @@ export const PROJECTS: Project[] = [
       author: "Sam",
       role: "Owner of YOU%"
     },
-    image: '/youpercent-screenshot.png',
+    image: '/youpercent-screenshot.webp',
     link: 'https://youpercent.com/'
   }
 ];

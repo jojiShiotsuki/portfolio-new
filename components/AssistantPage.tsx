@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, X, ArrowLeft } from 'lucide-react';
+import { Send, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../ThemeContext';
-import { AnimatePresence, motion } from 'motion/react';
 
 // === TYPES ===
 type Direction = 0 | 1 | 2 | 3;
@@ -543,6 +542,9 @@ const AssistantPage: React.FC = () => {
 
   // Chat mode: idle (Joji wanders), approaching (walking to meet), talking (standing face-to-face)
   const chatModeRef = useRef<'idle' | 'approaching' | 'talking'>('idle');
+  // Helper to read chatModeRef.current without TypeScript narrowing
+  // (the ref is mutated by the animation loop across await boundaries)
+  const getChatMode = () => chatModeRef.current;
   const chatIdleTimerRef = useRef(0);
   const CHAT_IDLE_TIMEOUT = 10; // seconds before Joji wanders again
   const pendingReplyRef = useRef<string | null>(null);
@@ -848,7 +850,12 @@ const AssistantPage: React.FC = () => {
     };
 
     animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      frameCanvasCache.clear();
+      silhouetteCache.clear();
+      spriteCanvasCache.clear();
+    };
   }, [pickTarget]);
 
   const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -900,7 +907,8 @@ const AssistantPage: React.FC = () => {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       // If characters already met, show immediately; otherwise queue
-      if (chatModeRef.current === 'talking') {
+      // chatModeRef.current may have been mutated to 'talking' by the animation loop during the await
+      if (getChatMode() === 'talking') {
         setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
         setIsLoading(false);
       } else {
@@ -908,7 +916,7 @@ const AssistantPage: React.FC = () => {
       }
     } catch {
       const fallback = "Sorry, having trouble connecting. Try emailing jojishiotsuki0@gmail.com instead!";
-      if (chatModeRef.current === 'talking') {
+      if (getChatMode() === 'talking') {
         setMessages(prev => [...prev, { role: 'assistant', content: fallback }]);
         setIsLoading(false);
       } else {
@@ -1066,16 +1074,6 @@ const AssistantPage: React.FC = () => {
 
         </div>
       </div>
-
-      <style>{`
-        .typing-dots { animation: pixpulse 1.5s ease-in-out infinite; }
-        @keyframes pixpulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-        @media (max-width: 868px) {
-          .talk-layout {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

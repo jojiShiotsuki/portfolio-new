@@ -40,14 +40,6 @@ const InteractiveHoverButton = React.forwardRef<
 
   return (
     <>
-    <style>{`
-      @media (max-width: 480px) {
-        .interactive-hover-btn {
-          padding: 16px 28px !important;
-          font-size: 12px !important;
-        }
-      }
-    `}</style>
     <button
       ref={ref}
       onMouseEnter={() => setHovered(true)}

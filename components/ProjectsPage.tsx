@@ -36,6 +36,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           <img
             src={project.image}
             alt={project.title}
+            loading="lazy"
             style={{
               width: '100%',
               height: '320px',
@@ -469,23 +470,6 @@ const ProjectsPage: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 968px) {
-          .project-row {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-          .project-img, .project-content {
-            order: 0 !important;
-          }
-          .case-study-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .project-row { padding: 40px 0 !important; }
-        }
-      `}</style>
     </div>
   );
 };

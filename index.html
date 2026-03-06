@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Joji Shiotsuki | Developer & Engineer</title>
+    <meta name="description" content="Joji Shiotsuki - Web designer and developer specializing in modern, high-converting websites for businesses. Based in Perth, Australia." />
+    <meta property="og:title" content="Joji Shiotsuki | Web Design & Development" />
+    <meta property="og:description" content="Web designer and developer specializing in modern, high-converting websites for businesses." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jojishiotsuki.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Joji Shiotsuki | Web Design & Development" />
+    <meta name="twitter:description" content="Web designer and developer specializing in modern, high-converting websites for businesses." />
+    <meta property="og:image" content="https://jojishiotsuki.com/og-image.webp" />
+    <meta name="twitter:image" content="https://jojishiotsuki.com/og-image.webp" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -20,32 +30,63 @@
           if (t === 'light' || t === 'dark') {
             document.documentElement.setAttribute('data-theme', t);
             if (t === 'light') {
-              document.documentElement.style.setProperty('--black', '#FFFFFF');
-              document.documentElement.style.setProperty('--cream', '#2A2820');
+              document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
+              document.documentElement.style.setProperty('--text-primary', '#2A2820');
+              document.documentElement.style.setProperty('--bg-secondary', '#EBE8E2');
+              document.documentElement.style.setProperty('--bg-tertiary', '#EBE8E2');
+              document.documentElement.style.setProperty('--accent', '#5F7161');
+              document.documentElement.style.setProperty('--accent-dim', 'rgba(95, 113, 97, 0.15)');
+              document.documentElement.style.setProperty('--accent-secondary', '#8D9A7C');
+              document.documentElement.style.setProperty('--accent-secondary-dim', '#8D9A7C33');
+              document.documentElement.style.setProperty('--text-muted', '#9C9890');
+            } else {
+              document.documentElement.style.setProperty('--bg-primary', '#0C0F14');
+              document.documentElement.style.setProperty('--text-primary', '#F5F3EE');
+              document.documentElement.style.setProperty('--bg-secondary', '#293122');
+              document.documentElement.style.setProperty('--bg-tertiary', '#293122');
+              document.documentElement.style.setProperty('--accent', '#8D9A7C');
+              document.documentElement.style.setProperty('--accent-dim', 'rgba(141, 154, 124, 0.2)');
+              document.documentElement.style.setProperty('--accent-secondary', '#C3C9A5');
+              document.documentElement.style.setProperty('--accent-secondary-dim', '#C3C9A533');
+              document.documentElement.style.setProperty('--text-muted', 'rgba(245, 243, 238, 0.35)');
             }
           } else {
             document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.style.setProperty('--black', '#FFFFFF');
-            document.documentElement.style.setProperty('--cream', '#2A2820');
+            document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
+            document.documentElement.style.setProperty('--text-primary', '#2A2820');
+            document.documentElement.style.setProperty('--bg-secondary', '#EBE8E2');
+            document.documentElement.style.setProperty('--bg-tertiary', '#EBE8E2');
+            document.documentElement.style.setProperty('--accent', '#5F7161');
+            document.documentElement.style.setProperty('--accent-dim', 'rgba(95, 113, 97, 0.15)');
+            document.documentElement.style.setProperty('--accent-secondary', '#8D9A7C');
+            document.documentElement.style.setProperty('--accent-secondary-dim', '#8D9A7C33');
+            document.documentElement.style.setProperty('--text-muted', '#9C9890');
           }
         } catch(e) {
           document.documentElement.setAttribute('data-theme', 'light');
-          document.documentElement.style.setProperty('--black', '#FFFFFF');
-          document.documentElement.style.setProperty('--cream', '#2A2820');
+          document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
+          document.documentElement.style.setProperty('--text-primary', '#2A2820');
+          document.documentElement.style.setProperty('--bg-secondary', '#EBE8E2');
+          document.documentElement.style.setProperty('--bg-tertiary', '#EBE8E2');
+          document.documentElement.style.setProperty('--accent', '#5F7161');
+          document.documentElement.style.setProperty('--accent-dim', 'rgba(95, 113, 97, 0.15)');
+          document.documentElement.style.setProperty('--accent-secondary', '#8D9A7C');
+          document.documentElement.style.setProperty('--accent-secondary-dim', '#8D9A7C33');
+          document.documentElement.style.setProperty('--text-muted', '#9C9890');
         }
       })();
     </script>
     <style>
       :root {
-        --black: #FFFFFF;
-        --charcoal: #EBE8E2;
-        --graphite: #EBE8E2;
-        --cream: #2A2820;
-        --cream-muted: #9C9890;
-        --cyan: #5F7161;
-        --cyan-dim: rgba(95, 113, 97, 0.15);
-        --coral: #8D9A7C;
-        --coral-dim: #8D9A7C33;
+        --bg-primary: #FFFFFF;
+        --bg-secondary: #EBE8E2;
+        --bg-tertiary: #EBE8E2;
+        --text-primary: #2A2820;
+        --text-muted: #9C9890;
+        --accent: #5F7161;
+        --accent-dim: rgba(95, 113, 97, 0.15);
+        --accent-secondary: #8D9A7C;
+        --accent-secondary-dim: #8D9A7C33;
 
         --font-display: 'Bricolage Grotesque', sans-serif;
         --font-body: 'Instrument Sans', sans-serif;
@@ -65,8 +106,8 @@
 
       body {
         font-family: var(--font-display);
-        background: var(--black);
-        color: var(--cream);
+        background: var(--bg-primary);
+        color: var(--text-primary);
         overflow-x: hidden;
         width: 100%;
         max-width: 100vw;
@@ -79,8 +120,8 @@
       }
 
       ::selection {
-        background: var(--cyan);
-        color: var(--black);
+        background: var(--accent);
+        color: var(--bg-primary);
       }
 
       /* Grain overlay */
@@ -94,12 +135,7 @@
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         opacity: 0.03;
         pointer-events: none;
-        z-index: 9999;
-      }
-
-      /* Smooth theme transitions */
-      body * {
-        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        z-index: 50;
       }
 
       /* Scrollbar */
@@ -107,10 +143,10 @@
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: var(--black);
+        background: var(--bg-primary);
       }
       ::-webkit-scrollbar-thumb {
-        background: var(--cyan);
+        background: var(--accent);
       }
 
       /* Light mode grain */
@@ -138,7 +174,7 @@
         80% { transform: translate(2px, -2px); }
       }
 
-      @keyframes pulse {
+      @keyframes pulse-dot {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.5; }
       }

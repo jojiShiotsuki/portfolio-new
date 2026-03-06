@@ -1,1 +1,393 @@
 @import "tailwindcss";
+
+/* ==========================================================================
+   Global Keyframes
+   ========================================================================== */
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-cta {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+@keyframes pixpulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ==========================================================================
+   StickyCTA
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .sticky-cta {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   UrgencyBanner
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .urgency-banner {
+    padding: 8px 12px !important;
+    height: auto !important;
+    min-height: 36px !important;
+  }
+  .urgency-text {
+    font-size: 10px !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.4 !important;
+  }
+  .urgency-text span {
+    display: inline-block !important;
+    margin-left: 6px !important;
+    font-size: 9px !important;
+    padding: 2px 6px !important;
+  }
+}
+
+/* ==========================================================================
+   Navbar
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .main-nav { padding: 16px 20px !important; }
+  .desktop-nav { display: none !important; }
+  .mobile-menu-btn { display: flex !important; }
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  #home { padding: 80px 24px 40px !important; min-height: auto !important; }
+  #home h1 {
+    font-size: clamp(42px, 12vw, 80px) !important;
+    letter-spacing: -2px !important;
+    line-height: 0.95 !important;
+    margin-bottom: 24px !important;
+  }
+  #home p {
+    font-size: 16px !important;
+    margin-bottom: 32px !important;
+  }
+  .hero-cta-container {
+    gap: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #home { padding: 80px 16px 32px !important; }
+  #home h1 {
+    font-size: clamp(38px, 11vw, 56px) !important;
+    letter-spacing: -1.5px !important;
+    line-height: 1 !important;
+    margin-bottom: 20px !important;
+  }
+  #home p {
+    font-size: 15px !important;
+    margin-bottom: 24px !important;
+  }
+  .hero-cta-container {
+    gap: 12px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  #home h1 {
+    font-size: 38px !important;
+    letter-spacing: -1px !important;
+    line-height: 1 !important;
+  }
+}
+
+/* ==========================================================================
+   AssistantPage
+   ========================================================================== */
+
+.typing-dots { animation: pixpulse 1.5s ease-in-out infinite; }
+
+@media (max-width: 868px) {
+  .talk-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==========================================================================
+   HowItWorks
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  #how-it-works { padding: 64px 20px !important; }
+  .hiw-header { margin-bottom: 48px !important; }
+  .hiw-cta { margin-top: 48px !important; }
+  .hiw-grid {
+    grid-template-columns: 1fr !important;
+    gap: 60px !important;
+  }
+  .hiw-connector { display: none !important; }
+  .hiw-arrow { display: none !important; }
+}
+
+@media (max-width: 480px) {
+  #how-it-works { padding: 48px 16px !important; }
+  .hiw-header { margin-bottom: 40px !important; }
+}
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  #contact { padding: 64px 20px !important; }
+  .contact-desc { margin-bottom: 40px !important; }
+  .contact-email { margin-top: 40px !important; }
+}
+
+@media (max-width: 480px) {
+  #contact { padding: 48px 16px !important; }
+}
+
+/* ==========================================================================
+   About
+   ========================================================================== */
+
+@media (max-width: 968px) {
+  .about-container {
+    grid-template-columns: 1fr !important;
+    gap: 80px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #about { padding: 64px 20px !important; }
+  .about-container { gap: 48px !important; }
+}
+
+@media (max-width: 480px) {
+  #about { padding: 48px 16px !important; }
+}
+
+/* ==========================================================================
+   Services
+   ========================================================================== */
+
+@media (max-width: 968px) {
+  .services-row {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .services-row > div:first-child {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #services { padding: 64px 20px !important; }
+  .services-header { margin-bottom: 48px !important; }
+  .services-row { padding: 32px 0 !important; }
+}
+
+@media (max-width: 480px) {
+  #services { padding: 48px 16px !important; }
+  .services-header { margin-bottom: 40px !important; }
+}
+
+/* ==========================================================================
+   Results
+   ========================================================================== */
+
+@media (max-width: 968px) {
+  .results-case-study {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+  .results-ongoing {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+  .results-ongoing p {
+    text-align: left !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #results { padding: 64px 20px !important; }
+  .results-header { margin-bottom: 48px !important; }
+  .results-case-study { margin-bottom: 60px !important; }
+  .results-ongoing { margin-bottom: 40px !important; padding: 24px 0 !important; }
+  .results-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 32px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #results { padding: 48px 16px !important; }
+  .results-header { margin-bottom: 40px !important; }
+  .results-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+  }
+}
+
+/* ==========================================================================
+   PixelAssistant
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .pixel-assistant-btn {
+    bottom: 16px !important;
+    right: 16px !important;
+    padding: 8px 14px 8px 8px !important;
+    gap: 6px !important;
+  }
+  .pixel-assistant-btn .pixel-label {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pixel-assistant-btn {
+    padding: 8px !important;
+    border-radius: 50% !important;
+  }
+  .pixel-assistant-btn .pixel-label {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   ProjectsPreview
+   ========================================================================== */
+
+@media (max-width: 968px) {
+  .project-card {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .project-card > div {
+    order: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #projects { padding: 64px 20px !important; }
+  .projects-header { margin-bottom: 48px !important; }
+  .projects-cta-bottom { margin-top: 48px !important; }
+}
+
+@media (max-width: 480px) {
+  #projects { padding: 48px 16px !important; }
+  .projects-header { margin-bottom: 40px !important; }
+}
+
+/* ==========================================================================
+   WhoIWorkWith
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .wiww-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #who-i-work-with { padding: 64px 20px !important; }
+  .wiww-header { margin-bottom: 48px !important; }
+  .wiww-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .wiww-grid > div { padding: 24px !important; }
+}
+
+@media (max-width: 480px) {
+  #who-i-work-with { padding: 48px 16px !important; }
+  .wiww-header { margin-bottom: 40px !important; }
+}
+
+/* ==========================================================================
+   InteractiveHoverButton
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .interactive-hover-btn {
+    padding: 16px 28px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 32px 24px !important;
+  }
+  .footer-container {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 24px !important;
+  }
+  .footer-social {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 16px !important;
+  }
+  .footer-divider {
+    display: none !important;
+  }
+  .footer-location {
+    width: 100% !important;
+    margin-top: 8px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-footer {
+    padding: 24px 16px !important;
+  }
+}
+
+/* ==========================================================================
+   ProjectsPage
+   ========================================================================== */
+
+@media (max-width: 968px) {
+  .project-row {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  .project-img, .project-content {
+    order: 0 !important;
+  }
+  .case-study-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-row { padding: 40px 0 !important; }
+}

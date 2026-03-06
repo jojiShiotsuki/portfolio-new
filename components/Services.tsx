@@ -14,7 +14,7 @@ const Services: React.FC = () => {
   const { theme } = useTheme();
 
   return (
-    <section id="services" style={{ padding: '160px 48px', position: 'relative' }}>
+    <section id="services" aria-label="Services offered" style={{ padding: '160px 48px', position: 'relative' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
         {/* Header - centered */}
@@ -152,26 +152,6 @@ const Services: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 968px) {
-          .services-row {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
-          }
-          .services-row > div:first-child {
-            display: none !important;
-          }
-        }
-        @media (max-width: 768px) {
-          #services { padding: 64px 20px !important; }
-          .services-header { margin-bottom: 48px !important; }
-          .services-row { padding: 32px 0 !important; }
-        }
-        @media (max-width: 480px) {
-          #services { padding: 48px 16px !important; }
-          .services-header { margin-bottom: 40px !important; }
-        }
-      `}</style>
     </section>
   );
 };

@@ -66,7 +66,7 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section id="contact" style={sectionStyle}>
+    <section id="contact" aria-label="Contact" style={sectionStyle}>
       {/* Background elements */}
       <div style={{
         position: 'absolute',
@@ -119,16 +119,6 @@ const Contact: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          #contact { padding: 64px 20px !important; }
-          .contact-desc { margin-bottom: 40px !important; }
-          .contact-email { margin-top: 40px !important; }
-        }
-        @media (max-width: 480px) {
-          #contact { padding: 48px 16px !important; }
-        }
-      `}</style>
     </section>
   );
 };

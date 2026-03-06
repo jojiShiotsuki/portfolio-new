@@ -138,35 +138,6 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .site-footer {
-            padding: 32px 24px !important;
-          }
-          .footer-container {
-            flex-direction: column !important;
-            text-align: center !important;
-            gap: 24px !important;
-          }
-          .footer-social {
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-            gap: 16px !important;
-          }
-          .footer-divider {
-            display: none !important;
-          }
-          .footer-location {
-            width: 100% !important;
-            margin-top: 8px !important;
-          }
-        }
-        @media (max-width: 480px) {
-          .site-footer {
-            padding: 24px 16px !important;
-          }
-        }
-      `}</style>
     </footer>
   );
 };

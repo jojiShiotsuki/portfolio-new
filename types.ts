@@ -44,9 +44,3 @@ export interface Service {
   description: string;
   icon: LucideIcon;
 }
-
-export interface ChatMessage {
-  role: 'user' | 'model';
-  text: string;
-  isError?: boolean;
-}

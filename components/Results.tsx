@@ -4,11 +4,11 @@ import { useTheme } from '../ThemeContext';
 
 const carouselImages = [
   {
-    src: '/pundok-google-ranking.png',
+    src: '/pundok-google-ranking.webp',
     alt: 'Pundok Studios ranking #1 on Google search results',
   },
   {
-    src: '/pundok-screenshot.png',
+    src: '/pundok-screenshot.webp',
     alt: 'Pundok Studios website homepage',
   },
 ];
@@ -33,7 +33,7 @@ const Results: React.FC = () => {
   }, []);
 
   return (
-    <section id="results" style={{ padding: '160px 48px', background: theme.bgSecondary, position: 'relative', overflow: 'hidden' }}>
+    <section id="results" aria-label="Results and metrics" style={{ padding: '160px 48px', background: theme.bgSecondary, position: 'relative', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
         {/* Header */}
@@ -87,6 +87,7 @@ const Results: React.FC = () => {
                   key={index}
                   src={img.src}
                   alt={img.alt}
+                  loading="lazy"
                   style={{
                     width: '100%',
                     height: 'auto',
@@ -362,8 +363,9 @@ const Results: React.FC = () => {
             border: `1px solid ${theme.borderPrimary}`,
           }}>
             <img
-              src="/youpercent-screenshot.png"
+              src="/youpercent-screenshot.webp"
               alt="You% Nutrition website"
+              loading="lazy"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
           </div>
@@ -397,7 +399,7 @@ const Results: React.FC = () => {
                 height: '6px',
                 background: theme.accent,
                 borderRadius: '50%',
-                animation: 'pulse 2s infinite',
+                animation: 'pulse-dot 2s infinite',
               }} />
             </div>
             <h3 style={{
@@ -461,40 +463,6 @@ const Results: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 968px) {
-          .results-case-study {
-            grid-template-columns: 1fr !important;
-            gap: 40px !important;
-          }
-          .results-ongoing {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 16px !important;
-          }
-          .results-ongoing p {
-            text-align: left !important;
-          }
-        }
-        @media (max-width: 768px) {
-          #results { padding: 64px 20px !important; }
-          .results-header { margin-bottom: 48px !important; }
-          .results-case-study { margin-bottom: 60px !important; }
-          .results-ongoing { margin-bottom: 40px !important; padding: 24px 0 !important; }
-          .results-stats-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 32px !important;
-          }
-        }
-        @media (max-width: 480px) {
-          #results { padding: 48px 16px !important; }
-          .results-header { margin-bottom: 40px !important; }
-          .results-stats-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 24px !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };

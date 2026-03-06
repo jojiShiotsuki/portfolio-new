@@ -123,10 +123,12 @@ interface ChatMessage {
   content: string;
 }
 
+function isLocalOrigin(origin: string): boolean {
+  return origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1');
+}
+
 function corsHeaders(origin: string, allowedOrigin: string): Record<string, string> {
-  const allowed = origin === allowedOrigin
-    || origin.startsWith('http://localhost')
-    || origin.startsWith('http://127.0.0.1');
+  const allowed = origin === allowedOrigin || isLocalOrigin(origin);
 
   return {
     'Access-Control-Allow-Origin': allowed ? origin : allowedOrigin,
@@ -136,9 +138,7 @@ function corsHeaders(origin: string, allowedOrigin: string): Record<string, stri
 }
 
 function isAllowedOrigin(origin: string, allowedOrigin: string): boolean {
-  return origin === allowedOrigin
-    || origin.startsWith('http://localhost')
-    || origin.startsWith('http://127.0.0.1');
+  return origin === allowedOrigin || isLocalOrigin(origin);
 }
 
 // KV key helpers
@@ -152,6 +152,12 @@ function dailyKey(): string {
   return `global:${day}`;
 }
 
+// NOTE: The KV get-then-put pattern below has an inherent race condition due to
+// KV eventual consistency. Under concurrent requests the counters may undercount,
+// allowing slightly more messages than the configured limits. This is an accepted
+// tradeoff for a portfolio site where the traffic volume is low and the risk of
+// meaningful abuse is minimal. A stricter approach would use Durable Objects or
+// an atomic counter, but that is unnecessary at this scale.
 async function checkRateLimit(env: Env, ip: string): Promise<{ allowed: boolean; reason?: string }> {
   // Check per-IP hourly limit
   const ipk = ipKey(ip);
@@ -258,7 +264,7 @@ export default {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5',
+          model: 'claude-haiku-4-5-20251001',
           max_tokens: 512,
           system: SYSTEM_PROMPT,
           messages,

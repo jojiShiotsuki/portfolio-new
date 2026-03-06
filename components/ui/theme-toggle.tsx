@@ -24,6 +24,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         border: `1px solid ${theme.borderPrimary}`,
       }}
       onClick={toggleTheme}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTheme(); } }}
       role="button"
       tabIndex={0}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}

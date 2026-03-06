@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { PERSONAL_INFO } from '../constants';
 import { Github, Linkedin } from 'lucide-react';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
@@ -18,13 +18,21 @@ const SOCIAL_ICONS = [
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const { theme } = useTheme();
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+        rafRef.current = 0;
+      });
     };
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   const containerStyle: React.CSSProperties = {
@@ -146,14 +154,14 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section id="home" style={containerStyle}>
+    <section id="home" aria-label="Hero introduction" style={containerStyle}>
       {/* Floating gradient */}
       <div style={{ ...floatingElementStyle, top: '10%', right: '20%' }} className="hide-mobile" />
       <div style={{ ...floatingElementStyle, bottom: '20%', left: '10%', background: `radial-gradient(circle, ${theme.accentBorder} 0%, transparent 70%)` }} className="hide-mobile" />
 
       {/* Vertical text */}
       <div style={verticalTextStyle} className="hide-mobile">
-        Available for Projects // 2025
+        {`Available for Projects // ${new Date().getFullYear()}`}
       </div>
 
       {/* Social links */}
@@ -214,48 +222,6 @@ const Hero: React.FC = () => {
         <div style={scrollLineStyle} />
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .hide-mobile { display: none !important; }
-          #home { padding: 80px 24px 40px !important; min-height: auto !important; }
-          #home h1 {
-            font-size: clamp(42px, 12vw, 80px) !important;
-            letter-spacing: -2px !important;
-            line-height: 0.95 !important;
-            margin-bottom: 24px !important;
-          }
-          #home p {
-            font-size: 16px !important;
-            margin-bottom: 32px !important;
-          }
-          .hero-cta-container {
-            gap: 16px !important;
-          }
-        }
-        @media (max-width: 480px) {
-          #home { padding: 80px 16px 32px !important; }
-          #home h1 {
-            font-size: clamp(38px, 11vw, 56px) !important;
-            letter-spacing: -1.5px !important;
-            line-height: 1 !important;
-            margin-bottom: 20px !important;
-          }
-          #home p {
-            font-size: 15px !important;
-            margin-bottom: 24px !important;
-          }
-          .hero-cta-container {
-            gap: 12px !important;
-          }
-        }
-        @media (max-width: 375px) {
-          #home h1 {
-            font-size: 38px !important;
-            letter-spacing: -1px !important;
-            line-height: 1 !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };

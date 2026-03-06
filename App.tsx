@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -10,12 +10,14 @@ import ProjectsPreview from './components/ProjectsPreview';
 import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ProjectsPage from './components/ProjectsPage';
-import AssistantPage from './components/AssistantPage';
 import UrgencyBanner from './components/UrgencyBanner';
 import StickyCTA from './components/StickyCTA';
 import PixelAssistant from './components/PixelAssistant';
 import { useTheme } from './ThemeContext';
+
+// Lazy-loaded route components for code splitting
+const ProjectsPage = React.lazy(() => import('./components/ProjectsPage'));
+const AssistantPage = React.lazy(() => import('./components/AssistantPage'));
 
 // Home page component
 const HomePage: React.FC = () => (
@@ -34,9 +36,18 @@ const HomePage: React.FC = () => (
 function App() {
   const [scrolled, setScrolled] = React.useState(false);
   const { theme } = useTheme();
+  const tickingRef = React.useRef(false);
 
   React.useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      if (!tickingRef.current) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
+          tickingRef.current = false;
+        });
+        tickingRef.current = true;
+      }
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -75,11 +86,13 @@ function App() {
           <div style={{ height: scrolled ? '0px' : '40px', transition: 'height 0.3s ease' }} />
           <Navbar />
           <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-              <Route path="/talk" element={<AssistantPage />} />
-            </Routes>
+            <Suspense fallback={<div />}>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/projects" element={<ProjectsPage />} />
+                <Route path="/talk" element={<AssistantPage />} />
+              </Routes>
+            </Suspense>
           </main>
           <Footer />
           <StickyCTA />

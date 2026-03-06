@@ -35,7 +35,7 @@ const HowItWorks: React.FC = () => {
   const { theme } = useTheme();
 
   return (
-    <section id="how-it-works" style={{ padding: '160px 48px', background: theme.bgSecondary, position: 'relative', overflow: 'hidden' }}>
+    <section id="how-it-works" aria-label="How it works" style={{ padding: '160px 48px', background: theme.bgSecondary, position: 'relative', overflow: 'hidden' }}>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header */}
         <div className="hiw-header" style={{ textAlign: 'center', marginBottom: '100px' }}>
@@ -254,23 +254,6 @@ const HowItWorks: React.FC = () => {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          #how-it-works { padding: 64px 20px !important; }
-          .hiw-header { margin-bottom: 48px !important; }
-          .hiw-cta { margin-top: 48px !important; }
-          .hiw-grid {
-            grid-template-columns: 1fr !important;
-            gap: 60px !important;
-          }
-          .hiw-connector { display: none !important; }
-          .hiw-arrow { display: none !important; }
-        }
-        @media (max-width: 480px) {
-          #how-it-works { padding: 48px 16px !important; }
-          .hiw-header { margin-bottom: 40px !important; }
-        }
-      `}</style>
     </section>
   );
 };

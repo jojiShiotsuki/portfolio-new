@@ -247,6 +247,12 @@ export default {
           content: typeof m.content === 'string' ? m.content.slice(0, MAX_MESSAGE_LENGTH) : '',
         }));
 
+      // Claude API requires the first message to be role: "user"
+      // Strip any leading assistant messages (e.g. the hardcoded greeting)
+      while (history.length > 0 && history[0].role === 'assistant') {
+        history.shift();
+      }
+
       // Build messages array for Claude
       const messages = [
         ...history.map((m) => ({
@@ -293,7 +299,7 @@ export default {
         headers: { ...headers, 'Content-Type': 'application/json' },
       });
     } catch (err) {
-      console.error('Worker error:', err);
+      console.error('Worker error:', err instanceof Error ? err.message : err);
       return new Response(JSON.stringify({ error: 'Internal error' }), {
         status: 500,
         headers: { ...headers, 'Content-Type': 'application/json' },

@@ -208,7 +208,7 @@ const Results: React.FC = () => {
                 color: theme.textTertiary,
                 fontStyle: 'italic',
               }}>
-                "Customers tell us they found us on Google — that never used to happen. Best investment we've made for the business."
+                "Customers tell us they found us on Google. That never used to happen. Best investment we've made for the business."
               </p>
               <div style={{
                 fontFamily: "'JetBrains Mono', monospace",
@@ -286,7 +286,7 @@ const Results: React.FC = () => {
               color: theme.textSecondary,
               marginBottom: '32px',
             }}>
-              A health & wellness business with a basic website that had poor usability — no clear booking buttons and low online exposure.
+              A health & wellness business with a basic website that had poor usability. No clear booking buttons and low online exposure.
             </p>
 
             <div style={{

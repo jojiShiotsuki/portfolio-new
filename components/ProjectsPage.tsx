@@ -273,7 +273,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
                       fontFamily: "'JetBrains Mono', monospace",
                       fontSize: '11px',
                       color: theme.textMuted,
-                    }}>— {project.testimonial.author}, {project.testimonial.role}</div>
+                    }}>{project.testimonial.author}, {project.testimonial.role}</div>
                   </div>
                 )}
               </div>
@@ -389,7 +389,7 @@ const ProjectsPage: React.FC = () => {
             color: theme.textSecondary,
             maxWidth: '500px',
           }}>
-            Web development, custom applications, and SEO — each project a unique challenge solved with precision.
+            Web development, custom applications, and SEO. Each project a unique challenge solved with precision.
           </p>
         </div>
 

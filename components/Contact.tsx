@@ -96,7 +96,7 @@ const Contact: React.FC = () => {
         </h2>
 
         <p className="contact-desc" style={descStyle}>
-          Get a free website audit. I'll show you exactly what's stopping you from ranking on Google — and how to fix it.
+          Get a free website audit. I'll show you exactly what's stopping you from ranking on Google, and how to fix it.
         </p>
 
         <div style={ctaContainerStyle}>

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { HardHat, Droplets, Zap, Wind, Hammer, TreePine, ArrowRight } from 'lucide-react';
+import { Scissors, SprayCan, Stethoscope, Coffee, Dumbbell, Flower2 } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const trades = [
-  { label: 'Roofers', icon: HardHat, tagline: 'Roof repairs, replacements & new builds' },
-  { label: 'Plumbers', icon: Droplets, tagline: 'Emergency, residential & commercial' },
-  { label: 'Electricians', icon: Zap, tagline: 'Wiring, installations & maintenance' },
-  { label: 'HVAC', icon: Wind, tagline: 'Heating, cooling & air conditioning' },
-  { label: 'Builders', icon: Hammer, tagline: 'Renovations, extensions & new homes' },
-  { label: 'Landscapers', icon: TreePine, tagline: 'Gardens, hardscaping & outdoor living' },
+  { label: 'Barbershops', icon: Scissors, tagline: 'Walk-ins, bookings & loyal regulars' },
+  { label: 'Salons', icon: SprayCan, tagline: 'Hair, beauty & wellness studios' },
+  { label: 'Clinics', icon: Stethoscope, tagline: 'Dental, medical & specialty practices' },
+  { label: 'Cafes & Restaurants', icon: Coffee, tagline: 'Local discovery & online orders' },
+  { label: 'Gyms & Studios', icon: Dumbbell, tagline: 'Memberships, classes & trials' },
+  { label: 'Spas & Wellness', icon: Flower2, tagline: 'Treatments, packages & retreats' },
 ];
 
 const WhoIWorkWith: React.FC = () => {
@@ -57,7 +57,7 @@ const WhoIWorkWith: React.FC = () => {
             maxWidth: '550px',
             margin: '0 auto',
           }}>
-            I specialise in websites for Australian tradies and construction businesses.
+            I specialize in websites for service businesses in the Philippines and US.
           </p>
         </div>
 
@@ -156,7 +156,7 @@ const WhoIWorkWith: React.FC = () => {
             color: theme.textSecondary,
             marginBottom: '32px',
           }}>
-            If you're a tradie who wants more leads from Google, let's talk.
+            If you run a service business and want more leads from Google, let's talk.
           </p>
           <InteractiveHoverButton
             text="Book a Call"

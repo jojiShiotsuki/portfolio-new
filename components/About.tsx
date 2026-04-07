@@ -150,7 +150,7 @@ const About: React.FC = () => {
     { icon: Code2, value: '600+', label: 'Hours of Dev Experience', color: theme.accent },
     { icon: Clock, value: 'Daily', label: 'Updates to Skills', color: theme.accentLight },
     { icon: Award, value: '#1', label: 'Google Rankings', color: theme.accent },
-    { icon: MapPin, value: 'Global', label: 'AU, US & PH Clients', color: theme.accentLight },
+    { icon: MapPin, value: 'Global', label: 'PH & US Clients', color: theme.accentLight },
   ];
 
   return (
@@ -174,7 +174,7 @@ const About: React.FC = () => {
             About
           </div>
           <h2 style={titleStyle}>
-            Why Tradies<br />
+            Why Service Businesses<br />
             <span style={{ color: theme.accent }}>Trust Me</span>
           </h2>
 
@@ -182,7 +182,7 @@ const About: React.FC = () => {
             I'm not just another web developer.
           </p>
           <p style={textStyle}>
-            I've spent <span style={highlightStyle}>2+ years working with a US roofing company</span>, so I understand the construction industry. I know tradies are busy running jobs — not messing around with websites.
+            I've spent <span style={highlightStyle}>2+ years working with a US roofing company</span> and <span style={highlightStyle}>ranked a Cebu barbershop #1 on Google in 3 months</span>. I know service business owners are busy running their shops, not messing around with websites.
           </p>
           <p style={textStyle}>
             That's why I handle everything:<br />

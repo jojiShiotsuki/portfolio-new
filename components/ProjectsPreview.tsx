@@ -288,7 +288,7 @@ const ProjectsPreview: React.FC = () => {
               marginTop: '24px',
               maxWidth: '500px',
             }}>
-              While I specialise in tradie websites, here's some other work I've done showcasing my technical skills.
+              While I specialize in service business websites, here's some other work I've done showcasing my technical skills.
             </p>
           </div>
 

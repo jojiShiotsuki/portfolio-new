@@ -14,11 +14,11 @@ import { NavItem, SocialLink, Project, Experience, Service } from './types';
 
 export const PERSONAL_INFO = {
   name: "Joji Shiotsuki",
-  role: "Web Developer for Australian Tradies",
+  role: "Web Developer for Service Businesses",
   email: "jojishiotsuki0@gmail.com",
   location: "Cebu, Philippines",
-  tagline: "I Help Australian Tradies Get Found on Google",
-  subHeadline: "I build websites for roofers, plumbers, electricians, and builders that rank on Google and turn visitors into paying customers. No fluff. Just results.",
+  tagline: "I Help Service Businesses Get Found on Google",
+  subHeadline: "I build websites for barbershops, salons, clinics, cafes, and service businesses that rank on Google and turn visitors into paying customers. No fluff. Just results.",
   availability: "Available for projects"
 };
 
@@ -43,19 +43,19 @@ export const SERVICES: Service[] = [
   {
     id: 'websites',
     title: 'Lead-Generating Websites',
-    description: 'Custom WordPress websites built specifically for tradies. Mobile-friendly, fast-loading, and designed to turn visitors into calls. Your site will look professional and work 24/7 to bring you customers.',
+    description: 'Custom WordPress websites built specifically for service businesses. Mobile-friendly, fast-loading, and designed to turn visitors into calls. Your site will look professional and work 24/7 to bring you customers.',
     icon: Layout
   },
   {
     id: 'seo',
     title: 'Get Found on Google',
-    description: 'What\'s the point of a website if no one finds it? I optimise your site so you show up when customers search "roofer near me" or "plumber [your city]". More visibility = more jobs.',
+    description: 'What\'s the point of a website if no one finds it? I optimize your site so you show up when customers search "barbershop near me" or "salon [your city]". More visibility = more bookings.',
     icon: LineChart
   },
   {
     id: 'maintenance',
     title: 'Maintenance & Support',
-    description: 'I don\'t disappear after launch. Get ongoing support, updates, and tweaks to keep your site running smoothly. You focus on the jobs — I\'ll handle the website.',
+    description: 'I don\'t disappear after launch. Get ongoing support, updates, and tweaks to keep your site running smoothly. You focus on the jobs. I\'ll handle the website.',
     icon: Wrench
   }
 ];
@@ -67,7 +67,7 @@ export const PROJECTS: Project[] = [
     id: 'vertex',
     title: 'Vertex',
     category: 'Web Apps',
-    description: 'A productivity app I built for myself. Combines task management, CRM, and goal tracking with natural language input—type "call mom tomorrow 3pm" and it creates the task automatically.',
+    description: 'A productivity app I built for myself. Combines task management, CRM, and goal tracking with natural language input: type "call mom tomorrow 3pm" and it creates the task automatically.',
     challenge: 'Managing productivity across multiple expensive SaaS tools ($50+/month combined) created fragmented workflows. Task creation was manual and tedious, and no tool offered AI-powered natural language input for rapid task creation.',
     solution: 'Engineered a unified full-stack application with natural language processing at its core. Type "Meeting with Sarah tomorrow at 3pm about Q2 budget" and Vertex automatically parses and creates a structured task with date, time, contact, and context. Built bulk creation for importing hundreds of items, quarterly OKR tracking, and an export system that provides context to AI assistants.',
     tech: ['FastAPI', 'Python', 'React', 'TypeScript', 'SQLite'],
@@ -106,7 +106,7 @@ export const PROJECTS: Project[] = [
     id: 'pundok-studios',
     title: 'Pundok Studios',
     category: 'Websites',
-    description: 'Website and local SEO for a barbershop in Cebu. They weren\'t showing up on Google before—now they rank #1 for "barbershop Cebu."',
+    description: 'Website and local SEO for a barbershop in Cebu. They weren\'t showing up on Google before. Now they rank #1 for "barbershop Cebu."',
     challenge: 'Despite having a 4.9-star reputation and loyal customer base, Pundok Studios was virtually invisible online. Competitors with inferior services ranked higher in local searches, and the barbershop was losing potential customers who searched "best barbershop in Cebu" to find their next haircut.',
     solution: 'Designed a clean, sophisticated website that mirrors their premium in-store experience. Implemented an aggressive local SEO strategy: optimized Google Business Profile, built location-specific landing pages, created schema markup for local business and reviews, and developed a content strategy targeting high-intent keywords like "premium barbershop Cebu" and "men\'s grooming Cebu City."',
     tech: ['WordPress', 'Elementor', 'Local SEO', 'Schema Markup', 'Google Business Profile'],
@@ -139,12 +139,29 @@ export const PROJECTS: Project[] = [
       'Service area page ranks #1 for 12 local keywords'
     ],
     testimonial: {
-      quote: "Our website finally matches who we are. Customers tell us they chose us because the site felt trustworthy and friendly—exactly what we wanted.",
+      quote: "Our website finally matches who we are. Customers tell us they chose us because the site felt trustworthy and friendly, exactly what we wanted.",
       author: "Client Testimonial",
       role: "Knock Knock HVAC Owner"
     },
     image: '/knockknock-screenshot.webp',
     link: 'https://knockknockair.com/'
+  },
+  {
+    id: 'samantha-angeli',
+    title: 'Samantha Angeli',
+    category: 'Websites',
+    description: 'Website for a US strategic branding and marketing consultancy. Built with a clean editorial aesthetic to match her positioning around credibility, loyalty, and intentional growth for established entrepreneurs.',
+    challenge: 'Samantha works with established entrepreneurs, keynote speakers, and authors. Her site had to convey premium credibility instantly. A generic template would undercut the very premise of her brand. She needed a digital home that matched the caliber of the clients she serves, with clear messaging around her five service pillars and a frictionless way for prospects to start a conversation.',
+    solution: 'Built a clean, editorial WordPress site with Elementor that leads with her core message ("Elevated Brands Begin Here") and walks visitors through her five service pillars: Brand Strategy, Visual Branding, Marketing Strategy, Website Development, and Relationship Management. Featured testimonials from notable industry figures, optimized loading speed with WP Rocket, and structured each section to convert visiting entrepreneurs into discovery calls.',
+    tech: ['WordPress', 'Elementor', 'WP Rocket', 'Responsive Design', 'Conversion Copywriting'],
+    results: [
+      'Premium editorial design matching her brand positioning',
+      'Clear five-pillar service architecture',
+      'Featured testimonials from notable industry figures',
+      'Optimized site speed with WP Rocket'
+    ],
+    image: '/samantha-angeli-screenshot.webp',
+    link: 'https://samanthaangeli.com/'
   },
   {
     id: 'trade-titans',
@@ -172,7 +189,7 @@ export const PROJECTS: Project[] = [
     id: 'perth-video',
     title: 'Perth Video',
     category: 'Design Pitch',
-    description: 'Redesign concept for a video production company in Perth. The old site was all text—the new design leads with their actual video work.',
+    description: 'Redesign concept for a video production company in Perth. The old site was all text. The new design leads with their actual video work.',
     challenge: 'The original website was text-heavy and didn\'t visually demonstrate their video production capabilities. Services were buried in long paragraphs, and the dark circular background felt dated for a creative video company.',
     solution: 'Redesigned with a visual-first approach using stunning aerial drone footage as the hero. Created a services carousel showcasing Interviews, Drone & Aerial, Event Filming, Livestreaming, and more. Added a testimonials slider, project gallery, and clean contact section. Built with WordPress and Bricks Builder for easy content management.',
     tech: ['WordPress', 'Bricks Builder', 'Custom CSS', 'Responsive Design'],
@@ -191,7 +208,7 @@ export const PROJECTS: Project[] = [
     category: 'Design Pitch',
     description: 'Homepage redesign concept for a commercial electrician in Houston. They\'ve done 200+ projects but their old site looked small-time.',
     challenge: 'The existing website looked like a small residential operation despite 200+ commercial projects and 15+ years in business. They were losing bids to competitors with more professional web presence.',
-    solution: 'Redesigned the entire homepage to lead with authority—bold statistics front and center, a dark professional color scheme that commands respect, and clear service pathways for property managers, general contractors, and business owners. The new design positions them as an enterprise-ready commercial contractor.',
+    solution: 'Redesigned the entire homepage to lead with authority: bold statistics front and center, a dark professional color scheme that commands respect, and clear service pathways for property managers, general contractors, and business owners. The new design positions them as an enterprise-ready commercial contractor.',
     tech: ['Framer', 'UI/UX Design', 'Responsive Design', 'Conversion Optimization'],
     results: [
       'Complete visual transformation from residential to commercial aesthetic',
@@ -206,8 +223,8 @@ export const PROJECTS: Project[] = [
     id: 'abacus',
     title: 'Abacus Home Services',
     category: 'Design Pitch',
-    description: 'Homepage redesign concept for a home services company in Houston. Their 24/7 emergency service was buried—now it\'s front and center.',
-    challenge: 'Their biggest competitive advantage—24/7 emergency service—was buried in the website. Panicked homeowners at 2 AM couldn\'t quickly find help or trust them with an emergency call.',
+    description: 'Homepage redesign concept for a home services company in Houston. Their 24/7 emergency service was buried. Now it\'s front and center.',
+    challenge: 'Their biggest competitive advantage, 24/7 emergency service, was buried in the website. Panicked homeowners at 2 AM couldn\'t quickly find help or trust them with an emergency call.',
     solution: 'Redesigned the homepage with trust as the foundation. Licensed technician badges, satisfaction guarantee, and 24/7 availability now appear above the fold. Created visual service cards for easy navigation between plumbing, HVAC, electrical, and water services. The emergency contact number is now impossible to miss with a sticky header CTA.',
     tech: ['Framer', 'UI/UX Design', 'Conversion Optimization', 'Mobile-First Design'],
     results: [
@@ -262,7 +279,7 @@ export const PROJECTS: Project[] = [
     id: 'youpercent',
     title: 'YOU% Nutrition',
     category: 'Websites',
-    description: 'Pro bono website for a nutritionist friend in Cebu. Did 3 months of free SEO—got them ranking #1 for "nutritionist in Cebu City."',
+    description: 'Pro bono website for a nutritionist friend in Cebu. Did 3 months of free SEO. Got them ranking #1 for "nutritionist in Cebu City."',
     challenge: 'YOU% Nutrition needed an online presence to reach clients seeking diet therapy, weight management, and exercise nutrition guidance. Without a website, they were invisible to potential clients searching for nutritionists in Cebu City.',
     solution: 'Built a clean, conversion-focused WordPress website highlighting their virtual consultation services. Implemented a comprehensive 3-month SEO strategy targeting local keywords. Created service pages, a blog for content marketing, and clear CTAs for booking consultations.',
     tech: ['WordPress', 'Local SEO', 'Content Strategy', 'Responsive Design'],
@@ -287,10 +304,10 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCE: Experience[] = [
   {
     id: 'freelance',
-    role: 'Freelance Web Developer for Tradies',
+    role: 'Freelance Web Developer for Service Businesses',
     company: 'Self-Employed',
     period: 'Oct 2024 - Present',
-    description: 'Building lead-generating websites and implementing SEO strategies for tradies and construction businesses in Australia and the US.'
+    description: 'Building lead-generating websites and implementing SEO strategies for service businesses in the Philippines and the US.'
   },
   {
     id: 'polianna',

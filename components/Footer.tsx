@@ -86,7 +86,7 @@ const Footer: React.FC = () => {
             maxWidth: '400px',
             lineHeight: 1.6,
           }}>
-            I help Australian tradies get found on Google and generate leads.
+            I help service businesses in the Philippines and US get found on Google and generate leads.
           </div>
           <div style={copyrightStyle}>
             &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}
@@ -133,7 +133,7 @@ const Footer: React.FC = () => {
           <div style={dividerStyle} className="footer-divider" />
 
           <div style={creditsStyle} className="footer-location">
-            Australia | United States | Philippines
+            Philippines | United States
           </div>
         </div>
       </div>

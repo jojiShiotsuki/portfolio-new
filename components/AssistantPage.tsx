@@ -556,7 +556,7 @@ const AssistantPage: React.FC = () => {
   const [chatOpen, setChatOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "G'day! I'm Joji's assistant. What kind of trade are you in and where are you based?" }
+    { role: 'assistant', content: "Hey! I'm Joji's assistant. What kind of business do you run and where are you based?" }
   ]);
   const [input, setInput] = useState('');
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -1068,7 +1068,7 @@ const AssistantPage: React.FC = () => {
               marginTop: '12px',
               textAlign: 'center',
             }}>
-              Send a message to enter the room — click to move around
+              Send a message to enter the room. Click to move around.
             </p>
           </div>
 

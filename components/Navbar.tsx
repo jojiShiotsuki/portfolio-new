@@ -98,6 +98,7 @@ const Navbar: React.FC = () => {
   const navItems = [
     { label: 'Results', href: isHomePage ? '#results' : '/#results', isRoute: !isHomePage },
     { label: 'Services', href: isHomePage ? '#services' : '/#services', isRoute: !isHomePage },
+    { label: 'Portfolio', href: '/projects', isRoute: true },
     { label: 'About', href: isHomePage ? '#about' : '/#about', isRoute: !isHomePage },
   ];
 

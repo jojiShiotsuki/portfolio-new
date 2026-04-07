@@ -4,8 +4,8 @@ import { useTheme } from '../ThemeContext';
 import { ArrowRight } from 'lucide-react';
 
 const serviceBenefits: Record<string, string[]> = {
-  websites: ['Mobile-responsive design', 'Fast page load speeds', 'Conversion-optimised layouts'],
-  seo: ['Local SEO optimisation', 'Google Business Profile setup', 'Keyword strategy & content'],
+  websites: ['Mobile-responsive design', 'Fast page load speeds', 'Conversion-optimized layouts'],
+  seo: ['Local SEO optimization', 'Google Business Profile setup', 'Keyword strategy & content'],
   maintenance: ['Monthly updates & fixes', 'Performance monitoring', 'Priority support'],
 };
 
@@ -45,7 +45,7 @@ const Services: React.FC = () => {
             marginBottom: '24px',
           }}>
             What I Build<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>for Tradies</span>
+            <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>for Service Businesses</span>
           </h2>
           <p style={{
             fontFamily: "'Instrument Sans', sans-serif",

@@ -7,7 +7,7 @@ import { useTheme } from '../ThemeContext';
 import { GooeyText } from './ui/gooey-text-morphing';
 import { AnimatedSocialIcons } from './ui/animated-social-icons';
 
-const TRADE_WORDS = ["Tradies", "Plumbers", "Sparkies", "Chippies", "Builders", "Roofers"];
+const BUSINESS_WORDS = ["Barbershops", "Salons", "Clinics", "Cafes", "Gyms", "Spas"];
 
 const SOCIAL_ICONS = [
   { Icon: TikTokIcon, href: "https://tiktok.com/@_shiotsuki" },
@@ -183,9 +183,8 @@ const Hero: React.FC = () => {
             I Help
           </span>
           <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}`, display: 'block', animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
-            Aussie{' '}
             <GooeyText
-              texts={TRADE_WORDS}
+              texts={BUSINESS_WORDS}
               morphTime={1.5}
               cooldownTime={0.5}
               textStyle={{ color: theme.headingStroke, WebkitTextStroke: 'unset' }}

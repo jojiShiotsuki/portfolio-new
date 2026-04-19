@@ -18,6 +18,9 @@ import { useTheme } from './ThemeContext';
 // Lazy-loaded route components for code splitting
 const ProjectsPage = React.lazy(() => import('./components/ProjectsPage'));
 const AssistantPage = React.lazy(() => import('./components/AssistantPage'));
+const HomeV2 = React.lazy(() => import('./components/HomeV2'));
+const HomeV3 = React.lazy(() => import('./components/HomeV3'));
+const HomeV4 = React.lazy(() => import('./components/HomeV4'));
 
 // Home page component
 const HomePage: React.FC = () => (
@@ -89,6 +92,9 @@ function App() {
             <Suspense fallback={<div />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/home-2" element={<HomeV2 />} />
+                <Route path="/home-3" element={<HomeV3 />} />
+                <Route path="/home-4" element={<HomeV4 />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/talk" element={<AssistantPage />} />
               </Routes>

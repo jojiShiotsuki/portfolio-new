@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOJI.DEV — Brand Kit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Primary — Dark Olive */
+      --obsidian: #000103;
+      --nightfall: #0C0F14;
+      --dark-olive: #15170C;
+      --forest: #293122;
+      --military-sage: #3F523F;
+
+      /* Accent — Olive Green */
+      --muted-olive: #5F7161;
+      --sage: #8D9A7C;
+      --pale-sage: #C3C9A5;
+      --sage-mist: #DFE3D0;
+
+      /* Earth — Warm Browns */
+      --espresso: #4D2E1C;
+      --leather: #6E5133;
+      --camel: #967856;
+
+      /* Neutrals */
+      --parchment: #F5F3EE;
+      --linen: #EBE8E2;
+      --stone: #D4D0C8;
+      --pewter: #9C9890;
+      --graphite: #5C5850;
+      --charcoal: #2A2820;
+      --ink: #141310;
+
+      /* Status */
+      --success: #22C55E;
+      --alert: #EF4444;
+
+      /* Fonts */
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Instrument Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--parchment);
+      color: var(--charcoal);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+      background: var(--muted-olive);
+      color: var(--parchment);
+    }
+
+    /* ─── Film Grain Overlay ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.015;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--parchment); }
+    ::-webkit-scrollbar-thumb { background: var(--stone); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted-olive); }
+
+    /* ─── Animations ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes revealLine {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @keyframes slideInFromLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .reveal-fade {
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .d1 { animation-delay: 0.05s; }
+    .d2 { animation-delay: 0.1s; }
+    .d3 { animation-delay: 0.15s; }
+    .d4 { animation-delay: 0.2s; }
+    .d5 { animation-delay: 0.25s; }
+    .d6 { animation-delay: 0.3s; }
+    .d7 { animation-delay: 0.35s; }
+    .d8 { animation-delay: 0.4s; }
+    .d9 { animation-delay: 0.45s; }
+    .d10 { animation-delay: 0.5s; }
+    .d11 { animation-delay: 0.55s; }
+    .d12 { animation-delay: 0.6s; }
+
+    /* ─── Layout ─── */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      padding: 80px 0;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted-olive);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--muted-olive);
+      animation: revealLine 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transform-origin: left;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin-bottom: 32px;
+    }
+
+    .hero-title .dot {
+      color: var(--muted-olive);
+      animation: pulseDot 3s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    .hero-description {
+      max-width: 560px;
+      font-size: 1.05rem;
+      color: var(--graphite);
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 48px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--pewter);
+    }
+
+    .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-meta span::before {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--muted-olive);
+      border-radius: 50%;
+    }
+
+    /* ─── Dot Grid Background ─── */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -10%;
+      width: 50%;
+      height: 100%;
+      background-image: radial-gradient(circle, var(--stone) 0.5px, transparent 0.5px);
+      background-size: 24px 24px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    /* ─── Section ─── */
+    section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--stone), transparent);
+      opacity: 0.6;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted-olive);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--graphite);
+      max-width: 480px;
+      margin-bottom: 56px;
+    }
+
+    /* ─── Color Palette Grid ─── */
+    .color-group {
+      margin-bottom: 72px;
+    }
+
+    .color-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .group-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--stone);
+    }
+
+    .group-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .group-count {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--pewter);
+      letter-spacing: 0.1em;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .swatch {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #FFFFFF;
+      border: 1px solid var(--stone);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .swatch:hover {
+      transform: translateY(-4px);
+      border-color: var(--pewter);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+    }
+
+    .swatch-color {
+      height: 120px;
+      position: relative;
+      transition: height 0.3s ease;
+    }
+
+    .swatch:hover .swatch-color {
+      height: 130px;
+    }
+
+    .swatch-copy {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+      color: white;
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+    }
+
+    .swatch:hover .swatch-copy {
+      opacity: 1;
+    }
+
+    .swatch-copy:hover {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .swatch-copy.copied {
+      background: var(--muted-olive);
+      border-color: var(--sage);
+    }
+
+    .swatch-info {
+      padding: 16px;
+    }
+
+    .swatch-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      margin-bottom: 4px;
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--graphite);
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .swatch-role {
+      font-size: 0.75rem;
+      color: var(--pewter);
+      line-height: 1.4;
+    }
+
+    /* ─── Large Featured Swatch ─── */
+    .swatch-featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #FFFFFF;
+      border: 1px solid var(--stone);
+    }
+
+    .swatch-featured .swatch-color {
+      height: 100%;
+      min-height: 200px;
+    }
+
+    .swatch-featured:hover .swatch-color {
+      height: 100%;
+    }
+
+    .swatch-featured .swatch-info {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .swatch-featured .swatch-name {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .swatch-featured .swatch-hex {
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .swatch-featured .swatch-role {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ─── Typography Section ─── */
+    .type-showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .type-specimen {
+      padding: 40px;
+      border-radius: 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--stone);
+    }
+
+    .type-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted-olive);
+      margin-bottom: 20px;
+    }
+
+    .type-display {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--charcoal);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .type-body-demo {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      color: var(--graphite);
+      line-height: 1.7;
+      max-width: 520px;
+    }
+
+    .type-mono-demo {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--muted-olive);
+      line-height: 1.8;
+    }
+
+    .type-weights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      margin-top: 24px;
+    }
+
+    .type-weight {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .type-weight-sample {
+      font-size: 1.8rem;
+      color: var(--charcoal);
+      line-height: 1.2;
+    }
+
+    .type-weight-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--pewter);
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── CSS Variables Section ─── */
+    .var-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .var-table th {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--pewter);
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--stone);
+    }
+
+    .var-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--linen);
+      font-size: 0.85rem;
+      vertical-align: middle;
+    }
+
+    .var-table tr:hover td {
+      background: var(--linen);
+    }
+
+    .var-name {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--muted-olive);
+    }
+
+    .var-value {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--graphite);
+    }
+
+    .var-preview {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid var(--stone);
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* ─── Theme Preview ─── */
+    .theme-preview-single {
+      max-width: 560px;
+    }
+
+    .theme-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--stone);
+      background: #FFFFFF;
+    }
+
+    .theme-card-header {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .theme-card-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--charcoal);
+    }
+
+    .theme-card-badge {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--linen);
+      color: var(--muted-olive);
+    }
+
+    .theme-card-body {
+      padding: 0 24px 24px;
+    }
+
+    .theme-ui-bar {
+      height: 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      background: var(--linen);
+    }
+
+    .theme-ui-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .theme-ui-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    /* ─── Logo Section ─── */
+    .logo-display {
+      display: flex;
+      gap: 48px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo-mark {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 48px 64px;
+      border-radius: 16px;
+      border: 1px solid var(--stone);
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 3rem;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .logo-text .logo-dot {
+      display: inline-block;
+    }
+
+    .logo-variant-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      padding: 60px 0;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--pewter);
+    }
+
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--stone);
+      margin: 16px auto;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .page { padding: 0 24px; }
+      .hero { min-height: auto; padding: 100px 0 60px; }
+      .hero-meta { flex-direction: column; gap: 16px; }
+      .swatches { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+      .swatch-featured { grid-template-columns: 1fr; }
+      .swatch-featured .swatch-color { min-height: 140px; }
+      .swatch-featured .swatch-info { padding: 24px; }
+      .logo-display { flex-direction: column; gap: 24px; }
+      .logo-mark { padding: 32px 40px; width: 100%; }
+      section { padding: 60px 0; }
+      .var-table { font-size: 0.75rem; }
+      .var-table th, .var-table td { padding: 10px 8px; }
+      .type-specimen { padding: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .page { padding: 0 16px; }
+      .swatches { grid-template-columns: 1fr 1fr; }
+      .swatch-color { height: 90px; }
+      .swatch-info { padding: 12px; }
+      .type-weights { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ─── Hero ─── -->
+  <header class="hero">
+    <div class="hero-eyebrow reveal d1">Brand Kit</div>
+    <h1 class="hero-title reveal d2">
+      JOJI<span class="dot">.</span>DEV
+    </h1>
+    <p class="hero-description reveal d3">
+      Drawn from the color grading of <em>Oppenheimer</em> — the film's cool-tinted
+      blacks and dark olive greens form the primary palette, while muted sage tones
+      provide accent. Warm leather browns add earthiness and depth.
+    </p>
+    <div class="hero-meta reveal d4">
+      <span>Oppenheimer Palette</span>
+      <span>Dark Olive Core</span>
+      <span>v2.0</span>
+    </div>
+  </header>
+
+  <div class="section-divider reveal-fade d5"></div>
+
+  <!-- ─── Colors ─── -->
+  <section>
+    <div class="section-label reveal d1">01</div>
+    <h2 class="section-title reveal d2">Color Palette</h2>
+    <p class="section-subtitle reveal d3">
+      19 colors organized into five groups — primaries, accents, earth tones, neutrals, and status.
+    </p>
+
+    <!-- Primary — Dark Olive -->
+    <div class="color-group reveal d4">
+      <div class="group-header">
+        <span class="group-name">Primary — Dark Olive</span>
+        <span class="group-count">5 swatches</span>
+      </div>
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #000103;">
+            <button class="swatch-copy" data-hex="#000103" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Obsidian</div>
+            <div class="swatch-hex">#000103</div>
+            <div class="swatch-role">True black, deepest bg</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #0C0F14;">
+            <button class="swatch-copy" data-hex="#0C0F14" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Nightfall</div>
+            <div class="swatch-hex">#0C0F14</div>
+            <div class="swatch-role">Dark backgrounds</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #15170C;">
+            <button class="swatch-copy" data-hex="#15170C" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Dark Olive</div>
+            <div class="swatch-hex">#15170C</div>
+            <div class="swatch-role">Cards, panels</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #293122;">
+            <button class="swatch-copy" data-hex="#293122" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Forest</div>
+            <div class="swatch-hex">#293122</div>
+            <div class="swatch-role">Secondary surfaces</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #3F523F;">
+            <button class="swatch-copy" data-hex="#3F523F" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Military Sage</div>
+            <div class="swatch-hex">#3F523F</div>
+            <div class="swatch-role">Borders, lighter dark</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accent — Olive Green -->
+    <div class="color-group reveal d5">
+      <div class="group-header">
+        <span class="group-name">Accent — Olive Green</span>
+        <span class="group-count">4 swatches</span>
+      </div>
+      <div class="swatches">
+        <div class="swatch swatch-featured">
+          <div class="swatch-color" style="background: #5F7161;">
+            <button class="swatch-copy" data-hex="#5F7161" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Muted Olive</div>
+            <div class="swatch-hex">#5F7161</div>
+            <div class="swatch-role">Primary accent — CTAs, logo dot, interactive elements. The signature color of the brand.</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #8D9A7C;">
+            <button class="swatch-copy" data-hex="#8D9A7C" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Sage</div>
+            <div class="swatch-hex">#8D9A7C</div>
+            <div class="swatch-role">Hover states, lighter accent</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #C3C9A5;">
+            <button class="swatch-copy" data-hex="#C3C9A5" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Pale Sage</div>
+            <div class="swatch-hex">#C3C9A5</div>
+            <div class="swatch-role">Subtle highlights, badges</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #DFE3D0;">
+            <button class="swatch-copy" data-hex="#DFE3D0" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Sage Mist</div>
+            <div class="swatch-hex">#DFE3D0</div>
+            <div class="swatch-role">Faint tints, borders</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earth — Warm Browns -->
+    <div class="color-group reveal d6">
+      <div class="group-header">
+        <span class="group-name">Earth — Warm Browns</span>
+        <span class="group-count">3 swatches</span>
+      </div>
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #4D2E1C;">
+            <button class="swatch-copy" data-hex="#4D2E1C" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Espresso</div>
+            <div class="swatch-hex">#4D2E1C</div>
+            <div class="swatch-role">Deep warm accent</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #6E5133;">
+            <button class="swatch-copy" data-hex="#6E5133" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Leather</div>
+            <div class="swatch-hex">#6E5133</div>
+            <div class="swatch-role">Secondary accent</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #967856;">
+            <button class="swatch-copy" data-hex="#967856" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Camel</div>
+            <div class="swatch-hex">#967856</div>
+            <div class="swatch-role">Light warm accent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Neutrals -->
+    <div class="color-group reveal d7">
+      <div class="group-header">
+        <span class="group-name">Neutrals</span>
+        <span class="group-count">7 swatches &middot; warm-tinted</span>
+      </div>
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #F5F3EE;">
+            <button class="swatch-copy" data-hex="#F5F3EE" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Parchment</div>
+            <div class="swatch-hex">#F5F3EE</div>
+            <div class="swatch-role">Page bg (light mode)</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #EBE8E2;">
+            <button class="swatch-copy" data-hex="#EBE8E2" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Linen</div>
+            <div class="swatch-hex">#EBE8E2</div>
+            <div class="swatch-role">Cards</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #D4D0C8;">
+            <button class="swatch-copy" data-hex="#D4D0C8" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Stone</div>
+            <div class="swatch-hex">#D4D0C8</div>
+            <div class="swatch-role">Borders</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #9C9890;">
+            <button class="swatch-copy" data-hex="#9C9890" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Pewter</div>
+            <div class="swatch-hex">#9C9890</div>
+            <div class="swatch-role">Muted text</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #5C5850;">
+            <button class="swatch-copy" data-hex="#5C5850" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Graphite</div>
+            <div class="swatch-hex">#5C5850</div>
+            <div class="swatch-role">Body text</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #2A2820;">
+            <button class="swatch-copy" data-hex="#2A2820" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Charcoal</div>
+            <div class="swatch-hex">#2A2820</div>
+            <div class="swatch-role">Headings</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #141310;">
+            <button class="swatch-copy" data-hex="#141310" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Ink</div>
+            <div class="swatch-hex">#141310</div>
+            <div class="swatch-role">Near black</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="color-group reveal d8">
+      <div class="group-header">
+        <span class="group-name">Status</span>
+        <span class="group-count">2 swatches</span>
+      </div>
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-color" style="background: #22C55E;">
+            <button class="swatch-copy" data-hex="#22C55E" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Success</div>
+            <div class="swatch-hex">#22C55E</div>
+            <div class="swatch-role">Success states</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background: #EF4444;">
+            <button class="swatch-copy" data-hex="#EF4444" onclick="copyHex(this)" aria-label="Copy hex code">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+          <div class="swatch-info">
+            <div class="swatch-name">Alert</div>
+            <div class="swatch-hex">#EF4444</div>
+            <div class="swatch-role">Error, destructive actions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ─── Typography ─── -->
+  <section>
+    <div class="section-label reveal d1">02</div>
+    <h2 class="section-title reveal d2">Typography</h2>
+    <p class="section-subtitle reveal d3">
+      Three typefaces, each with a distinct role in the hierarchy.
+    </p>
+
+    <div class="type-showcase">
+      <!-- Display -->
+      <div class="type-specimen reveal d4">
+        <div class="type-label">Display &middot; Bricolage Grotesque</div>
+        <div class="type-display">The act of creation<br>is the act of destruction.</div>
+        <div class="type-weights">
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-display); font-weight: 400;">Aa</span>
+            <span class="type-weight-label">400 Regular</span>
+          </div>
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-display); font-weight: 500;">Aa</span>
+            <span class="type-weight-label">500 Medium</span>
+          </div>
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-display); font-weight: 600;">Aa</span>
+            <span class="type-weight-label">600 SemiBold</span>
+          </div>
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-display); font-weight: 700;">Aa</span>
+            <span class="type-weight-label">700 Bold</span>
+          </div>
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-display); font-weight: 800;">Aa</span>
+            <span class="type-weight-label">800 ExtraBold</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="type-specimen reveal d5">
+        <div class="type-label">Body &middot; Instrument Sans</div>
+        <div class="type-body-demo">
+          Clean and contemporary. Instrument Sans carries body copy, descriptions, and
+          supporting text. Its neutral personality stays out of the way while maintaining
+          excellent readability at all sizes. Weights 400 through 600.
+        </div>
+        <div class="type-weights" style="margin-top: 20px;">
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-body); font-weight: 400;">Aa</span>
+            <span class="type-weight-label">400 Regular</span>
+          </div>
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-body); font-weight: 500;">Aa</span>
+            <span class="type-weight-label">500 Medium</span>
+          </div>
+          <div class="type-weight">
+            <span class="type-weight-sample" style="font-family: var(--font-body); font-weight: 600;">Aa</span>
+            <span class="type-weight-label">600 SemiBold</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mono -->
+      <div class="type-specimen reveal d6">
+        <div class="type-label">Code &middot; JetBrains Mono</div>
+        <div class="type-mono-demo">
+const palette = {<br>
+&nbsp;&nbsp;primary: '--olive-900 through --olive-500',<br>
+&nbsp;&nbsp;accent:  '--green-500 through --green-200',<br>
+&nbsp;&nbsp;earth:   '--brown-700, --brown-600, --brown-500',<br>
+&nbsp;&nbsp;neutral: '--parchment through --ink',<br>
+};<br>
+<br>
+// Labels, hex values, technical annotations
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ─── Theme ─── -->
+  <section>
+    <div class="section-label reveal d1">03</div>
+    <h2 class="section-title reveal d2">Theme</h2>
+    <p class="section-subtitle reveal d3">
+      Light mode — the Oppenheimer palette on a warm parchment canvas.
+    </p>
+
+    <div class="theme-preview-single reveal d4">
+      <div class="theme-card">
+        <div class="theme-card-header">
+          <span class="theme-card-title">Light Mode</span>
+          <span class="theme-card-badge">Default</span>
+        </div>
+        <div class="theme-card-body">
+          <div class="theme-ui-bar" style="width: 80%;"></div>
+          <div class="theme-ui-bar" style="width: 55%; opacity: 0.6;"></div>
+          <div class="theme-ui-bar" style="width: 40%; opacity: 0.3;"></div>
+          <div class="theme-ui-dots" style="margin-top: 16px;">
+            <div class="theme-ui-dot" style="background: #5F7161;"></div>
+            <div class="theme-ui-dot" style="background: #8D9A7C;"></div>
+            <div class="theme-ui-dot" style="background: #3F523F;"></div>
+            <div class="theme-ui-dot" style="background: #6E5133;"></div>
+            <div class="theme-ui-dot" style="background: #967856;"></div>
+          </div>
+          <div style="margin-top: 16px; display: flex; gap: 12px;">
+            <div style="flex: 1; padding: 12px; background: #EBE8E2; border-radius: 8px;">
+              <div style="font-family: var(--font-mono); font-size: 0.6rem; color: #5F7161; margin-bottom: 4px;">BG</div>
+              <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #2A2820;">#F5F3EE</div>
+            </div>
+            <div style="flex: 1; padding: 12px; background: #EBE8E2; border-radius: 8px;">
+              <div style="font-family: var(--font-mono); font-size: 0.6rem; color: #5F7161; margin-bottom: 4px;">TEXT</div>
+              <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #2A2820;">#2A2820</div>
+            </div>
+            <div style="flex: 1; padding: 12px; background: #EBE8E2; border-radius: 8px;">
+              <div style="font-family: var(--font-mono); font-size: 0.6rem; color: #5F7161; margin-bottom: 4px;">ACCENT</div>
+              <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #2A2820;">#5F7161</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ─── Logo ─── -->
+  <section>
+    <div class="section-label reveal d1">04</div>
+    <h2 class="section-title reveal d2">Logo Mark</h2>
+    <p class="section-subtitle reveal d3">
+      The logotype uses Bricolage Grotesque ExtraBold with the signature olive dot.
+    </p>
+
+    <div class="logo-display reveal d4">
+      <div class="logo-mark" style="background: var(--nightfall);">
+        <div class="logo-text" style="color: var(--parchment);">
+          JOJI<span class="logo-dot" style="color: var(--muted-olive);">.</span>DEV
+        </div>
+        <div class="logo-variant-label" style="color: var(--military-sage);">On Dark</div>
+      </div>
+      <div class="logo-mark" style="background: var(--parchment);">
+        <div class="logo-text" style="color: var(--charcoal);">
+          JOJI<span class="logo-dot" style="color: var(--muted-olive);">.</span>DEV
+        </div>
+        <div class="logo-variant-label" style="color: var(--pewter);">On Light</div>
+      </div>
+      <div class="logo-mark" style="background: var(--muted-olive);">
+        <div class="logo-text" style="color: var(--parchment);">
+          JOJI<span class="logo-dot" style="color: var(--nightfall);">.</span>DEV
+        </div>
+        <div class="logo-variant-label" style="color: var(--pale-sage);">On Accent</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ─── CSS Variables Reference ─── -->
+  <section>
+    <div class="section-label reveal d1">05</div>
+    <h2 class="section-title reveal d2">CSS Variable Map</h2>
+    <p class="section-subtitle reveal d3">
+      Variable naming follows the migration from the previous navy/amber scheme.
+    </p>
+
+    <div class="reveal d4" style="overflow-x: auto;">
+      <table class="var-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Value</th>
+            <th>Preview</th>
+            <th>Migration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="var-name">--olive-900</span></td>
+            <td><span class="var-value">#000103</span></td>
+            <td><span class="var-preview" style="background: #000103;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --navy-900</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--olive-800</span></td>
+            <td><span class="var-value">#0C0F14</span></td>
+            <td><span class="var-preview" style="background: #0C0F14;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --navy-800</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--olive-700</span></td>
+            <td><span class="var-value">#15170C</span></td>
+            <td><span class="var-preview" style="background: #15170C;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --navy-700</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--olive-600</span></td>
+            <td><span class="var-value">#293122</span></td>
+            <td><span class="var-preview" style="background: #293122;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --navy-600</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--olive-500</span></td>
+            <td><span class="var-value">#3F523F</span></td>
+            <td><span class="var-preview" style="background: #3F523F;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --navy-500</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--green-500</span></td>
+            <td><span class="var-value">#5F7161</span></td>
+            <td><span class="var-preview" style="background: #5F7161;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --amber-500</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--green-400</span></td>
+            <td><span class="var-value">#8D9A7C</span></td>
+            <td><span class="var-preview" style="background: #8D9A7C;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --amber-400</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--green-300</span></td>
+            <td><span class="var-value">#C3C9A5</span></td>
+            <td><span class="var-preview" style="background: #C3C9A5;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --amber-300</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--green-200</span></td>
+            <td><span class="var-value">#DFE3D0</span></td>
+            <td><span class="var-preview" style="background: #DFE3D0;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --amber-200</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--brown-700</span></td>
+            <td><span class="var-value">#4D2E1C</span></td>
+            <td><span class="var-preview" style="background: #4D2E1C;"></span></td>
+            <td style="color: var(--muted-olive); font-size: 0.75rem;">NEW</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--brown-600</span></td>
+            <td><span class="var-value">#6E5133</span></td>
+            <td><span class="var-preview" style="background: #6E5133;"></span></td>
+            <td style="color: var(--muted-olive); font-size: 0.75rem;">NEW</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--brown-500</span></td>
+            <td><span class="var-value">#967856</span></td>
+            <td><span class="var-preview" style="background: #967856;"></span></td>
+            <td style="color: var(--muted-olive); font-size: 0.75rem;">NEW</td>
+          </tr>
+          <tr>
+            <td><span class="var-name">--parchment</span></td>
+            <td><span class="var-value">#F5F3EE</span></td>
+            <td><span class="var-preview" style="background: #F5F3EE;"></span></td>
+            <td style="color: var(--pewter); font-size: 0.75rem;">was --off-white</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer class="footer">
+    <div class="footer-divider"></div>
+    <p class="footer-text">JOJI.DEV &middot; Oppenheimer Palette &middot; v2.0</p>
+  </footer>
+
+</div>
+
+<script>
+  function copyHex(btn) {
+    const hex = btn.getAttribute('data-hex');
+    navigator.clipboard.writeText(hex).then(() => {
+      btn.classList.add('copied');
+      btn.innerHTML = '<span style="font-size:9px;">OK</span>';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      }, 1200);
+    });
+  }
+
+  // Intersection observer for scroll-triggered reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-fade').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+  });
+
+  // Unpause hero elements immediately
+  document.querySelectorAll('.hero .reveal, .hero .reveal-fade').forEach(el => {
+    el.style.animationPlayState = 'running';
+  });
+</script>
+
+</body>
+</html>

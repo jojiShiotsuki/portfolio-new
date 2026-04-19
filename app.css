@@ -372,6 +372,427 @@
 }
 
 /* ==========================================================================
+   HomeV2 — Editorial / Bento variant
+   ========================================================================== */
+
+/* Hero — split collapses on tablet */
+@media (max-width: 968px) {
+  .homev2-hero { padding: 120px 32px 64px !important; }
+  .homev2-hero-split {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+  .homev2-hero-bento {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .homev2-hero { padding: 96px 20px 48px !important; }
+  .homev2-hero-h1 {
+    font-size: clamp(44px, 11vw, 80px) !important;
+    letter-spacing: -2px !important;
+  }
+  .homev2-hero-cta {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+  .homev2-hero-cta > * {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .homev2-hero { padding: 80px 16px 40px !important; }
+  .homev2-hero-h1 {
+    font-size: clamp(38px, 11vw, 56px) !important;
+    letter-spacing: -1.5px !important;
+  }
+  .homev2-hero-bento { grid-template-columns: 1fr !important; }
+}
+
+/* Section padding */
+@media (max-width: 768px) {
+  .homev2-section { padding: 64px 20px !important; }
+}
+@media (max-width: 480px) {
+  .homev2-section { padding: 48px 16px !important; }
+}
+
+/* Bento results grid */
+@media (max-width: 968px) {
+  .homev2-bento-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .homev2-bento-pundok {
+    grid-column: span 2 !important;
+    grid-row: span 1 !important;
+  }
+  .homev2-bento-quote {
+    grid-column: span 2 !important;
+  }
+  .homev2-bento-youpercent {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .homev2-bento-youpercent > a {
+    justify-self: start !important;
+  }
+}
+@media (max-width: 480px) {
+  .homev2-bento-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .homev2-bento-pundok,
+  .homev2-bento-quote,
+  .homev2-bento-youpercent {
+    grid-column: span 1 !important;
+  }
+}
+
+/* Services 3-up */
+@media (max-width: 968px) {
+  .homev2-services-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .homev2-services-grid > div:last-child {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 640px) {
+  .homev2-services-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .homev2-services-grid > div:last-child {
+    grid-column: span 1;
+  }
+}
+
+/* Process layout */
+@media (max-width: 968px) {
+  .homev2-process-layout {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+}
+
+/* Projects bento */
+@media (max-width: 968px) {
+  .homev2-projects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-auto-rows: 200px !important;
+  }
+  .homev2-project-tile {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+  .homev2-project-tile:first-child {
+    grid-column: span 2 !important;
+    grid-row: span 1 !important;
+  }
+}
+@media (max-width: 540px) {
+  .homev2-projects-grid {
+    grid-template-columns: 1fr !important;
+    grid-auto-rows: 180px !important;
+  }
+  .homev2-project-tile,
+  .homev2-project-tile:first-child {
+    grid-column: span 1 !important;
+  }
+}
+
+/* About */
+@media (max-width: 968px) {
+  .homev2-about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 64px !important;
+  }
+}
+
+/* Contact card */
+@media (max-width: 968px) {
+  .homev2-contact-card {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+    padding: 48px !important;
+  }
+}
+@media (max-width: 480px) {
+  .homev2-contact-card {
+    padding: 28px !important;
+  }
+}
+
+/* ==========================================================================
+   HomeV3 — Pixel Art / 8-bit RPG variant
+   ========================================================================== */
+
+/* Hero */
+@media (max-width: 968px) {
+  .homev3-hero { padding: 96px 20px 64px !important; }
+  .homev3-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .homev3-hero-h1 {
+    font-size: clamp(22px, 6vw, 36px) !important;
+    letter-spacing: 1px !important;
+  }
+}
+@media (max-width: 640px) {
+  .homev3-hero { padding: 80px 16px 48px !important; }
+  .homev3-hero-h1 {
+    font-size: clamp(18px, 7vw, 28px) !important;
+  }
+  .homev3-status-bar {
+    font-size: 8px !important;
+    padding: 8px 12px !important;
+  }
+  .homev3-dialog {
+    padding: 18px 16px !important;
+  }
+  .homev3-dialog > div:not(:first-child) {
+    font-size: 18px !important;
+  }
+  .homev3-inventory {
+    padding: 16px !important;
+  }
+  .homev3-hero-cta {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+  .homev3-hero-cta > * {
+    width: 100% !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+    padding: 14px 16px !important;
+  }
+}
+
+/* Section padding */
+@media (max-width: 768px) {
+  .homev3-section { padding: 56px 20px !important; }
+}
+@media (max-width: 480px) {
+  .homev3-section { padding: 48px 16px !important; }
+}
+
+/* Achievements (Party Stats) */
+@media (max-width: 968px) {
+  .homev3-achievements-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  .homev3-achievements-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Shop (Services) */
+@media (max-width: 968px) {
+  .homev3-shop-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+/* Quest log rows */
+@media (max-width: 768px) {
+  .homev3-quest-row {
+    grid-template-columns: 56px 1fr !important;
+    gap: 16px !important;
+    padding: 18px !important;
+  }
+  .homev3-quest-row > div:first-child {
+    width: 56px !important;
+    height: 56px !important;
+    font-size: 14px !important;
+  }
+  .homev3-quest-reward {
+    grid-column: 2 !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+  }
+}
+
+/* Trophy hall */
+@media (max-width: 968px) {
+  .homev3-trophy-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .homev3-trophy-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+@media (max-width: 540px) {
+  .homev3-trophy-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Lore */
+@media (max-width: 968px) {
+  .homev3-lore-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+/* Choices */
+@media (max-width: 640px) {
+  .homev3-choices > a {
+    grid-template-columns: 32px 40px 1fr !important;
+    padding: 14px 16px !important;
+  }
+  .homev3-choices > a > svg:last-child {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   HomeV4 — Liquid Glass / VisionOS variant
+   ========================================================================== */
+
+/* Hero */
+@media (max-width: 968px) {
+  .homev4-hero { padding: 96px 24px 64px !important; min-height: auto !important; }
+  .homev4-hero-cards {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 640px) {
+  .homev4-hero { padding: 80px 16px 48px !important; }
+  .homev4-hero-h1 {
+    font-size: clamp(40px, 11vw, 64px) !important;
+    letter-spacing: -2px !important;
+  }
+  .homev4-hero-cta {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+  .homev4-hero-cta > * {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  .homev4-hero-cards {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* Section padding */
+@media (max-width: 768px) {
+  .homev4-section { padding: 80px 20px !important; }
+}
+@media (max-width: 480px) {
+  .homev4-section { padding: 64px 16px !important; }
+  .homev4-section h2 {
+    font-size: clamp(28px, 8vw, 40px) !important;
+    letter-spacing: -1px !important;
+  }
+}
+
+/* Case study */
+@media (max-width: 968px) {
+  .homev4-case-study {
+    grid-template-columns: 1fr !important;
+  }
+  .homev4-case-image {
+    min-height: 280px !important;
+  }
+}
+@media (max-width: 640px) {
+  .homev4-case-study > div:last-child {
+    padding: 32px !important;
+  }
+}
+
+/* Quote card */
+@media (max-width: 768px) {
+  .homev4-quote-card {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 32px !important;
+  }
+  .homev4-quote-attr {
+    border-left: none !important;
+    border-top: 1px solid currentColor !important;
+    padding-left: 0 !important;
+    padding-top: 24px !important;
+  }
+}
+
+/* Services + Process grids */
+@media (max-width: 968px) {
+  .homev4-services-grid,
+  .homev4-process-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .homev4-services-grid > div:last-child,
+  .homev4-process-grid > div:last-child {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 640px) {
+  .homev4-services-grid,
+  .homev4-process-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .homev4-services-grid > div:last-child,
+  .homev4-process-grid > div:last-child {
+    grid-column: span 1;
+  }
+}
+
+/* Projects grid */
+@media (max-width: 968px) {
+  .homev4-projects-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .homev4-projects-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}
+@media (max-width: 540px) {
+  .homev4-projects-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* About */
+@media (max-width: 968px) {
+  .homev4-about-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+/* Contact */
+@media (max-width: 768px) {
+  .homev4-contact-card {
+    padding: 48px 32px !important;
+  }
+  .homev4-contact-meta {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 480px) {
+  .homev4-contact-card {
+    padding: 32px 20px !important;
+  }
+}
+
+/* ==========================================================================
    ProjectsPage
    ========================================================================== */
 

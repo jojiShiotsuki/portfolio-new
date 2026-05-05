@@ -15,12 +15,6 @@ export const PERSONAL_INFO = {
   name: "Joji Shiotsuki",
   email: "jojishiotsuki0@gmail.com",
   location: "Cebu, Philippines",
-  // The fields below are retained as DEPRECATED for backwards compatibility
-  // until all components migrate to COPY[mode]. Removed in Task 12.
-  role: "Web Developer",
-  tagline: "Web Developer · WordPress + JavaScript",
-  subHeadline: "Mid-level web developer with 4 years shipping client sites, custom apps, and SEO-driven builds. WordPress (Bricks, Elementor) and modern JavaScript (React, TypeScript). Open to AU and US remote roles.",
-  availability: "Open to AU/US remote roles",
 };
 
 // --- MODE-KEYED COPY ---

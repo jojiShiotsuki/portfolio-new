@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { PERSONAL_INFO } from '../constants';
+import { COPY } from '../constants';
 import { Github, Linkedin } from 'lucide-react';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 import { TikTokIcon } from './ui/tiktok-icon';
 import { useTheme } from '../ThemeContext';
+import { useMode } from '../hooks/useMode';
 import { GooeyText } from './ui/gooey-text-morphing';
 import { AnimatedSocialIcons } from './ui/animated-social-icons';
-
-const BUSINESS_WORDS = ["Barbershops", "Salons", "Clinics", "Cafes", "Gyms", "Spas"];
 
 const SOCIAL_ICONS = [
   { Icon: TikTokIcon, href: "https://tiktok.com/@_shiotsuki" },
@@ -18,6 +17,8 @@ const SOCIAL_ICONS = [
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
@@ -161,7 +162,7 @@ const Hero: React.FC = () => {
 
       {/* Vertical text */}
       <div style={verticalTextStyle} className="hide-mobile">
-        {`Available for Projects // ${new Date().getFullYear()}`}
+        {copy.heroVerticalText}
       </div>
 
       {/* Social links */}
@@ -175,40 +176,40 @@ const Hero: React.FC = () => {
       <div style={contentStyle}>
         <div style={taglineStyle}>
           <span style={{ width: '40px', height: '1px', background: theme.accent }} />
-          {PERSONAL_INFO.role}
+          {copy.role}
         </div>
 
         <h1 style={headlineStyle}>
           <span style={{ animation: 'fadeInUp 0.8s ease-out 0.1s forwards', opacity: 0, display: 'block' }}>
-            I Help
+            {copy.heroHeadlineLine1}
           </span>
           <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}`, display: 'block', animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
             <GooeyText
-              texts={BUSINESS_WORDS}
+              texts={copy.heroMorphWords}
               morphTime={1.5}
               cooldownTime={0.5}
               textStyle={{ color: theme.headingStroke, WebkitTextStroke: 'unset' }}
             />
           </span>
           <span style={{ animation: 'fadeInUp 0.8s ease-out 0.3s forwards', opacity: 0, display: 'block' }}>
-            Get Found
+            {copy.heroHeadlineLine3}
           </span>
         </h1>
 
         <p style={descriptionStyle}>
-          {PERSONAL_INFO.subHeadline}
+          {copy.subHeadline}
         </p>
 
         <div style={ctaContainerStyle} className="hero-cta-container">
           <InteractiveHoverButton
-            text="Book a Call"
+            text={copy.heroCtaPrimary.text}
             variant="primary"
-            href="https://calendly.com/jojishiotsuki0/30min"
+            href={copy.heroCtaPrimary.href}
           />
           <InteractiveHoverButton
-            text="See My Results"
+            text={copy.heroCtaSecondary.text}
             variant="outline"
-            href="#results"
+            href={copy.heroCtaSecondary.href}
           />
         </div>
       </div>

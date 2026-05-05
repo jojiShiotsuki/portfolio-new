@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../ThemeContext';
+import { COPY } from '../constants';
+import { useMode } from '../hooks/useMode';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const StickyCTA: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
   const tickingRef = useRef(false);
 
   useEffect(() => {
@@ -51,9 +55,9 @@ const StickyCTA: React.FC = () => {
       <div style={{ position: 'relative' }}>
         <span style={pulseStyle} />
         <InteractiveHoverButton
-          text="BOOK A CALL"
+          text={copy.stickyCtaText}
           variant="primary"
-          href="https://calendly.com/jojishiotsuki0/30min"
+          href={copy.stickyCtaHref}
           style={{ padding: '18px 32px', fontSize: '14px', boxShadow: `0 4px 30px ${theme.accentGlow}` }}
         />
       </div>

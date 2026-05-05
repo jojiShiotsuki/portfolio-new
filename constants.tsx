@@ -209,9 +209,6 @@ export const NAV_ITEMS: Record<Mode, NavItem[]> = {
   ],
 };
 
-// Legacy alias — remove in Task 8 after Navbar migrates
-export const NAV_ITEMS_LEGACY: NavItem[] = NAV_ITEMS.freelance;
-
 // --- SOCIAL LINKS ---
 
 export const SOCIAL_LINKS: SocialLink[] = [

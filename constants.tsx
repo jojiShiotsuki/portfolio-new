@@ -1,39 +1,223 @@
 import {
   Github,
   Linkedin,
-  Globe,
   Instagram,
   Layout,
   LineChart,
   Wrench,
   Music2
 } from 'lucide-react';
-import { NavItem, SocialLink, Project, Experience, Service } from './types';
+import { NavItem, SocialLink, Project, Experience, Service, Mode } from './types';
 
-// --- PERSONAL BRANDING DATA ---
+// --- IDENTITY (mode-invariant) ---
 
 export const PERSONAL_INFO = {
   name: "Joji Shiotsuki",
-  role: "Web Developer for Service Businesses",
   email: "jojishiotsuki0@gmail.com",
   location: "Cebu, Philippines",
-  tagline: "I Help Service Businesses Get Found on Google",
-  subHeadline: "I build websites for barbershops, salons, clinics, cafes, and service businesses that rank on Google and turn visitors into paying customers. No fluff. Just results.",
-  availability: "Available for projects"
+  // The fields below are retained as DEPRECATED for backwards compatibility
+  // until all components migrate to COPY[mode]. Removed in Task 12.
+  role: "Web Developer",
+  tagline: "Web Developer · WordPress + JavaScript",
+  subHeadline: "Mid-level web developer with 4 years shipping client sites, custom apps, and SEO-driven builds. WordPress (Bricks, Elementor) and modern JavaScript (React, TypeScript). Open to AU and US remote roles.",
+  availability: "Open to AU/US remote roles",
 };
 
-export const NAV_ITEMS: NavItem[] = [
-  { label: 'Results', href: '#results' },
-  { label: 'Services', href: '#services' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-];
+// --- MODE-KEYED COPY ---
+
+interface CtaButton {
+  text: string;
+  href: string;
+}
+
+interface ModeCopy {
+  // Identity / framing
+  role: string;
+  tagline: string;
+  subHeadline: string;
+  availability: string;
+
+  // Hero
+  heroVerticalText: string;
+  heroMorphWords: string[];
+  heroHeadlineLine1: string;
+  heroHeadlineLine3: string;
+  heroCtaPrimary: CtaButton;
+  heroCtaSecondary: CtaButton;
+
+  // Results section
+  resultsKicker: string;
+  resultsHeadlineLine1: string;
+  resultsHeadlineLine2: string;
+  resultsStats: { value: string; label: string }[];
+  resultsCarouselAlts: string[];
+
+  // ProjectsPreview
+  projectsKicker: string;
+  projectsHeadlineLine1: string;
+  projectsHeadlineLine2: string;
+  projectsLeadIn: string;
+
+  // About
+  aboutKicker: string;
+  aboutTitle: string;
+  aboutBody: string[]; // paragraphs
+
+  // Contact
+  contactKicker: string;
+  contactTitle: string;
+  contactBody: string;
+  contactCtaPrimary: CtaButton;
+  contactCtaSecondary: CtaButton;
+
+  // UrgencyBanner
+  bannerText: string;
+  bannerBadge: string;
+
+  // StickyCTA
+  stickyCtaText: string;
+  stickyCtaHref: string;
+
+  // Footer
+  footerTagline: string;
+}
+
+export const COPY: Record<Mode, ModeCopy> = {
+  developer: {
+    role: "Web Developer",
+    tagline: "Web Developer · WordPress + JavaScript",
+    subHeadline: "Mid-level web developer with 4 years shipping client sites, custom apps, and SEO-driven builds. WordPress (Bricks, Elementor) and modern JavaScript (React, TypeScript). Open to AU and US remote roles.",
+    availability: "Open to AU/US remote roles",
+
+    heroVerticalText: `Open to Roles // ${new Date().getFullYear()}`,
+    heroMorphWords: ["Sites", "Apps", "Tools", "Stores", "Microsites", "Dashboards"],
+    heroHeadlineLine1: "I Build",
+    heroHeadlineLine3: "That Ship",
+    heroCtaPrimary: { text: "View Work", href: "#projects" },
+    heroCtaSecondary: { text: "Resume", href: "/resume.pdf" },
+
+    resultsKicker: "TRACK RECORD",
+    resultsHeadlineLine1: "Real Work,",
+    resultsHeadlineLine2: "Shipped & Live",
+    resultsStats: [
+      { value: "4", label: "Years Shipping" },
+      { value: "10+", label: "Sites Delivered" },
+      { value: "WP + JS", label: "Production Stack" },
+      { value: "AU / US", label: "Open To Remote" },
+    ],
+    resultsCarouselAlts: [
+      "Pundok Studios — WordPress site I built, ranked #1 on Google for client",
+      "Pundok Studios homepage — barbershop site, Cebu",
+    ],
+
+    projectsKicker: "SELECTED WORK",
+    projectsHeadlineLine1: "Recent",
+    projectsHeadlineLine2: "Projects",
+    projectsLeadIn: "A mix of agency client builds, custom apps, and SEO-led sites. WordPress and React, mostly.",
+
+    aboutKicker: "BACKGROUND",
+    aboutTitle: "Mid-level web developer. WordPress, React, and the bits in between.",
+    aboutBody: [
+      "Four years building for the web — agency client work, in-house tools, side projects that taught me how production really behaves. I started in WordPress (Bricks, Elementor, custom themes) and grew into modern JavaScript (React, TypeScript, Tailwind, Cloudflare Workers).",
+      "Most of my shipped work is for small teams and agencies in the Philippines and US: marketing sites, e-commerce, SEO-driven builds, and the occasional custom app when an off-the-shelf plugin won't cut it. I care about what hiring managers also care about: things actually shipping, page speed that survives real traffic, SEO that holds up in audits, and code another developer can pick up without ceremony.",
+      "Open to mid-level web developer roles in AU and US (remote).",
+    ],
+
+    contactKicker: "GET IN TOUCH",
+    contactTitle: "Let's talk.",
+    contactBody: "Open to mid-level web developer roles in AU and US (remote). Drop me a line — happy to share work samples, walk through case studies, or just chat about a role.",
+    contactCtaPrimary: { text: "Email", href: "mailto:jojishiotsuki0@gmail.com" },
+    contactCtaSecondary: { text: "Resume", href: "/resume.pdf" },
+
+    bannerText: "OPEN TO MID-LEVEL WEB DEVELOPER ROLES",
+    bannerBadge: "AU / US REMOTE",
+
+    stickyCtaText: "RESUME",
+    stickyCtaHref: "/resume.pdf",
+
+    footerTagline: "Web developer based in Cebu. Available for mid-level roles, AU and US remote.",
+  },
+
+  freelance: {
+    role: "Web Developer for Service Businesses",
+    tagline: "I Help Service Businesses Get Found on Google",
+    subHeadline: "I build websites for barbershops, salons, clinics, cafes, and service businesses that rank on Google and turn visitors into paying customers. No fluff. Just results.",
+    availability: "Available for projects",
+
+    heroVerticalText: `Available for Projects // ${new Date().getFullYear()}`,
+    heroMorphWords: ["Barbershops", "Salons", "Clinics", "Cafes", "Gyms", "Spas"],
+    heroHeadlineLine1: "I Help",
+    heroHeadlineLine3: "Get Found",
+    heroCtaPrimary: { text: "Book a Call", href: "https://calendly.com/jojishiotsuki0/30min" },
+    heroCtaSecondary: { text: "See My Results", href: "#results" },
+
+    resultsKicker: "Proof",
+    resultsHeadlineLine1: "Real Results,",
+    resultsHeadlineLine2: "Real Businesses",
+    resultsStats: [
+      { value: "#1", label: "Google Ranking" },
+      { value: "60%", label: "More Walk-ins" },
+      { value: "More", label: "Inquiries & Bookings" },
+      { value: "100%", label: "Client Satisfaction" },
+    ],
+    resultsCarouselAlts: [
+      "Pundok Studios ranking #1 on Google search results",
+      "Pundok Studios website homepage",
+    ],
+
+    projectsKicker: "Portfolio",
+    projectsHeadlineLine1: "Other",
+    projectsHeadlineLine2: "Projects",
+    projectsLeadIn: "While I specialize in service business websites, here's some other work I've done showcasing my technical skills.",
+
+    aboutKicker: "ABOUT",
+    aboutTitle: "I help service businesses win online.",
+    aboutBody: [
+      "I'm a web developer based in Cebu, Philippines, focused on building high-converting websites and local SEO systems for service businesses.",
+      "I work with barbershops, salons, clinics, cafes, gyms, and spas — primarily in the Philippines, with select clients in the US. The goal is simple: get you found on Google and turn visitors into paying customers.",
+    ],
+
+    contactKicker: "CONTACT",
+    contactTitle: "Let's build something.",
+    contactBody: "Tell me about your service business and what you're trying to grow. I'll show you how to get found on Google and turn your website into a lead-generating machine.",
+    contactCtaPrimary: { text: "Book a Call", href: "https://calendly.com/jojishiotsuki0/30min" },
+    contactCtaSecondary: { text: "Email", href: "mailto:jojishiotsuki0@gmail.com" },
+
+    bannerText: `Currently booking for ${new Date().toLocaleString('default', { month: 'long' })}`,
+    bannerBadge: "2 SPOTS LEFT",
+
+    stickyCtaText: "BOOK A CALL",
+    stickyCtaHref: "https://calendly.com/jojishiotsuki0/30min",
+
+    footerTagline: "I help service businesses in the Philippines and US get found on Google and generate leads.",
+  },
+};
+
+// --- NAVIGATION (mode-keyed) ---
+
+export const NAV_ITEMS: Record<Mode, NavItem[]> = {
+  developer: [
+    { label: 'Work', href: '#projects' },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
+  ],
+  freelance: [
+    { label: 'Results', href: '#results' },
+    { label: 'Services', href: '#services' },
+    { label: 'About', href: '#about' },
+    { label: 'Contact', href: '#contact' },
+  ],
+};
+
+// Legacy alias — remove in Task 8 after Navbar migrates
+export const NAV_ITEMS_LEGACY: NavItem[] = NAV_ITEMS.freelance;
+
+// --- SOCIAL LINKS ---
 
 export const SOCIAL_LINKS: SocialLink[] = [
   { platform: 'TikTok', url: 'https://tiktok.com/@_shiotsuki', icon: Music2 },
   { platform: 'LinkedIn', url: 'https://linkedin.com/in/jojishiotsuki', icon: Linkedin },
   { platform: 'GitHub', url: 'https://github.com/jojiShiotsuki', icon: Github },
-  { platform: 'Website', url: 'https://jojishiotsuki.com', icon: Globe },
   { platform: 'Instagram', url: 'https://instagram.com/_shiotsuki', icon: Instagram },
 ];
 

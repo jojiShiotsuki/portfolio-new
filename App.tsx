@@ -3,9 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Results from './components/Results';
-import Services from './components/Services';
-import HowItWorks from './components/HowItWorks';
-import WhoIWorkWith from './components/WhoIWorkWith';
 import ProjectsPreview from './components/ProjectsPreview';
 import About from './components/About';
 import Contact from './components/Contact';
@@ -18,6 +15,7 @@ import { useTheme } from './ThemeContext';
 // Lazy-loaded route components for code splitting
 const ProjectsPage = React.lazy(() => import('./components/ProjectsPage'));
 const AssistantPage = React.lazy(() => import('./components/AssistantPage'));
+const FreelancePage = React.lazy(() => import('./components/FreelancePage'));
 const HomeV2 = React.lazy(() => import('./components/HomeV2'));
 const HomeV3 = React.lazy(() => import('./components/HomeV3'));
 const HomeV4 = React.lazy(() => import('./components/HomeV4'));
@@ -27,9 +25,6 @@ const HomePage: React.FC = () => (
   <>
     <Hero />
     <Results />
-    <Services />
-    <HowItWorks />
-    <WhoIWorkWith />
     <ProjectsPreview />
     <About />
     <Contact />
@@ -92,6 +87,7 @@ function App() {
             <Suspense fallback={<div />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/freelance" element={<FreelancePage />} />
                 <Route path="/home-2" element={<HomeV2 />} />
                 <Route path="/home-3" element={<HomeV3 />} />
                 <Route path="/home-4" element={<HomeV4 />} />

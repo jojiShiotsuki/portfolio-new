@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '../ThemeContext';
+import { COPY } from '../constants';
+import { useMode } from '../hooks/useMode';
 
 const UrgencyBanner: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
   const tickingRef = useRef(false);
 
   useEffect(() => {
@@ -56,8 +60,8 @@ const UrgencyBanner: React.FC = () => {
   return (
     <div style={bannerStyle} className="urgency-banner">
       <p style={textStyle} className="urgency-text">
-        {`Currently booking for ${new Date().toLocaleString('default', { month: 'long' })}`}
-        <span style={highlightStyle}>2 SPOTS LEFT</span>
+        {copy.bannerText}
+        <span style={highlightStyle}>{copy.bannerBadge}</span>
       </p>
 
     </div>

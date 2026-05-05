@@ -1,10 +1,13 @@
 import React from 'react';
 import { Mail } from 'lucide-react';
-import { SOCIAL_LINKS, PERSONAL_INFO } from '../constants';
+import { SOCIAL_LINKS, PERSONAL_INFO, COPY } from '../constants';
+import { useMode } from '../hooks/useMode';
 import { useTheme } from '../ThemeContext';
 
 const Footer: React.FC = () => {
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
 
   const footerStyle: React.CSSProperties = {
     padding: '48px',
@@ -86,7 +89,7 @@ const Footer: React.FC = () => {
             maxWidth: '400px',
             lineHeight: 1.6,
           }}>
-            I help service businesses in the Philippines and US get found on Google and generate leads.
+            {copy.footerTagline}
           </div>
           <div style={copyrightStyle}>
             &copy; {new Date().getFullYear()} {PERSONAL_INFO.name}

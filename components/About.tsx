@@ -1,10 +1,13 @@
 import React from 'react';
-import { EXPERIENCE } from '../constants';
+import { EXPERIENCE, COPY } from '../constants';
 import { MapPin, Clock, Award, Code2 } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
+import { useMode } from '../hooks/useMode';
 
 const About: React.FC = () => {
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
 
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
@@ -49,11 +52,6 @@ const About: React.FC = () => {
     lineHeight: 1.9,
     color: theme.textSecondary,
     marginBottom: '24px',
-  };
-
-  const highlightStyle: React.CSSProperties = {
-    color: theme.textPrimary,
-    fontWeight: 600,
   };
 
   const statsGridStyle: React.CSSProperties = {
@@ -171,28 +169,15 @@ const About: React.FC = () => {
         <div>
           <div style={labelStyle}>
             <span style={{ width: '40px', height: '1px', background: theme.accent }} />
-            About
+            {copy.aboutKicker}
           </div>
           <h2 style={titleStyle}>
-            Why Service Businesses<br />
-            <span style={{ color: theme.accent }}>Trust Me</span>
+            {copy.aboutTitle}
           </h2>
 
-          <p style={textStyle}>
-            I'm not just another web developer.
-          </p>
-          <p style={textStyle}>
-            I've spent <span style={highlightStyle}>2+ years working with a US roofing company</span> and <span style={highlightStyle}>ranked a Cebu barbershop #1 on Google in 3 months</span>. I know service business owners are busy running their shops, not messing around with websites.
-          </p>
-          <p style={textStyle}>
-            That's why I handle everything:<br />
-            <span style={{ color: theme.accent }}>No tech jargon.</span>{' '}
-            <span style={{ color: theme.accentLight, fontWeight: 700 }}>No endless back-and-forth.</span>{' '}
-            Just a website that ranks and brings you customers.
-          </p>
-          <p style={textStyle}>
-            I've ranked local businesses <span style={{ color: theme.accent, fontWeight: 700 }}>#1 on Google</span>. I'll do the same for you.
-          </p>
+          {copy.aboutBody.map((paragraph, i) => (
+            <p key={i} style={textStyle}>{paragraph}</p>
+          ))}
 
           <div style={statsGridStyle}>
             {stats.map((stat, i) => (

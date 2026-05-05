@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, Check } from 'lucide-react';
-import { PERSONAL_INFO } from '../constants';
+import { NAV_ITEMS, COPY } from '../constants';
+import { useMode } from '../hooks/useMode';
 import { useTheme } from '../ThemeContext';
 import { ThemeToggle } from './ui/theme-toggle';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
@@ -23,7 +24,9 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isAnyHome = HOME_VARIANTS.some((v) => v.path === location.pathname);
-  const { mode, theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
+  const pageMode = useMode();
+  const copy = COPY[pageMode];
   const tickingRef = useRef(false);
 
   // Close home menu on outside click
@@ -132,12 +135,15 @@ const Navbar: React.FC = () => {
     color: theme.textPrimary,
   };
 
-  const navItems = [
-    { label: 'Results', href: isHomePage ? '#results' : '/#results', isRoute: !isHomePage },
-    { label: 'Services', href: isHomePage ? '#services' : '/#services', isRoute: !isHomePage },
-    { label: 'Portfolio', href: '/projects', isRoute: true },
-    { label: 'About', href: isHomePage ? '#about' : '/#about', isRoute: !isHomePage },
-  ];
+  const navItems = NAV_ITEMS[pageMode].map((item) => {
+    const isAnchor = item.href.startsWith('#');
+    const isRoute = !isAnchor;
+    return {
+      label: item.label,
+      href: isAnchor && !isHomePage ? `/${item.href}` : item.href,
+      isRoute,
+    };
+  });
 
   return (
     <>
@@ -320,9 +326,9 @@ const Navbar: React.FC = () => {
           ))}
           <ThemeToggle />
           <InteractiveHoverButton
-            text="Book a Call"
+            text={copy.stickyCtaText}
             variant="primary"
-            href="https://calendly.com/jojishiotsuki0/30min"
+            href={copy.stickyCtaHref}
             style={{ padding: '14px 28px', fontSize: '11px' }}
           />
         </div>
@@ -468,9 +474,9 @@ const Navbar: React.FC = () => {
             )
           ))}
           <InteractiveHoverButton
-            text="Book a Call"
+            text={copy.stickyCtaText}
             variant="primary"
-            href="https://calendly.com/jojishiotsuki0/30min"
+            href={copy.stickyCtaHref}
             onClick={() => setIsOpen(false)}
             style={{ padding: '14px 28px', fontSize: '11px', marginTop: '8px', width: '100%' }}
           />

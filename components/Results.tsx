@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
-
-const carouselImages = [
-  {
-    src: '/pundok-google-ranking.webp',
-    alt: 'Pundok Studios ranking #1 on Google search results',
-  },
-  {
-    src: '/pundok-screenshot.webp',
-    alt: 'Pundok Studios website homepage',
-  },
-];
-
-const stats = [
-  { value: '#1', label: 'Google Ranking' },
-  { value: '60%', label: 'More Walk-ins' },
-  { value: 'More', label: 'Inquiries & Bookings' },
-  { value: '100%', label: 'Client Satisfaction' },
-];
+import { COPY } from '../constants';
+import { useMode } from '../hooks/useMode';
 
 const Results: React.FC = () => {
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
+  const stats = copy.resultsStats;
+  const carouselImages = [
+    { src: '/pundok-google-ranking.webp', alt: copy.resultsCarouselAlts[0] },
+    { src: '/pundok-screenshot.webp', alt: copy.resultsCarouselAlts[1] },
+  ];
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -51,7 +42,7 @@ const Results: React.FC = () => {
             gap: '16px',
           }}>
             <span style={{ width: '40px', height: '1px', background: theme.accent }} />
-            Proof
+            {copy.resultsKicker}
             <span style={{ width: '40px', height: '1px', background: theme.accent }} />
           </div>
           <h2 style={{
@@ -62,8 +53,8 @@ const Results: React.FC = () => {
             letterSpacing: '-2px',
             color: theme.textPrimary,
           }}>
-            Results That<br />
-            <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>Speak</span>
+            {copy.resultsHeadlineLine1}<br />
+            <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>{copy.resultsHeadlineLine2}</span>
           </h2>
         </div>
 

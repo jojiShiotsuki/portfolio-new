@@ -44,3 +44,5 @@ export interface Service {
   description: string;
   icon: LucideIcon;
 }
+
+export type Mode = 'developer' | 'freelance';

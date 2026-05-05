@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PROJECTS } from '../constants';
+import { PROJECTS, COPY } from '../constants';
 import { Project } from '../types';
 import { Github, ArrowUpRight, ArrowRight } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
+import { useMode } from '../hooks/useMode';
 
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -222,6 +223,8 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
 
 const ProjectsPreview: React.FC = () => {
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
 
   const sectionStyle: React.CSSProperties = {
     padding: '160px 48px',
@@ -274,11 +277,11 @@ const ProjectsPreview: React.FC = () => {
           <div>
             <div style={labelStyle}>
               <span style={{ width: '40px', height: '1px', background: theme.accent }} />
-              Portfolio
+              {copy.projectsKicker}
             </div>
             <h2 style={titleStyle}>
-              Other<br />
-              <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.accentLight}` }}>Projects</span>
+              {copy.projectsHeadlineLine1}<br />
+              <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.accentLight}` }}>{copy.projectsHeadlineLine2}</span>
             </h2>
             <p style={{
               fontFamily: "'Instrument Sans', sans-serif",
@@ -288,7 +291,7 @@ const ProjectsPreview: React.FC = () => {
               marginTop: '24px',
               maxWidth: '500px',
             }}>
-              While I specialize in service business websites, here's some other work I've done showcasing my technical skills.
+              {copy.projectsLeadIn}
             </p>
           </div>
 

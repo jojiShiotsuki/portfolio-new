@@ -279,9 +279,9 @@ Note: project descriptions in `PROJECTS` array are read by both modes. Audit eac
 
 ## Prerequisites (block until resolved)
 
-1. **Resume PDF** — needs to exist at `public/resume.pdf` before deploy. If not yet ready, ship with a placeholder and link to LinkedIn instead until the PDF is added.
-2. **Verify experience numbers** — confirm "4 years" matches the start of agency/freelance work. Confirm "12+ sites" matches actual count in `PROJECTS` data (currently appears to be 8–10 in the websites category — adjust the stat to match reality).
-3. **Confirm AU/US-remote messaging** — Joji has confirmed both, no further validation needed.
+1. **Resume PDF — RESOLVED.** Source file exists at `C:\Users\Shiot\Downloads\Joji_Shiotsuki_Resume.docx (1).pdf` (94 KB). Implementation plan will copy and rename it to `public/resume.pdf`.
+2. **Verify experience numbers** — confirm "4 years" matches the start of agency/freelance work (Joji confirmed during brainstorming). Confirm "12+ sites" matches actual count in `PROJECTS` data (currently 8–10 in the websites category — adjust the stat to the real count during implementation).
+3. **AU/US-remote messaging** — Joji has confirmed both, no further validation needed.
 
 ## Out of Scope
 

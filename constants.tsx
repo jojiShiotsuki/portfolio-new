@@ -265,8 +265,8 @@ export const PROJECTS: Project[] = [
     id: 'kontentfire',
     title: 'KontentFire',
     category: 'Web Apps',
-    description: 'An AI-powered social media content automation platform for home service businesses. Generate, schedule, and publish content across LinkedIn, Facebook, Instagram, and Twitter with GPT-4 and Claude integration.',
-    challenge: 'Home service businesses struggle to maintain consistent social media presence. Creating quality content is time-consuming, and most owners lack the expertise or resources to manage multiple platforms effectively.',
+    description: 'An AI-powered social media content automation platform for small businesses in the trades and home services space. Generate, schedule, and publish content across LinkedIn, Facebook, Instagram, and Twitter with GPT-4 and Claude integration.',
+    challenge: 'Small businesses in the trades and home services sector struggle to maintain consistent social media presence. Creating quality content is time-consuming, and most owners lack the expertise or resources to manage multiple platforms effectively.',
     solution: 'Built a full SaaS platform with AI content generation using GPT-4 and Claude, AI image generation with DALL-E and Stable Diffusion, smart scheduling automation, multi-platform publishing, and real-time analytics. Includes content templates like Battle Royale, Myth Busters, and How-To guides tailored for home services.',
     tech: ['React', 'TypeScript', 'Node.js', 'OpenAI API', 'Anthropic API', 'PostgreSQL'],
     results: [
@@ -310,7 +310,7 @@ export const PROJECTS: Project[] = [
     title: 'Knock Knock Heating & Cooling',
     category: 'Websites',
     description: 'Website for an HVAC company in Cincinnati. They have a fun bird-themed brand ("im-peck-able service") so the site needed to match that personality while still looking professional.',
-    challenge: 'Knock Knock had a perfect 5.0 Google rating but their outdated website didn\'t reflect their quality of service. The site failed to convert visitors into leads, and their unique brand personality (bird-themed "im-peck-able service") wasn\'t coming through online. They were losing emergency calls to competitors with better web presence.',
+    challenge: 'Knock Knock had a perfect 5.0 Google rating but their outdated website didn\'t reflect their quality of service. The site had poor conversion paths, and their unique brand personality (bird-themed "im-peck-able service") wasn\'t coming through online. They were losing emergency calls to competitors with better web presence.',
     solution: 'Built a WordPress site using Bricks Builder that captures their friendly, neighborhood-expert personality while establishing trust. Featured their perfect rating prominently, created service-specific landing pages for heating, cooling, and indoor air quality, integrated their blog for SEO, and built a service area map showing coverage across Cincinnati suburbs.',
     tech: ['WordPress', 'Bricks Builder', 'Local SEO', 'Blog Integration', 'Service Area Maps'],
     results: [
@@ -333,7 +333,7 @@ export const PROJECTS: Project[] = [
     category: 'Websites',
     description: 'Website for a US strategic branding and marketing consultancy. Built with a clean editorial aesthetic to match her positioning around credibility, loyalty, and intentional growth for established entrepreneurs.',
     challenge: 'Samantha works with established entrepreneurs, keynote speakers, and authors. Her site had to convey premium credibility instantly. A generic template would undercut the very premise of her brand. She needed a digital home that matched the caliber of the clients she serves, with clear messaging around her five service pillars and a frictionless way for prospects to start a conversation.',
-    solution: 'Built a clean, editorial WordPress site with Elementor that leads with her core message ("Elevated Brands Begin Here") and walks visitors through her five service pillars: Brand Strategy, Visual Branding, Marketing Strategy, Website Development, and Relationship Management. Featured testimonials from notable industry figures, optimized loading speed with WP Rocket, and structured each section to convert visiting entrepreneurs into discovery calls.',
+    solution: 'Built a clean, editorial WordPress site with Elementor that leads with her core message ("Elevated Brands Begin Here") and walks visitors through her five service pillars: Brand Strategy, Visual Branding, Marketing Strategy, Website Development, and Relationship Management. Featured testimonials from notable industry figures, optimized loading speed with WP Rocket, and structured each section with a clear conversion path toward discovery calls.',
     tech: ['WordPress', 'Elementor', 'WP Rocket', 'Responsive Design', 'Conversion Copywriting'],
     results: [
       'Premium editorial design matching her brand positioning',

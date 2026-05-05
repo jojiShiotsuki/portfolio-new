@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { PROJECTS, COPY } from '../constants';
 import { Project } from '../types';
-import { Github, ArrowUpRight, ArrowRight } from 'lucide-react';
+import { Github, ArrowUpRight } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 import { useMode } from '../hooks/useMode';

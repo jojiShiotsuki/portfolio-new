@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const isAnyHome = HOME_VARIANTS.some((v) => v.path === location.pathname);
-  const { mode, theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const pageMode = useMode();
   const copy = COPY[pageMode];
   const tickingRef = useRef(false);

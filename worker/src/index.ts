@@ -110,7 +110,7 @@ async function checkRateLimit(env: Env, ip: string): Promise<{ allowed: boolean;
   const dk = dailyKey();
   const globalCount = parseInt(await env.RATE_LIMIT.get(dk) || '0', 10);
   if (globalCount >= MAX_GLOBAL_PER_DAY) {
-    return { allowed: false, reason: "Joji's assistant is maxed out today! Shoot him an email at jojishiotsuki0@gmail.com or book a call at calendly.com/jojishiotsuki0/30min" };
+    return { allowed: false, reason: "Joji's assistant is maxed out today! Shoot him an email at jojishiotsuki0@gmail.com or message him on LinkedIn (linkedin.com/in/jojishiotsuki)." };
   }
 
   // Increment both counters (TTL: IP=1hr, global=24hr)

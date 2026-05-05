@@ -3,9 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Results from './components/Results';
-import Services from './components/Services';
-import HowItWorks from './components/HowItWorks';
-import WhoIWorkWith from './components/WhoIWorkWith';
 import ProjectsPreview from './components/ProjectsPreview';
 import About from './components/About';
 import Contact from './components/Contact';
@@ -28,9 +25,6 @@ const HomePage: React.FC = () => (
   <>
     <Hero />
     <Results />
-    <Services />
-    <HowItWorks />
-    <WhoIWorkWith />
     <ProjectsPreview />
     <About />
     <Contact />

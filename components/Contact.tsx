@@ -1,10 +1,13 @@
 import React from 'react';
-import { PERSONAL_INFO } from '../constants';
+import { PERSONAL_INFO, COPY } from '../constants';
 import { useTheme } from '../ThemeContext';
+import { useMode } from '../hooks/useMode';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const Contact: React.FC = () => {
   const { theme } = useTheme();
+  const mode = useMode();
+  const copy = COPY[mode];
 
   const sectionStyle: React.CSSProperties = {
     padding: '200px 48px',
@@ -88,28 +91,27 @@ const Contact: React.FC = () => {
       }} />
 
       <div style={containerStyle}>
-        <div style={labelStyle}>Let's Go</div>
+        <div style={labelStyle}>{copy.contactKicker}</div>
 
         <h2 style={titleStyle}>
-          Ready to Get<br />
-          <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}` }}>More Leads?</span>
+          {copy.contactTitle}
         </h2>
 
         <p className="contact-desc" style={descStyle}>
-          Get a free website audit. I'll show you exactly what's stopping you from ranking on Google, and how to fix it.
+          {copy.contactBody}
         </p>
 
         <div style={ctaContainerStyle}>
           <InteractiveHoverButton
-            text="Book a Call"
+            text={copy.contactCtaPrimary.text}
             variant="primary"
-            href="https://calendly.com/jojishiotsuki0/30min"
+            href={copy.contactCtaPrimary.href}
             style={{ padding: '24px 48px', fontSize: '14px' }}
           />
           <InteractiveHoverButton
-            text="Connect on LinkedIn"
+            text={copy.contactCtaSecondary.text}
             variant="outline"
-            href="https://linkedin.com/in/jojishiotsuki"
+            href={copy.contactCtaSecondary.href}
             style={{ padding: '24px 48px', fontSize: '14px' }}
           />
         </div>

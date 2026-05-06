@@ -237,9 +237,9 @@ export const SERVICES: Service[] = [
 
 // --- PORTFOLIO STRATEGY ---
 
-// Auto-sorted oldest-first by `date`. Add a `date: 'YYYY-MM'` to each new project
-// and it slots into the right place automatically. To flip to newest-first, change
-// the comparator below to (b, a) instead of (a, b).
+// Auto-sorted newest-first by `date`. Add a `date: 'YYYY-MM'` to each new project
+// and it slots into the right place automatically. Projects without a date sort
+// to the end. To flip to oldest-first, swap (b, a) for (a, b) in the comparator.
 export const PROJECTS: Project[] = ([
   {
     id: 'vertex',
@@ -307,7 +307,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'wecoat',
-    date: '2025-02',
+    date: '2026-04',
     title: 'We Coat Commercial Roofing',
     category: 'Websites',
     description: 'Design and build for a family-owned commercial roof coating company in Charlotte, NC, serving four states. Marketing site with multi-location service pages, lead-capture quote form, and a clear path from problem to quote.',
@@ -507,9 +507,9 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'tru-plumbing',
-    date: '2025-09',
+    date: '2026-03',
     title: 'Tru Plumbing & Excavating',
-    category: 'SEO & Optimization',
+    category: 'Websites',
     description: 'Design adjustments and SEO implementation for a family-owned plumbing and excavation company in Beaver Falls, PA. Restructured service and area pages and tightened on-page SEO across the site.',
     challenge: 'Tru Plumbing has 25+ years in the Pittsburgh area and a healthy mix of plumbing and excavation services, but the existing site was burying that range and competing weakly for "plumber Beaver Falls" and surrounding-county searches. Service and area pages were thin, internal linking was inconsistent, and the homepage hero was working harder for hiring than for jobs and quotes.',
     solution: 'Audited the existing WordPress build and worked inside it — no rebuild. Reworked the homepage hierarchy so the value prop and "Get a Free Estimate" CTA sit above secondary content. Restructured plumbing service pages (drain cleaning, sewer repair, water heater, gas lines, frozen pipes, backflow) and excavation pages (directional drilling, trenchless utility, grinder pumps) with proper H1/H2 structure, internal links, and schema. Built out areas-served pages for Beaver, Butler, and Lawrence counties with localized copy, and tuned title tags and meta descriptions across the site for local-intent keywords.',
@@ -519,9 +519,9 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'spectrum-signs',
-    date: '2025-10',
+    date: '2026-02',
     title: 'Spectrum Signs & Wraps',
-    category: 'SEO & Optimization',
+    category: 'Websites',
     description: 'SEO implementation, design adjustments, and ongoing maintenance for a vehicle wrap and signage company in the Greater Houston area. Service-page SEO, area-served structure, and the day-to-day care a busy WordPress site needs.',
     challenge: 'Spectrum has the work to back up the brand — 2,000+ vehicles wrapped, two Houston-area locations, and a deep service mix from full color changes to chrome delete to commercial fleet wraps. The challenge was making Google understand all of it. Service pages weren\'t differentiated for "vehicle wraps Houston" vs "trailer wraps" vs "boat wraps," and the site needed ongoing care: plugin updates, broken-link cleanup, performance, and steady on-page SEO improvements as new services and specials rolled out.',
     solution: 'Slotted into the client\'s WordPress stack as the developer who handles the things they don\'t want to think about. Restructured service pages so each wrap and signage offering targets its own intent. Built out areas-served pages across Houston suburbs, tightened titles, meta descriptions, and internal linking, and set up a maintenance rhythm: routine plugin and theme updates, ongoing SEO work, and the small design adjustments — pricing pages, specials, new service pages — they need on a recurring basis.',
@@ -531,9 +531,9 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'mimis-jewelry',
-    date: '2025-12',
+    date: '2026-01',
     title: "Mimi's Jewelry",
-    category: 'SEO & Optimization',
+    category: 'Websites',
     description: 'SEO implementation, design adjustments, and ongoing site maintenance for a 35+ year family-owned jeweler in Fountain Valley, CA. Custom engagement rings, jewelry repair, appraisals, and gold buying — ranking in a competitive Orange County market.',
     challenge: 'Mimi\'s competes in one of the most saturated local markets in the country — Orange County jewelers, with 40+ surrounding cities to capture. They have real differentiators (35+ years family-owned, custom design, certified gemologists, ethical sourcing) but those differentiators weren\'t showing up in search. The site also has live elements — a dynamic gold price calculator, Instagram integration, frequent service-page updates — that need someone watching them so nothing breaks.',
     solution: 'Took on the SEO and the upkeep. Restructured service pages around the actual searches: "custom engagement rings Orange County," "jewelry repair Fountain Valley," "sell gold near me," "jewelry appraisal." Built out service-area pages for the cities that matter (Irvine, Newport Beach, Huntington Beach, Costa Mesa). Tuned on-page SEO across the site, added local business and service schema, and kept the site healthy with regular WordPress updates, broken-link sweeps, and small design adjustments as offers and seasonal pages rotate.',
@@ -541,7 +541,7 @@ export const PROJECTS: Project[] = ([
     image: '/mimis-screenshot.webp',
     link: 'https://mimisjewelryinc.com/'
   }
-] as Project[]).sort((a, b) => (a.date ?? '9999-99').localeCompare(b.date ?? '9999-99'));
+] as Project[]).sort((a, b) => (b.date ?? '0000-00').localeCompare(a.date ?? '0000-00'));
 
 // --- CAREER STORY ---
 

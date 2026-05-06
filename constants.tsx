@@ -237,9 +237,13 @@ export const SERVICES: Service[] = [
 
 // --- PORTFOLIO STRATEGY ---
 
-export const PROJECTS: Project[] = [
+// Auto-sorted oldest-first by `date`. Add a `date: 'YYYY-MM'` to each new project
+// and it slots into the right place automatically. To flip to newest-first, change
+// the comparator below to (b, a) instead of (a, b).
+export const PROJECTS: Project[] = ([
   {
     id: 'vertex',
+    date: '2024-03',
     title: 'Vertex',
     category: 'Web Apps',
     description: 'A productivity app I built for myself. Combines task management, CRM, and goal tracking with natural language input: type "call mom tomorrow 3pm" and it creates the task automatically.',
@@ -257,6 +261,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'kontentfire',
+    date: '2024-08',
     title: 'KontentFire',
     category: 'Web Apps',
     description: 'An AI-powered social media content automation platform for small businesses in the trades and home services space. Generate, schedule, and publish content across LinkedIn, Facebook, Instagram, and Twitter with GPT-4 and Claude integration.',
@@ -279,6 +284,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'pundok-studios',
+    date: '2024-11',
     title: 'Pundok Studios',
     category: 'Websites',
     description: 'Website and local SEO for a barbershop in Cebu. They weren\'t showing up on Google before. Now they rank #1 for "barbershop Cebu."',
@@ -300,7 +306,26 @@ export const PROJECTS: Project[] = [
     link: 'https://pundokstudios.com/'
   },
   {
+    id: 'wecoat',
+    date: '2025-02',
+    title: 'We Coat Commercial Roofing',
+    category: 'Websites',
+    description: 'Design and build for a family-owned commercial roof coating company in Charlotte, NC, serving four states. Marketing site with multi-location service pages, lead-capture quote form, and a clear path from problem to quote.',
+    challenge: 'A newly founded specialist needed a credible online presence quickly. They cover four states (NC, SC, LA, MI) from a Charlotte HQ, so the site had to make multi-state coverage obvious without losing the family-owned, locally accountable feel. Their buyer is also a property manager or facilities lead, not a residential homeowner — the site needed to read as "we work on warehouses, factories, and industrial roofs," not weekend handyman.',
+    solution: 'Built the site in WordPress with Elementor for in-house editability. Designed the homepage around a single conversion: get a free estimate. Service pages cover acrylic, silicone, and polyurethane coatings plus repair and maintenance, each with its own SEO-friendly URL and FAQ structure. Stood up location pages for each state served, integrated a quote form with address autocomplete tied to the lead inbox, and structured the blog so they can publish project case studies without me. Designed for the commercial buyer: bold blue brand, hardhat photography, and "40+ years combined experience" front and center.',
+    tech: ['WordPress', 'Elementor', 'Local SEO', 'Multi-location Pages', 'Schema Markup', 'Lead Forms'],
+    results: [
+      'Full design and build delivered for a 4-state operation',
+      'Service-specific landing pages for each coating type and repair service',
+      'Location pages for NC, SC, LA, and MI with localized copy',
+      'Quote form with address autocomplete wired to the client lead inbox',
+    ],
+    image: '/wecoat-screenshot.webp',
+    link: 'https://wecoatcommercialroofing.com/'
+  },
+  {
     id: 'knock-knock',
+    date: '2024-09',
     title: 'Knock Knock Heating & Cooling',
     category: 'Websites',
     description: 'Website for an HVAC company in Cincinnati. They have a fun bird-themed brand ("im-peck-able service") so the site needed to match that personality while still looking professional.',
@@ -323,6 +348,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'samantha-angeli',
+    date: '2025-03',
     title: 'Samantha Angeli',
     category: 'Websites',
     description: 'Website for a US strategic branding and marketing consultancy. Built with a clean editorial aesthetic to match her positioning around credibility, loyalty, and intentional growth for established entrepreneurs.',
@@ -340,6 +366,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'trade-titans',
+    date: '2025-01',
     title: 'Trade Titans',
     category: 'Websites',
     description: 'Website for a podcast about the trades industry. Episode archive, show notes blog, and newsletter signup.',
@@ -362,6 +389,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'perth-video',
+    date: '2024-12',
     title: 'Perth Video',
     category: 'Design Pitch',
     description: 'Redesign concept for a video production company in Perth. The old site was all text. The new design leads with their actual video work.',
@@ -379,6 +407,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'correct-electric',
+    date: '2025-02',
     title: 'Correct Electric',
     category: 'Design Pitch',
     description: 'Homepage redesign concept for a commercial electrician in Houston. They\'ve done 200+ projects but their old site looked small-time.',
@@ -396,6 +425,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'abacus',
+    date: '2025-02',
     title: 'Abacus Home Services',
     category: 'Design Pitch',
     description: 'Homepage redesign concept for a home services company in Houston. Their 24/7 emergency service was buried. Now it\'s front and center.',
@@ -413,6 +443,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'maid-to-please',
+    date: '2025-04',
     title: 'Maid To Please',
     category: 'Websites',
     description: 'Website for a cleaning company with 30+ years in business, serving DC, Maryland, and Virginia. Added an instant quote calculator.',
@@ -430,6 +461,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'spark-your-designs',
+    date: '2025-05',
     title: 'Spark Your Designs',
     category: 'Websites',
     description: 'Website for a web design company in Cebu. Clean layout showcasing their services: custom sites, branding, and SEO.',
@@ -452,6 +484,7 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'youpercent',
+    date: '2024-12',
     title: 'YOU% Nutrition',
     category: 'Websites',
     description: 'Pro bono website for a nutritionist friend in Cebu. Did 3 months of free SEO. Got them ranking #1 for "nutritionist in Cebu City."',
@@ -471,8 +504,44 @@ export const PROJECTS: Project[] = [
     },
     image: '/youpercent-screenshot.webp',
     link: 'https://youpercent.com/'
+  },
+  {
+    id: 'tru-plumbing',
+    date: '2025-09',
+    title: 'Tru Plumbing & Excavating',
+    category: 'SEO & Optimization',
+    description: 'Design adjustments and SEO implementation for a family-owned plumbing and excavation company in Beaver Falls, PA. Restructured service and area pages and tightened on-page SEO across the site.',
+    challenge: 'Tru Plumbing has 25+ years in the Pittsburgh area and a healthy mix of plumbing and excavation services, but the existing site was burying that range and competing weakly for "plumber Beaver Falls" and surrounding-county searches. Service and area pages were thin, internal linking was inconsistent, and the homepage hero was working harder for hiring than for jobs and quotes.',
+    solution: 'Audited the existing WordPress build and worked inside it — no rebuild. Reworked the homepage hierarchy so the value prop and "Get a Free Estimate" CTA sit above secondary content. Restructured plumbing service pages (drain cleaning, sewer repair, water heater, gas lines, frozen pipes, backflow) and excavation pages (directional drilling, trenchless utility, grinder pumps) with proper H1/H2 structure, internal links, and schema. Built out areas-served pages for Beaver, Butler, and Lawrence counties with localized copy, and tuned title tags and meta descriptions across the site for local-intent keywords.',
+    tech: ['WordPress', 'On-Page SEO', 'Local SEO', 'Schema Markup', 'Service Area Pages', 'Site Audit'],
+    image: '/tru-screenshot.webp',
+    link: 'https://www.truplumbingandexcavating.com/'
+  },
+  {
+    id: 'spectrum-signs',
+    date: '2025-10',
+    title: 'Spectrum Signs & Wraps',
+    category: 'SEO & Optimization',
+    description: 'SEO implementation, design adjustments, and ongoing maintenance for a vehicle wrap and signage company in the Greater Houston area. Service-page SEO, area-served structure, and the day-to-day care a busy WordPress site needs.',
+    challenge: 'Spectrum has the work to back up the brand — 2,000+ vehicles wrapped, two Houston-area locations, and a deep service mix from full color changes to chrome delete to commercial fleet wraps. The challenge was making Google understand all of it. Service pages weren\'t differentiated for "vehicle wraps Houston" vs "trailer wraps" vs "boat wraps," and the site needed ongoing care: plugin updates, broken-link cleanup, performance, and steady on-page SEO improvements as new services and specials rolled out.',
+    solution: 'Slotted into the client\'s WordPress stack as the developer who handles the things they don\'t want to think about. Restructured service pages so each wrap and signage offering targets its own intent. Built out areas-served pages across Houston suburbs, tightened titles, meta descriptions, and internal linking, and set up a maintenance rhythm: routine plugin and theme updates, ongoing SEO work, and the small design adjustments — pricing pages, specials, new service pages — they need on a recurring basis.',
+    tech: ['WordPress', 'On-Page SEO', 'Local SEO', 'Site Maintenance', 'Performance Tuning', 'Schema Markup'],
+    image: '/spectrum-screenshot.webp',
+    link: 'https://www.gotospectrum.com/'
+  },
+  {
+    id: 'mimis-jewelry',
+    date: '2025-12',
+    title: "Mimi's Jewelry",
+    category: 'SEO & Optimization',
+    description: 'SEO implementation, design adjustments, and ongoing site maintenance for a 35+ year family-owned jeweler in Fountain Valley, CA. Custom engagement rings, jewelry repair, appraisals, and gold buying — ranking in a competitive Orange County market.',
+    challenge: 'Mimi\'s competes in one of the most saturated local markets in the country — Orange County jewelers, with 40+ surrounding cities to capture. They have real differentiators (35+ years family-owned, custom design, certified gemologists, ethical sourcing) but those differentiators weren\'t showing up in search. The site also has live elements — a dynamic gold price calculator, Instagram integration, frequent service-page updates — that need someone watching them so nothing breaks.',
+    solution: 'Took on the SEO and the upkeep. Restructured service pages around the actual searches: "custom engagement rings Orange County," "jewelry repair Fountain Valley," "sell gold near me," "jewelry appraisal." Built out service-area pages for the cities that matter (Irvine, Newport Beach, Huntington Beach, Costa Mesa). Tuned on-page SEO across the site, added local business and service schema, and kept the site healthy with regular WordPress updates, broken-link sweeps, and small design adjustments as offers and seasonal pages rotate.',
+    tech: ['WordPress', 'On-Page SEO', 'Local SEO', 'Schema Markup', 'Service Area Pages', 'Site Maintenance'],
+    image: '/mimis-screenshot.webp',
+    link: 'https://mimisjewelryinc.com/'
   }
-];
+] as Project[]).sort((a, b) => (a.date ?? '9999-99').localeCompare(b.date ?? '9999-99'));
 
 // --- CAREER STORY ---
 

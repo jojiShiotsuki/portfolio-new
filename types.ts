@@ -20,6 +20,8 @@ export interface Project {
   solution: string;
   tech: string[];
   image: string;
+  // 'YYYY-MM' — drives auto-sort in constants.tsx (oldest first). Projects without a date sort to the end.
+  date?: string;
   link?: string;
   github?: string;
   results?: string[];

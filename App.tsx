@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Results from './components/Results';
@@ -19,6 +19,16 @@ const FreelancePage = React.lazy(() => import('./components/FreelancePage'));
 const HomeV2 = React.lazy(() => import('./components/HomeV2'));
 const HomeV3 = React.lazy(() => import('./components/HomeV3'));
 const HomeV4 = React.lazy(() => import('./components/HomeV4'));
+
+// Reset scroll on route change. React Router preserves scroll across navigations
+// by default, which makes "Explore All Projects" land you mid-page.
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 // Home page component
 const HomePage: React.FC = () => (
@@ -77,6 +87,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div style={styles.app}>
         <div style={styles.gridOverlay} />
         <div style={styles.content}>

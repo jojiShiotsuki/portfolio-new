@@ -1362,8 +1362,8 @@ const LoreV3: React.FC = () => {
               }}
             >
               <p>
-                <span style={{ color: px.sageMid }}>{'>'}</span> Two years training inside a US roofing
-                guild. Forged a Cebu barbershop into a #1 Google champion in 3 months.
+                <span style={{ color: px.sageMid }}>{'>'}</span> Trained inside a US roofing
+                guild. Forged a Cebu barbershop into a #1 Google champion.
               </p>
               <p>
                 <span style={{ color: px.sageMid }}>{'>'}</span> Specializes in service-business spells:

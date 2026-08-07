@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Alternate homepage designs kept for reference only. They carry older copy
+# and should never be the page someone lands on from search.
+Disallow: /home-2
+Disallow: /home-3
+Disallow: /home-4
+Disallow: /freelance
+
+Sitemap: https://jojishiotsuki.com/sitemap.xml

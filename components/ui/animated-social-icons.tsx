@@ -6,6 +6,9 @@ import { useTheme } from "../../ThemeContext";
 interface SocialIcon {
   Icon: React.ComponentType<{ size?: number; color?: string }>;
   href?: string;
+  /** Accessible name. The anchors hold only an SVG, so without this a screen
+   *  reader announces an unnamed link. */
+  label?: string;
 }
 
 interface AnimatedSocialIconsProps {
@@ -54,16 +57,19 @@ export function AnimatedSocialIcons({
             transition: 'background 0.2s ease',
           }}
           onClick={() => setActive(!active)}
+          aria-label={active ? 'Hide social links' : 'Show social links'}
+          aria-expanded={active}
+          type="button"
           animate={{ rotate: active ? 45 : 0 }}
           transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
           onMouseEnter={(e) => { e.currentTarget.style.background = theme.accentLight; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = theme.accent; }}
         >
-          <Plus size={iconSize} strokeWidth={3} color={theme.btnPrimaryText} />
+          <Plus size={iconSize} strokeWidth={3} color={theme.btnPrimaryText} aria-hidden="true" />
         </motion.button>
       </motion.div>
 
-      {icons.map(({ Icon, href }, index) => (
+      {icons.map(({ Icon, href, label }, index) => (
         <motion.div
           key={index}
           style={{
@@ -88,6 +94,9 @@ export function AnimatedSocialIcons({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={label}
+              tabIndex={active ? 0 : -1}
+              aria-hidden={active ? undefined : true}
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.textTertiary, transition: 'color 0.2s ease' }}
               onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = theme.textTertiary; }}

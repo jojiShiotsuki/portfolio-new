@@ -30,6 +30,32 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
+// The alternate home designs and the archived freelance page still carry older
+// copy. robots.txt asks crawlers not to fetch them, but a Disallow does not stop
+// indexing if something links in, so set noindex on the page itself too.
+const NOINDEX_ROUTES = ['/home-2', '/home-3', '/home-4', '/freelance'];
+
+const RouteMeta: React.FC = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    const shouldHide = NOINDEX_ROUTES.includes(pathname);
+    let tag = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    if (shouldHide) {
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.name = 'robots';
+        document.head.appendChild(tag);
+      }
+      tag.content = 'noindex, nofollow';
+    } else if (tag) {
+      tag.remove();
+    }
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (canonical) canonical.href = `https://jojishiotsuki.com${pathname === '/' ? '/' : pathname}`;
+  }, [pathname]);
+  return null;
+};
+
 // Home page component
 const HomePage: React.FC = () => (
   <>
@@ -88,13 +114,15 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <RouteMeta />
       <div style={styles.app}>
         <div style={styles.gridOverlay} />
         <div style={styles.content}>
+          <a href="#main" className="skip-link">Skip to content</a>
           <UrgencyBanner />
           <div style={{ height: scrolled ? '0px' : '40px', transition: 'height 0.3s ease' }} />
           <Navbar />
-          <main>
+          <main id="main">
             <Suspense fallback={<div />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />

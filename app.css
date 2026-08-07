@@ -1,6 +1,64 @@
 @import "tailwindcss";
 
 /* ==========================================================================
+   Accessibility baseline
+   ========================================================================== */
+
+/* Keyboard users get a visible ring; mouse users see nothing change. */
+:focus-visible {
+  outline: 3px solid #5F7161;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Never remove focus without replacing it. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #5F7161;
+  outline-offset: 3px;
+}
+
+:root[data-theme="dark"] :focus-visible {
+  outline-color: #C3C9A5;
+}
+
+/* Skip link: off-screen until focused, then pinned top-left. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 1000;
+  padding: 12px 20px;
+  background: #2A2820;
+  color: #F5F3EE;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+}
+
+/* Respect the OS setting. Everything decorative stops moving. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
    Global Keyframes
    ========================================================================== */
 
@@ -221,21 +279,12 @@
     grid-template-columns: 1fr !important;
     gap: 40px !important;
   }
-  .results-ongoing {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-  }
-  .results-ongoing p {
-    text-align: left !important;
-  }
 }
 
 @media (max-width: 768px) {
   #results { padding: 64px 20px !important; }
   .results-header { margin-bottom: 48px !important; }
   .results-case-study { margin-bottom: 60px !important; }
-  .results-ongoing { margin-bottom: 40px !important; padding: 24px 0 !important; }
   .results-stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 32px !important;

@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { COPY } from '../constants';
-import { Github, Linkedin } from 'lucide-react';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
-import { TikTokIcon } from './ui/tiktok-icon';
 import { useTheme } from '../ThemeContext';
 import { useMode } from '../hooks/useMode';
 import { GooeyText } from './ui/gooey-text-morphing';
-import { AnimatedSocialIcons } from './ui/animated-social-icons';
 
-const SOCIAL_ICONS = [
-  { Icon: TikTokIcon, href: "https://tiktok.com/@_shiotsuki" },
-  { Icon: Linkedin, href: "https://linkedin.com/in/jojishiotsuki" },
-  { Icon: Github, href: "https://github.com/jojiShiotsuki" },
-];
+// The hero used to carry a floating social rail. It duplicated the footer links and
+// had no collision-free position: on the left it painted over the sub-headline and the
+// View Work button (that overlap shipped to production), and on the right it lands under
+// the assistant and sticky-CTA widgets. Removing it also keeps motion/react out of the
+// eager bundle. The named social links live in the footer.
 
 const Hero: React.FC = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -124,17 +121,6 @@ const Hero: React.FC = () => {
     whiteSpace: 'nowrap',
   };
 
-  const socialLinksStyle: React.CSSProperties = {
-    position: 'absolute',
-    left: '48px',
-    bottom: '140px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '20px',
-    animation: 'fadeInUp 0.8s ease-out 0.5s forwards',
-    opacity: 0,
-  };
-
   const scrollIndicatorStyle: React.CSSProperties = {
     position: 'absolute',
     bottom: '40px',
@@ -165,25 +151,23 @@ const Hero: React.FC = () => {
         {copy.heroVerticalText}
       </div>
 
-      {/* Social links */}
-      <div style={socialLinksStyle} className="hide-mobile">
-        <AnimatedSocialIcons
-          icons={SOCIAL_ICONS}
-          iconSize={20}
-        />
-      </div>
-
       <div style={contentStyle}>
         <div style={taglineStyle}>
           <span style={{ width: '40px', height: '1px', background: theme.accent }} />
           {copy.role}
         </div>
 
-        <h1 style={headlineStyle}>
-          <span style={{ animation: 'fadeInUp 0.8s ease-out 0.1s forwards', opacity: 0, display: 'block' }}>
+        {/* The morph renders two overlapping words at once, so both land in the
+            accessibility tree and the computed name doubles up. Name the h1 explicitly
+            and hide the animated span from assistive tech. */}
+        <h1
+          style={headlineStyle}
+          aria-label={`${copy.heroHeadlineLine1} ${copy.heroMorphWords[0]} ${copy.heroHeadlineLine3}`}
+        >
+          <span aria-hidden="true" style={{ animation: 'fadeInUp 0.8s ease-out 0.1s forwards', opacity: 0, display: 'block' }}>
             {copy.heroHeadlineLine1}
           </span>
-          <span style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}`, display: 'block', animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
+          <span aria-hidden="true" style={{ color: 'transparent', WebkitTextStroke: `2px ${theme.headingStroke}`, display: 'block', animation: 'fadeInUp 0.8s ease-out 0.2s forwards', opacity: 0 }}>
             <GooeyText
               texts={copy.heroMorphWords}
               morphTime={1.5}

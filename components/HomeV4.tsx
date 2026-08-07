@@ -677,7 +677,7 @@ const ProofV4: React.FC = () => {
             </div>
 
             <div style={{ marginTop: 'auto', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <GlassButton href="https://pundokstudios.com/" external>
+              <GlassButton href="https://pndk.jojishiotsuki.com/" external>
                 Visit live site <ArrowUpRight size={12} />
               </GlassButton>
             </div>
@@ -1410,11 +1410,10 @@ const AboutV4: React.FC = () => {
                 contractors. The people who keep their towns running.
               </p>
               <p>
-                Two years inside a US roofing company taught me how trades actually buy: trust,
+                Working inside a US roofing company taught me how trades actually buy: trust,
                 speed, and the phone ringing. A Cebu barbershop client taught me how to take that
                 same playbook and rank it{' '}
-                <span style={{ color: g.sage, fontWeight: 600 }}>#1 on Google</span> in three
-                months.
+                <span style={{ color: g.sage, fontWeight: 600 }}>#1 on Google</span>.
               </p>
               <p>
                 You don't need a 30-page deck. You need a site that loads, ranks, and converts —
@@ -1430,7 +1429,6 @@ const AboutV4: React.FC = () => {
                 gap: '12px',
               }}
             >
-              <MiniStat value="600+" label="Dev hours" />
               <MiniStat value="#1" label="Rankings" />
               <MiniStat value="PH+US" label="Markets" />
             </div>

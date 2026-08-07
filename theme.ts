@@ -70,7 +70,7 @@ export const darkTheme: ThemeTokens = {
   textPrimary: '#F5F3EE',
   textSecondary: 'rgba(245, 243, 238, 0.7)',
   textTertiary: 'rgba(245, 243, 238, 0.55)',
-  textMuted: 'rgba(245, 243, 238, 0.35)',
+  textMuted: 'rgba(245, 243, 238, 0.49)',
 
   accent: '#8D9A7C',
   accentLight: '#C3C9A5',
@@ -122,10 +122,10 @@ export const lightTheme: ThemeTokens = {
   textPrimary: '#2A2820',
   textSecondary: '#5C5850',
   textTertiary: '#6B6860',
-  textMuted: '#9C9890',
+  textMuted: '#706D68',
 
   accent: '#5F7161',
-  accentLight: '#8D9A7C',
+  accentLight: '#67705B',
   accentDim: 'rgba(95, 113, 97, 0.15)',
   accentBorder: 'rgba(95, 113, 97, 0.12)',
   accentGlow: 'rgba(95, 113, 97, 0.3)',

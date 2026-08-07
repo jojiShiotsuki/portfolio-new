@@ -78,9 +78,9 @@ interface ModeCopy {
 
 export const COPY: Record<Mode, ModeCopy> = {
   developer: {
-    role: "Web Developer",
-    tagline: "Web Developer · WordPress + JavaScript",
-    subHeadline: "Mid-level web developer with 4 years shipping client sites, custom apps, and SEO-driven builds. WordPress (Bricks, Elementor) and modern JavaScript (React, TypeScript). Open to AU and US remote roles.",
+    role: "Senior Web Developer",
+    tagline: "Senior Web Developer · WordPress + JavaScript",
+    subHeadline: "Senior web developer shipping client sites, custom apps, and SEO-driven builds. WordPress (Bricks, Elementor) and modern JavaScript (React, TypeScript). Open to AU and US remote roles.",
     availability: "Open to AU/US remote roles",
 
     heroVerticalText: `Open to Roles // ${new Date().getFullYear()}`,
@@ -94,7 +94,6 @@ export const COPY: Record<Mode, ModeCopy> = {
     resultsHeadlineLine1: "Real Work,",
     resultsHeadlineLine2: "Shipped & Live",
     resultsStats: [
-      { value: "4", label: "Years Shipping" },
       { value: "10+", label: "Sites Delivered" },
       { value: "WP + JS", label: "Production Stack" },
       { value: "AU / US", label: "Open To Remote" },
@@ -110,26 +109,26 @@ export const COPY: Record<Mode, ModeCopy> = {
     projectsLeadIn: "A mix of agency client builds, custom apps, and SEO-led sites. WordPress and React, mostly.",
 
     aboutKicker: "BACKGROUND",
-    aboutTitle: "Mid-level web developer. WordPress, React, and the bits in between.",
+    aboutTitle: "Senior web developer. WordPress, React, and the bits in between.",
     aboutBody: [
-      "Four years building for the web — agency client work, in-house tools, side projects that taught me how production really behaves. I started in WordPress (Bricks, Elementor, custom themes) and grew into modern JavaScript (React, TypeScript, Tailwind, Cloudflare Workers).",
+      "I build for the web across agency client work, in-house tools, and side projects that taught me how production really behaves. I started in WordPress (Bricks, Elementor, custom themes) and grew into modern JavaScript (React, TypeScript, Cloudflare Workers).",
       "Most of my shipped work is for small teams and agencies in the Philippines and US: marketing sites, e-commerce, SEO-driven builds, and the occasional custom app when an off-the-shelf plugin won't cut it. I care about what hiring managers also care about: things actually shipping, page speed that survives real traffic, SEO that holds up in audits, and code another developer can pick up without ceremony.",
-      "Open to mid-level web developer roles in AU and US (remote).",
+      "Open to senior web developer roles in AU and US (remote).",
     ],
 
     contactKicker: "GET IN TOUCH",
     contactTitle: "Let's talk.",
-    contactBody: "Open to mid-level web developer roles in AU and US (remote). Drop me a line — happy to share work samples, walk through case studies, or just chat about a role.",
+    contactBody: "Open to senior web developer roles in AU and US (remote). Drop me a line — happy to share work samples, walk through case studies, or just chat about a role.",
     contactCtaPrimary: { text: "Email", href: "mailto:jojishiotsuki0@gmail.com" },
     contactCtaSecondary: { text: "Resume", href: "/resume.pdf" },
 
-    bannerText: "OPEN TO MID-LEVEL WEB DEVELOPER ROLES",
+    bannerText: "OPEN TO SENIOR WEB DEVELOPER ROLES",
     bannerBadge: "AU / US REMOTE",
 
     stickyCtaText: "RESUME",
     stickyCtaHref: "/resume.pdf",
 
-    footerTagline: "Web developer based in Cebu. Available for mid-level roles, AU and US remote.",
+    footerTagline: "Web developer based in Cebu. Available for senior roles, AU and US remote.",
   },
 
   freelance: {
@@ -253,8 +252,7 @@ export const PROJECTS: Project[] = ([
     results: [
       'Eliminated $600+/year in SaaS subscriptions',
       '10x faster task creation with natural language parsing',
-      'Bulk import handles 500+ items in seconds',
-      'Quarterly goal completion rate increased by 40%'
+      'Bulk import handles 500+ items in seconds'
     ],
     image: '/vertex-screenshot.webp',
     github: 'https://github.com/jojiShiotsuki'
@@ -269,16 +267,10 @@ export const PROJECTS: Project[] = ([
     solution: 'Built a full SaaS platform with AI content generation using GPT-4 and Claude, AI image generation with DALL-E and Stable Diffusion, smart scheduling automation, multi-platform publishing, and real-time analytics. Includes content templates like Battle Royale, Myth Busters, and How-To guides tailored for home services.',
     tech: ['React', 'TypeScript', 'Node.js', 'OpenAI API', 'Anthropic API', 'PostgreSQL'],
     results: [
-      'Trusted by 500+ home service businesses',
       'AI generates content in seconds vs hours manually',
       'Multi-platform publishing to 4+ social networks',
       'Voice-controlled automation for hands-free management'
     ],
-    testimonial: {
-      quote: "KontentFire transformed how we handle social media. What used to take hours now happens automatically.",
-      author: "Early Adopter",
-      role: "Home Service Business Owner"
-    },
     image: '/kontentfire-screenshot.webp',
     link: 'https://app.kontentfire.com'
   },
@@ -292,7 +284,7 @@ export const PROJECTS: Project[] = ([
     solution: 'Designed a clean, sophisticated website that mirrors their premium in-store experience. Implemented an aggressive local SEO strategy: optimized Google Business Profile, built location-specific landing pages, created schema markup for local business and reviews, and developed a content strategy targeting high-intent keywords like "premium barbershop Cebu" and "men\'s grooming Cebu City."',
     tech: ['WordPress', 'Elementor', 'Local SEO', 'Schema Markup', 'Google Business Profile'],
     results: [
-      '#1 Google ranking for "barbershop Cebu" within 6 months',
+      '#1 Google ranking for "barbershop Cebu"',
       '340% increase in Google Business Profile views',
       '85% increase in direction requests from Google Maps',
       'New customer bookings increased 60% month-over-month'
@@ -303,7 +295,7 @@ export const PROJECTS: Project[] = ([
       role: "Head Barber"
     },
     image: '/pundok-screenshot.webp',
-    link: 'https://pundokstudios.com/'
+    link: 'https://pndk.jojishiotsuki.com/'
   },
   {
     id: 'wecoat',
@@ -338,11 +330,6 @@ export const PROJECTS: Project[] = ([
       'Average time on site increased from 45s to 3m 20s',
       'Service area page ranks #1 for 12 local keywords'
     ],
-    testimonial: {
-      quote: "Our website finally matches who we are. Customers tell us they chose us because the site felt trustworthy and friendly, exactly what we wanted.",
-      author: "Client Testimonial",
-      role: "Knock Knock HVAC Owner"
-    },
     image: '/knockknock-screenshot.webp',
     link: 'https://knockknockair.com/'
   },
@@ -379,13 +366,7 @@ export const PROJECTS: Project[] = ([
       'Average session duration of 4+ minutes',
       '3 new sponsors acquired through website inquiries'
     ],
-    testimonial: {
-      quote: "Finally, a website that makes our podcast look as professional as our content. The episode organization alone has transformed how listeners engage with us.",
-      author: "Client Testimonial",
-      role: "Trade Titans Host"
-    },
-    image: '/tradetitans-screenshot.webp',
-    link: 'https://tradetitans.live-website.com/'
+    image: '/tradetitans-screenshot.webp'
   },
   {
     id: 'perth-video',
@@ -403,7 +384,7 @@ export const PROJECTS: Project[] = ([
       'Modern dark theme with cinematic aesthetic'
     ],
     image: '/perth-video-screenshot.webp',
-    link: 'https://darkturquoise-woodpecker-593820.hostingersite.com/'
+    link: 'https://perthvideo.jojishiotsuki.com/'
   },
   {
     id: 'correct-electric',
@@ -456,8 +437,7 @@ export const PROJECTS: Project[] = ([
       'Service area pages rank top 5 for 25+ local keywords',
       'Phone call volume decreased 40% (shifted to online booking)'
     ],
-    image: '/maidtoplease-screenshot.webp',
-    link: 'https://shirazr.sg-host.com/'
+    image: '/maidtoplease-screenshot.webp'
   },
   {
     id: 'spark-your-designs',
@@ -556,16 +536,16 @@ export const EXPERIENCE: Experience[] = [
   {
     id: 'polianna',
     role: 'Web Developer',
-    company: 'US Roofing Company',
+    company: 'Polianna',
     period: 'May 2024 - Oct 2024',
     description: 'Website maintenance, development, and digital presence management for a US-based roofing company.'
   },
   {
     id: '100devs',
-    role: 'Software Engineer',
+    role: 'Software Engineering Program',
     company: '100Devs',
     period: 'Jun 2023 - May 2024',
-    description: 'Full-stack development training mastering modern web technologies and software engineering principles.'
+    description: 'Full-stack training in modern web technologies and software engineering principles.'
   },
   {
     id: 'toyota',

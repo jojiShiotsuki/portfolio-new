@@ -1459,11 +1459,10 @@ const AboutV2: React.FC = () => {
                 running.
               </p>
               <p>
-                Two years inside a US roofing company taught me how trades actually buy: trust,
+                Working inside a US roofing company taught me how trades actually buy: trust,
                 speed, and the phone ringing. A Cebu barbershop client taught me how to take that
                 same playbook and rank it{' '}
-                <span style={{ color: theme.accent, fontWeight: 700 }}>#1 on Google</span> in three
-                months.
+                <span style={{ color: theme.accent, fontWeight: 700 }}>#1 on Google</span>.
               </p>
               <p>
                 You don't need a 30-page deck. You need a site that loads, ranks, and converts —
@@ -1479,7 +1478,6 @@ const AboutV2: React.FC = () => {
                 flexWrap: 'wrap',
               }}
             >
-              <PillStat theme={theme} value="600+" label="Dev hours" />
               <PillStat theme={theme} value="#1" label="Google" />
               <PillStat theme={theme} value="PH + US" label="Markets" />
             </div>

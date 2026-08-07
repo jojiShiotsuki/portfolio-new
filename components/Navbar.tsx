@@ -1,59 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Check } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { NAV_ITEMS, COPY } from '../constants';
 import { useMode } from '../hooks/useMode';
 import { useTheme } from '../ThemeContext';
 import { ThemeToggle } from './ui/theme-toggle';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
-const HOME_VARIANTS = [
-  { label: 'Default', sub: 'Brutalist editorial', path: '/' },
-  { label: 'Editorial', sub: 'Bento magazine spread', path: '/home-2' },
-  { label: 'Pixel', sub: '8-bit RPG village', path: '/home-3' },
-  { label: 'Glass', sub: 'Liquid glass / VisionOS', path: '/home-4' },
-];
-
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
-  const [homeMenuOpen, setHomeMenuOpen] = useState(false);
-  const homeMenuTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const homeMenuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const isAnyHome = HOME_VARIANTS.some((v) => v.path === location.pathname);
   const { theme, toggleTheme } = useTheme();
   const pageMode = useMode();
   const copy = COPY[pageMode];
   const tickingRef = useRef(false);
-
-  // Close home menu on outside click
-  useEffect(() => {
-    if (!homeMenuOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (homeMenuRef.current && !homeMenuRef.current.contains(e.target as Node)) {
-        setHomeMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [homeMenuOpen]);
-
-  // Close on route change
-  useEffect(() => {
-    setHomeMenuOpen(false);
-  }, [location.pathname]);
-
-  const openHomeMenu = () => {
-    if (homeMenuTimeoutRef.current) clearTimeout(homeMenuTimeoutRef.current);
-    setHomeMenuOpen(true);
-  };
-  const scheduleCloseHomeMenu = () => {
-    if (homeMenuTimeoutRef.current) clearTimeout(homeMenuTimeoutRef.current);
-    homeMenuTimeoutRef.current = setTimeout(() => setHomeMenuOpen(false), 180);
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -156,150 +119,14 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div style={linksContainerStyle} className="desktop-nav">
-          {/* Home dropdown */}
-          <div
-            ref={homeMenuRef}
-            style={{ position: 'relative' }}
-            onMouseEnter={openHomeMenu}
-            onMouseLeave={scheduleCloseHomeMenu}
+          <Link
+            to="/"
+            style={linkStyle(hoveredLink === 'Home' || location.pathname === '/')}
+            onMouseEnter={() => setHoveredLink('Home')}
+            onMouseLeave={() => setHoveredLink(null)}
           >
-            <button
-              type="button"
-              onClick={() => setHomeMenuOpen((v) => !v)}
-              aria-haspopup="true"
-              aria-expanded={homeMenuOpen}
-              style={{
-                ...linkStyle(hoveredLink === 'Home' || isAnyHome || homeMenuOpen),
-                background: 'transparent',
-                border: 'none',
-                padding: '8px 0',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                cursor: 'pointer',
-                fontFamily: "'JetBrains Mono', monospace",
-              }}
-              onMouseEnter={() => setHoveredLink('Home')}
-              onMouseLeave={() => setHoveredLink(null)}
-            >
-              Home
-              <ChevronDown
-                size={12}
-                style={{
-                  transition: 'transform 0.2s ease',
-                  transform: homeMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                }}
-              />
-            </button>
-
-            {homeMenuOpen && (
-              <div
-                role="menu"
-                aria-label="Home variants"
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 12px)',
-                  left: 0,
-                  minWidth: '260px',
-                  background: theme.bgPrimary,
-                  border: `1px solid ${theme.accentBorder}`,
-                  borderRadius: '2px',
-                  padding: '8px',
-                  boxShadow: `0 12px 32px ${theme.accentBorder}, 0 4px 12px rgba(0,0,0,0.15)`,
-                  backdropFilter: 'blur(20px)',
-                  zIndex: 110,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '4px',
-                }}
-                onMouseEnter={openHomeMenu}
-                onMouseLeave={scheduleCloseHomeMenu}
-              >
-                <div
-                  style={{
-                    padding: '8px 12px 4px',
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: '9px',
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase',
-                    color: theme.textMuted,
-                  }}
-                >
-                  Choose a layout
-                </div>
-                {HOME_VARIANTS.map((variant) => {
-                  const active = location.pathname === variant.path;
-                  return (
-                    <Link
-                      key={variant.path}
-                      to={variant.path}
-                      role="menuitem"
-                      onClick={() => setHomeMenuOpen(false)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '12px',
-                        padding: '12px',
-                        borderRadius: '2px',
-                        textDecoration: 'none',
-                        background: active ? theme.accentDim : 'transparent',
-                        border: `1px solid ${active ? theme.accent : 'transparent'}`,
-                        transition: 'all 0.2s ease',
-                        cursor: 'pointer',
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!active) {
-                          e.currentTarget.style.background = theme.bgSecondary;
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!active) {
-                          e.currentTarget.style.background = 'transparent';
-                        }
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '20px',
-                          paddingTop: '2px',
-                          color: theme.accent,
-                          display: 'flex',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {active && <Check size={14} />}
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div
-                          style={{
-                            fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: '12px',
-                            letterSpacing: '2px',
-                            textTransform: 'uppercase',
-                            color: theme.textPrimary,
-                            marginBottom: '4px',
-                          }}
-                        >
-                          {variant.label}
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: "'Instrument Sans', sans-serif",
-                            fontSize: '12px',
-                            color: theme.textTertiary,
-                            lineHeight: 1.4,
-                          }}
-                        >
-                          {variant.sub}
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+            Home
+          </Link>
 
           {navItems.map((item) => (
             item.isRoute ? (
@@ -341,6 +168,9 @@ const Navbar: React.FC = () => {
             onClick={() => setIsOpen(!isOpen)}
             style={mobileMenuBtnStyle}
             className="mobile-menu-btn"
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -349,11 +179,13 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div style={{
+        <div id="mobile-menu" style={{
           position: 'fixed',
           top: '80px',
           left: 0,
           right: 0,
+          maxHeight: 'calc(100dvh - 80px)',
+          overflowY: 'auto',
           background: theme.bgMobileMenu,
           backdropFilter: 'blur(20px)',
           borderBottom: `1px solid ${theme.accentBorder}`,
@@ -363,76 +195,6 @@ const Navbar: React.FC = () => {
           flexDirection: 'column',
           gap: '16px',
         }}>
-          {/* Home variants */}
-          <div
-            style={{
-              padding: '12px',
-              border: `1px solid ${theme.accentBorder}`,
-              borderRadius: '2px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: '9px',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                color: theme.textMuted,
-                padding: '4px 8px 8px',
-              }}
-            >
-              Home — Choose a layout
-            </div>
-            {HOME_VARIANTS.map((variant) => {
-              const active = location.pathname === variant.path;
-              return (
-                <Link
-                  key={variant.path}
-                  to={variant.path}
-                  onClick={() => setIsOpen(false)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '10px 12px',
-                    borderRadius: '2px',
-                    textDecoration: 'none',
-                    background: active ? theme.accentDim : 'transparent',
-                    border: `1px solid ${active ? theme.accent : 'transparent'}`,
-                  }}
-                >
-                  <div style={{ width: '16px', display: 'flex', justifyContent: 'center', color: theme.accent }}>
-                    {active && <Check size={14} />}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: '12px',
-                        letterSpacing: '2px',
-                        textTransform: 'uppercase',
-                        color: theme.textPrimary,
-                      }}
-                    >
-                      {variant.label}
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: "'Instrument Sans', sans-serif",
-                        fontSize: '11px',
-                        color: theme.textTertiary,
-                      }}
-                    >
-                      {variant.sub}
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
 
           {navItems.map((item) => (
             item.isRoute ? (

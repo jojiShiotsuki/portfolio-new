@@ -16,12 +16,19 @@ const Results: React.FC = () => {
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Restarting on `autoplayKey` means a manual Prev/Next resets the clock, so the
+  // carousel never yanks the slide out from under someone who just clicked.
+  const [autoplayKey, setAutoplayKey] = useState(0);
+  const restartAutoplay = () => setAutoplayKey((k) => k + 1);
+
   useEffect(() => {
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [autoplayKey, carouselImages.length]);
 
   return (
     <section id="results" aria-label="Results and metrics" style={{ padding: '160px 48px', background: theme.bgSecondary, position: 'relative', overflow: 'hidden' }}>
@@ -115,7 +122,7 @@ const Results: React.FC = () => {
                   cursor: 'pointer',
                   padding: 0,
                 }}
-                onClick={() => setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)}
+                onClick={() => { setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length); restartAutoplay(); }}
                 aria-label="Previous image"
               >
                 <ChevronLeft size={16} />
@@ -133,7 +140,7 @@ const Results: React.FC = () => {
                   cursor: 'pointer',
                   padding: 0,
                 }}
-                onClick={() => setCurrentSlide((prev) => (prev + 1) % carouselImages.length)}
+                onClick={() => { setCurrentSlide((prev) => (prev + 1) % carouselImages.length); restartAutoplay(); }}
                 aria-label="Next image"
               >
                 <ChevronRight size={16} />
@@ -184,7 +191,7 @@ const Results: React.FC = () => {
               fontSize: '15px',
               color: theme.textTertiary,
               marginBottom: '40px',
-            }}>60% lift in walk-ins post-launch · ranked #1 in 3 months</p>
+            }}>60% lift in walk-ins post-launch · ranked #1 on Google</p>
 
             {/* Testimonial */}
             <div style={{
@@ -210,7 +217,7 @@ const Results: React.FC = () => {
             </div>
 
             <a
-              href="https://pundokstudios.com/"
+              href="https://pndk.jojishiotsuki.com/"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -362,62 +369,10 @@ const Results: React.FC = () => {
           </div>
         </div>
 
-        {/* Ongoing Project — inline */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '40px 0',
-          borderTop: `1px solid ${theme.borderPrimary}`,
-          borderBottom: `1px solid ${theme.borderPrimary}`,
-          marginBottom: '80px',
-        }} className="results-ongoing">
-          <div>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: '11px',
-              color: theme.accent,
-              letterSpacing: '3px',
-              textTransform: 'uppercase',
-              marginBottom: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-            }}>
-              Ongoing
-              <span style={{
-                width: '6px',
-                height: '6px',
-                background: theme.accent,
-                borderRadius: '50%',
-                animation: 'pulse-dot 2s infinite',
-              }} />
-            </div>
-            <h3 style={{
-              fontFamily: "'Bricolage Grotesque', sans-serif",
-              fontSize: '28px',
-              fontWeight: 800,
-              color: theme.textPrimary,
-              letterSpacing: '-0.5px',
-              lineHeight: 1.1,
-            }}>US Roofing Company</h3>
-          </div>
-          <p style={{
-            fontFamily: "'Instrument Sans', sans-serif",
-            fontSize: '16px',
-            color: theme.textSecondary,
-            maxWidth: '400px',
-            lineHeight: 1.7,
-            textAlign: 'right',
-          }}>
-            Website maintenance, development, and managing their digital presence.
-          </p>
-        </div>
-
         {/* Stats */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: `repeat(${stats.length}, 1fr)`,
           gap: '48px',
         }} className="results-stats-grid">
           {stats.map((stat, index) => {

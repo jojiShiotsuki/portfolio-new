@@ -1,6 +1,6 @@
 import React from 'react';
 import { EXPERIENCE, COPY } from '../constants';
-import { MapPin, Clock, Award, Code2 } from 'lucide-react';
+import { MapPin, Award } from 'lucide-react';
 import { useTheme } from '../ThemeContext';
 import { useMode } from '../hooks/useMode';
 
@@ -145,8 +145,6 @@ const About: React.FC = () => {
   };
 
   const stats = [
-    { icon: Code2, value: '600+', label: 'Hours of Dev Experience', color: theme.accent },
-    { icon: Clock, value: 'Daily', label: 'Updates to Skills', color: theme.accentLight },
     { icon: Award, value: '#1', label: 'Google Rankings', color: theme.accent },
     { icon: MapPin, value: 'Global', label: 'PH & US Clients', color: theme.accentLight },
   ];

@@ -42,3 +42,8 @@ nul
 *.njsproj
 *.sln
 *.sw?
+
+# Internal planning docs and audit notes — not for public consumption
+docs/
+QA.md
+.claude/settings.local.json

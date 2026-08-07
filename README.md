@@ -1,20 +1,47 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# jojishiotsuki.com
 
-# Run and deploy your AI Studio app
+Source for my portfolio at [jojishiotsuki.com](https://jojishiotsuki.com). A single-page React app
+with a small Cloudflare Worker in front of the chat assistant, deployed over FTP by GitHub Actions.
 
-This contains everything you need to run your app locally.
+## Stack
 
-View your app in AI Studio: https://ai.studio/apps/drive/1bYgC9xFfUHlvZA7AOuKTZjhx1sH59M2e
+| Layer | What it uses |
+|---|---|
+| UI | React 19, TypeScript, React Router 7 |
+| Build | Vite 6 |
+| Styling | `app.css` plus co-located style objects, with a light/dark theme in `theme.ts` |
+| Chat proxy | Cloudflare Worker (`worker/`) that holds the API key server-side |
+| Deploy | GitHub Actions to FTP (`.github/workflows/deploy.yml`) |
 
-## Run Locally
+## Running it
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev        # vite dev server
+npm run build      # type-checked production build into dist/
+npm run preview    # serve the built output
+```
 
+No environment variables are needed for the site itself. The chat assistant calls the
+deployed Worker, so it works in dev without any local key.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Layout
+
+```
+App.tsx              routes and page shell
+constants.tsx        all site copy, projects and work history in one place
+theme.ts             light and dark colour tokens
+components/          one file per section (Hero, Results, ProjectsPreview, About, Contact, Footer)
+components/ui/       shared primitives
+hooks/               useMode, which picks the copy set for the current route
+worker/              Cloudflare Worker proxying the chat assistant
+```
+
+Content lives in `constants.tsx`, not in the components. Adding a project means adding one
+object to `PROJECTS`; it is sorted newest-first by its `date` field, and the homepage shows
+the first two.
+
+## Deploying
+
+Pushing to `main` runs the workflow, which type-checks, builds, and uploads `dist/` over FTP.
+The Worker deploys separately with `wrangler`.

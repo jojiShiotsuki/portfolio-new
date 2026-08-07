@@ -23,7 +23,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         background: isDark ? theme.bgSecondary : theme.bgTertiary,
         border: `1px solid ${theme.borderPrimary}`,
       }}
-      onClick={toggleTheme}
+      onClick={(e) => toggleTheme(e.currentTarget.getBoundingClientRect())}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTheme(); } }}
       role="button"
       tabIndex={0}

@@ -25,59 +25,41 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Anti-flash: apply stored theme before paint -->
+    <!-- Azeret Mono is the Mono Index design's only family and is needed for first paint
+         on / and /projects. The rest serve the older /freelance and /talk pages. -->
+    <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Anti-flash: settle the theme before first paint.
+         No saved choice means follow the operating system, which is what ThemeContext
+         also does on mount. If these two disagree the page flashes the wrong theme. -->
     <script>
-      (function() {
+      (function () {
+        var LIGHT = {
+          '--bg-primary': '#FFFFFF', '--text-primary': '#2A2820',
+          '--bg-secondary': '#EBE8E2', '--bg-tertiary': '#EBE8E2',
+          '--accent': '#5F7161', '--accent-dim': 'rgba(95, 113, 97, 0.15)',
+          '--accent-secondary': '#8D9A7C', '--accent-secondary-dim': '#8D9A7C33',
+          '--text-muted': '#9C9890'
+        };
+        var DARK = {
+          '--bg-primary': '#0C0F14', '--text-primary': '#F5F3EE',
+          '--bg-secondary': '#293122', '--bg-tertiary': '#293122',
+          '--accent': '#8D9A7C', '--accent-dim': 'rgba(141, 154, 124, 0.2)',
+          '--accent-secondary': '#C3C9A5', '--accent-secondary-dim': '#C3C9A533',
+          '--text-muted': 'rgba(245, 243, 238, 0.35)'
+        };
+        var mode = 'light';
         try {
-          var t = localStorage.getItem('theme');
-          if (t === 'light' || t === 'dark') {
-            document.documentElement.setAttribute('data-theme', t);
-            if (t === 'light') {
-              document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
-              document.documentElement.style.setProperty('--text-primary', '#2A2820');
-              document.documentElement.style.setProperty('--bg-secondary', '#EBE8E2');
-              document.documentElement.style.setProperty('--bg-tertiary', '#EBE8E2');
-              document.documentElement.style.setProperty('--accent', '#5F7161');
-              document.documentElement.style.setProperty('--accent-dim', 'rgba(95, 113, 97, 0.15)');
-              document.documentElement.style.setProperty('--accent-secondary', '#8D9A7C');
-              document.documentElement.style.setProperty('--accent-secondary-dim', '#8D9A7C33');
-              document.documentElement.style.setProperty('--text-muted', '#9C9890');
-            } else {
-              document.documentElement.style.setProperty('--bg-primary', '#0C0F14');
-              document.documentElement.style.setProperty('--text-primary', '#F5F3EE');
-              document.documentElement.style.setProperty('--bg-secondary', '#293122');
-              document.documentElement.style.setProperty('--bg-tertiary', '#293122');
-              document.documentElement.style.setProperty('--accent', '#8D9A7C');
-              document.documentElement.style.setProperty('--accent-dim', 'rgba(141, 154, 124, 0.2)');
-              document.documentElement.style.setProperty('--accent-secondary', '#C3C9A5');
-              document.documentElement.style.setProperty('--accent-secondary-dim', '#C3C9A533');
-              document.documentElement.style.setProperty('--text-muted', 'rgba(245, 243, 238, 0.35)');
-            }
-          } else {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
-            document.documentElement.style.setProperty('--text-primary', '#2A2820');
-            document.documentElement.style.setProperty('--bg-secondary', '#EBE8E2');
-            document.documentElement.style.setProperty('--bg-tertiary', '#EBE8E2');
-            document.documentElement.style.setProperty('--accent', '#5F7161');
-            document.documentElement.style.setProperty('--accent-dim', 'rgba(95, 113, 97, 0.15)');
-            document.documentElement.style.setProperty('--accent-secondary', '#8D9A7C');
-            document.documentElement.style.setProperty('--accent-secondary-dim', '#8D9A7C33');
-            document.documentElement.style.setProperty('--text-muted', '#9C9890');
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark') {
+            mode = saved;
+          } else if (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) {
+            mode = 'dark';
           }
-        } catch(e) {
-          document.documentElement.setAttribute('data-theme', 'light');
-          document.documentElement.style.setProperty('--bg-primary', '#FFFFFF');
-          document.documentElement.style.setProperty('--text-primary', '#2A2820');
-          document.documentElement.style.setProperty('--bg-secondary', '#EBE8E2');
-          document.documentElement.style.setProperty('--bg-tertiary', '#EBE8E2');
-          document.documentElement.style.setProperty('--accent', '#5F7161');
-          document.documentElement.style.setProperty('--accent-dim', 'rgba(95, 113, 97, 0.15)');
-          document.documentElement.style.setProperty('--accent-secondary', '#8D9A7C');
-          document.documentElement.style.setProperty('--accent-secondary-dim', '#8D9A7C33');
-          document.documentElement.style.setProperty('--text-muted', '#9C9890');
-        }
+        } catch (e) {}
+        var root = document.documentElement;
+        root.setAttribute('data-theme', mode);
+        var tokens = mode === 'dark' ? DARK : LIGHT;
+        for (var k in tokens) root.style.setProperty(k, tokens[k]);
       })();
     </script>
     <style>

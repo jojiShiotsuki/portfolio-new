@@ -216,13 +216,13 @@ select:focus-visible,
    ========================================================================== */
 
 @media (max-width: 768px) {
-  #contact { padding: 64px 20px !important; }
+  .legacy #contact { padding: 64px 20px !important; }
   .contact-desc { margin-bottom: 40px !important; }
   .contact-email { margin-top: 40px !important; }
 }
 
 @media (max-width: 480px) {
-  #contact { padding: 48px 16px !important; }
+  .legacy #contact { padding: 48px 16px !important; }
 }
 
 /* ==========================================================================
@@ -237,12 +237,12 @@ select:focus-visible,
 }
 
 @media (max-width: 768px) {
-  #about { padding: 64px 20px !important; }
+  .legacy #about { padding: 64px 20px !important; }
   .about-container { gap: 48px !important; }
 }
 
 @media (max-width: 480px) {
-  #about { padding: 48px 16px !important; }
+  .legacy #about { padding: 48px 16px !important; }
 }
 
 /* ==========================================================================
@@ -341,13 +341,13 @@ select:focus-visible,
 }
 
 @media (max-width: 768px) {
-  #projects { padding: 64px 20px !important; }
+  .legacy #projects { padding: 64px 20px !important; }
   .projects-header { margin-bottom: 48px !important; }
   .projects-cta-bottom { margin-top: 48px !important; }
 }
 
 @media (max-width: 480px) {
-  #projects { padding: 48px 16px !important; }
+  .legacy #projects { padding: 48px 16px !important; }
   .projects-header { margin-bottom: 40px !important; }
 }
 

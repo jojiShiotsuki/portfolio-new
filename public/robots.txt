@@ -1,11 +1,9 @@
 User-agent: *
 Allow: /
 
-# Alternate homepage designs kept for reference only. They carry older copy
-# and should never be the page someone lands on from search.
-Disallow: /home-2
-Disallow: /home-3
-Disallow: /home-4
+# The freelance page is a side door for prospects, kept off the main nav. It carries
+# sales copy aimed at service businesses and should never be the page someone lands
+# on from a search for the developer.
 Disallow: /freelance
 
 Sitemap: https://jojishiotsuki.com/sitemap.xml

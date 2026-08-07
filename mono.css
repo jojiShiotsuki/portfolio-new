@@ -743,6 +743,85 @@ body:has(.mono)::before { content: none }
   .mono .cs-body { padding-left: 15.25rem }
 }
 
+/* ------------------------------------------------------ the assistant (/talk) */
+/* Two columns: the transcript, and the room the character walks around in. The
+   transcript is set as a typeset conversation, not as chat bubbles — this design has
+   no rounded corners and no filled shapes anywhere else, and a speech bubble would be
+   the only one on the site. Each turn is a labelled row with a hairline above it,
+   which is the same shape as the work-history rows. */
+.mono .talk-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem }
+@media (min-width: 1020px) {
+  .mono .talk-grid { grid-template-columns: minmax(0, 25rem) minmax(0, 1fr); gap: 3rem; align-items: start }
+  /* The room scrolls past while the conversation stays put. Anchored below the
+     masthead, which is 3.1rem plus its own rule. */
+  .mono .talk-panel { position: sticky; top: 4.2rem }
+}
+
+.mono .talk-panel { border: 1px solid var(--rule); display: flex; flex-direction: column }
+.mono .talk-head {
+  display: flex; align-items: baseline; gap: .85rem;
+  padding: .85rem 1rem; border-bottom: 1px solid var(--rule);
+}
+.mono .talk-head h2 {
+  font-size: .8125rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.mono .talk-head .c {
+  font-size: .7rem; letter-spacing: .13em; text-transform: uppercase; color: var(--muted);
+  white-space: nowrap;
+}
+
+/* A fixed height, so the input never walks off the bottom of a long conversation.
+   Not `flex: 1`: that is `flex-basis: 0%`, and in a column flex box the basis wins over
+   height, which collapsed the log to the height of whatever was in it. */
+.mono .talk-log {
+  flex: 0 0 auto; min-height: 0; overflow-y: auto;
+  height: clamp(20rem, 52vh, 30rem);
+  padding: 0 1rem;
+}
+.mono .turn { padding-block: .9rem; border-top: 1px solid var(--faint) }
+.mono .turn:first-child { border-top: 0 }
+.mono .turn-who {
+  display: block; margin-bottom: .3rem;
+  font-size: .68rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+}
+/* Who is speaking is carried by the label's colour and a rule down the side, not by
+   which edge the text is glued to. Alternating alignment breaks the left margin that
+   every other page on this site keeps. */
+.mono .turn--you .turn-who { color: var(--muted) }
+.mono .turn--joji .turn-who { color: var(--accent) }
+.mono .turn--joji { border-left: 1px solid var(--accent); padding-left: .85rem; margin-left: -.85rem }
+.mono .turn p { color: var(--ink-2); white-space: pre-wrap; overflow-wrap: break-word }
+
+.mono .talk-form { display: flex; gap: .6rem; padding: .8rem 1rem; border-top: 1px solid var(--rule) }
+.mono .talk-input {
+  flex: 1; min-width: 0;
+  font: inherit; color: var(--ink);
+  background: none; border: 0; border-bottom: 1px solid var(--rule);
+  padding: .45rem .1rem;
+  transition: border-color var(--dur-2) var(--ease-line);
+}
+.mono .talk-input::placeholder { color: var(--muted) }
+.mono .talk-input:focus { outline: 0; border-bottom-color: var(--accent) }
+.mono .talk-input:disabled { opacity: .5 }
+.mono .talk-send {
+  font: inherit; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 500;
+  color: var(--ink); background: none; border: 1px solid var(--ink);
+  padding: .45rem .9rem; cursor: pointer;
+  transition: color var(--dur-1) var(--ease), background var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+.mono .talk-send:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); color: var(--paper) }
+.mono .talk-send:disabled { color: var(--muted); border-color: var(--rule); cursor: default }
+
+/* The room keeps its own pixel palette — it is a drawn scene, not a themed surface. */
+.mono .room { border: 1px solid var(--rule); background: var(--faint) }
+.mono .room canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; cursor: pointer }
+.mono .room-note {
+  margin-top: .75rem;
+  font-size: .7rem; letter-spacing: .13em; text-transform: uppercase; color: var(--muted);
+}
+
 /* --- honour the system setting; this switches every one of the above off --- */
 @media (prefers-reduced-motion: reduce) {
   .mono, .mono *, .mono *::before, .mono *::after {

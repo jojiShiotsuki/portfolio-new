@@ -220,7 +220,22 @@ export default {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Claude API error:', response.status, errorText);
-        return new Response(JSON.stringify({ error: 'AI service error' }), {
+
+        // Surface the upstream status and Anthropic's own error type in the reply.
+        // Without this the only symptom is a bare 502, and finding out whether the
+        // cause was an expired key, an empty balance or a rate limit needs a
+        // Cloudflare login and `wrangler tail`. Status codes and error types are
+        // not secrets; the key and the full message body are never included.
+        let upstreamType = 'unknown';
+        try {
+          upstreamType = (JSON.parse(errorText)?.error?.type as string) ?? 'unknown';
+        } catch {}
+
+        return new Response(JSON.stringify({
+          error: 'AI service error',
+          upstream_status: response.status,
+          upstream_type: upstreamType,
+        }), {
           status: 502,
           headers: { ...headers, 'Content-Type': 'application/json' },
         });

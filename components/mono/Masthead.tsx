@@ -5,8 +5,9 @@ import { PERSONAL_INFO } from '../../constants';
 
 interface MastheadProps {
   /* 'home' shows the name as plain text and links the sections in-page.
-     'work' links the name back home and sends About/History/Contact to the front page. */
-  page: 'home' | 'work';
+     'work' links the name back home, keeps #work local and marks it as the current page.
+     'other' is any page with none of those sections on it, so all four go home. */
+  page: 'home' | 'work' | 'other';
 }
 
 const SECTIONS = [
@@ -37,7 +38,8 @@ const Masthead: React.FC<MastheadProps> = ({ page }) => {
         <nav className="mast-nav" aria-label="Primary">
           {SECTIONS.map(s => {
             // On the work page only #work exists locally; the rest live on the front page.
-            const local = page === 'home' || s.hash === '#work';
+            // On any other page none of them do.
+            const local = page === 'home' || (page === 'work' && s.hash === '#work');
             const current = page === 'work' && s.hash === '#work';
             const body = <><span className="n">{s.n}</span>{s.label}</>;
             return local ? (

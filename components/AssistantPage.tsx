@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../ThemeContext';
+import MonoLayout from './mono/MonoLayout';
+import { PERSONAL_INFO, PROJECTS } from '../constants';
 
 // === TYPES ===
 type Direction = 0 | 1 | 2 | 3;
@@ -486,18 +487,22 @@ const WAYPOINTS = [
 
 // === PAGE COMPONENT ===
 const AssistantPage: React.FC = () => {
-  const { theme } = useTheme();
+  const { mode } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const roomDataRef = useRef<{ bg: HTMLCanvasElement; furniture: FurnInst[] } | null>(null);
   const animRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
-  const accentRef = useRef(theme.accent);
+  // The room is drawn on a canvas, so it cannot read a CSS variable. These are the
+  // Mono Index accents, the same two values mono.css declares, rather than theme.ts's
+  // older sage — otherwise the character is highlighted in a green the page never uses.
+  const monoAccent = mode === 'dark' ? '#6DB075' : '#3E6A43';
+  const accentRef = useRef(monoAccent);
   const spriteImgRef = useRef<HTMLImageElement | null>(null);
   const spriteLoadedRef = useRef(false);
   // Visitor sprite (appears when user chats)
   const visitorImgRef = useRef<HTMLImageElement | null>(null);
   const visitorLoadedRef = useRef(false);
-  useEffect(() => { accentRef.current = theme.accent; }, [theme.accent]);
+  useEffect(() => { accentRef.current = monoAccent; }, [monoAccent]);
 
   useEffect(() => {
     const img = new Image();
@@ -926,155 +931,120 @@ const AssistantPage: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', paddingTop: '120px', paddingBottom: '100px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 48px' }}>
+    <MonoLayout page="other" skipLabel="Skip to the conversation" skipHref="#talk">
+      <section className="hero sheet">
+        <div className="hero-meta">
+          <span className="label">AI Assistant // Ask it anything</span>
+          <span className="status"><span className="dot" aria-hidden="true" />{PERSONAL_INFO.location}</span>
+        </div>
 
-        {/* Back link */}
-        <Link
-          to="/"
-          style={{
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: '12px',
-            color: theme.textSecondary,
-            textDecoration: 'none',
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            marginBottom: '40px',
-            transition: 'color 0.3s ease',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = theme.accent; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = theme.textSecondary; }}
-        >
-          <ArrowLeft size={16} />
-          Back to Home
-        </Link>
+        <div className="hero-grid">
+          <div>
+            <h1><span className="ln">Talk to</span><span className="ln">Joji</span></h1>
+            <p className="role">An assistant that knows the work on this site</p>
+            <p className="sub">
+              Ask about a project, the stack behind it, or whether I have done something
+              like the thing you need. It answers from the same case studies you can read
+              on the work page, so it cannot invent a project I have not built.
+            </p>
+            <Link className="back" to="/">&larr; Back to the front page</Link>
+          </div>
 
-        {/* Side-by-side layout: chat left, room right */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '380px 1fr',
-          gap: '24px',
-          alignItems: 'start',
-        }} className="talk-layout">
+          <dl className="spec">
+            <div className="r">
+              <dt>Answers from</dt>
+              <span className="leader" aria-hidden="true" />
+              <dd>{PROJECTS.length} case studies</dd>
+            </div>
+            <div className="r">
+              <dt>Built with</dt>
+              <span className="leader" aria-hidden="true" />
+              <dd>React, Cloudflare Workers</dd>
+            </div>
+            <div className="r">
+              <dt>Rather email?</dt>
+              <span className="leader" aria-hidden="true" />
+              <dd><a href={`mailto:${PERSONAL_INFO.email}`}>{PERSONAL_INFO.email}</a></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
 
-          {/* Chat panel (left) */}
-          <div style={{
-            border: `1px solid ${theme.borderPrimary}`,
-            background: theme.bgPrimary,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 'calc(100vh - 200px)',
-            maxHeight: '600px',
-            position: 'sticky',
-            top: '120px',
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              padding: '14px 20px',
-              borderBottom: `1px solid ${theme.borderPrimary}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            }}>
-              <div>
-                <div style={{
-                  fontFamily: "'Bricolage Grotesque', sans-serif",
-                  fontSize: '18px',
-                  fontWeight: 800,
-                  color: theme.textPrimary,
-                  lineHeight: 1.2,
-                }}>Talk to Joji</div>
-                <div style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-                  color: theme.accent, letterSpacing: '2px', textTransform: 'uppercase',
-                  marginTop: '4px',
-                }}>AI Assistant</div>
-              </div>
+      <section className="sec sheet" id="talk" aria-labelledby="talk-h">
+        <div className="sec-head">
+          <span className="n">01</span>
+          <h2 id="talk-h">Conversation</h2>
+          <span className="leader" aria-hidden="true" />
+          <span className="count">{messages.length} {messages.length === 1 ? 'Turn' : 'Turns'}</span>
+        </div>
+
+        <div className="talk-grid">
+          <div className="talk-panel">
+            <div className="talk-head">
+              <h2>Transcript</h2>
+              <span className="leader" aria-hidden="true" />
+              <span className="c">{isLoading ? 'Thinking' : 'Ready'}</span>
             </div>
 
+            {/* A live region, so a screen reader hears the reply instead of only seeing it. */}
             <div
               ref={chatContainerRef}
-              style={{
-                flex: 1, overflowY: 'auto', padding: '16px',
-                display: 'flex', flexDirection: 'column', gap: '10px',
-                minHeight: 0,
-              }}
+              className="talk-log"
+              role="log"
+              aria-live="polite"
+              aria-label="Conversation with the assistant"
             >
               {messages.map((m, i) => (
-                <div key={i} style={{
-                  maxWidth: '85%', padding: '10px 14px',
-                  background: m.role === 'user' ? theme.accent : theme.bgSecondary,
-                  color: m.role === 'user' ? theme.btnPrimaryText : theme.textPrimary,
-                  alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
-                  fontFamily: "'Instrument Sans', sans-serif", fontSize: '14px', lineHeight: 1.6,
-                  borderRadius: m.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                }}>{m.content}</div>
+                <div key={i} className={`turn ${m.role === 'user' ? 'turn--you' : 'turn--joji'}`}>
+                  <span className="turn-who">{m.role === 'user' ? 'You' : 'Joji'}</span>
+                  <p>{m.content}</p>
+                </div>
               ))}
               {isLoading && (
-                <div style={{
-                  padding: '10px 14px', background: theme.bgSecondary, alignSelf: 'flex-start',
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: theme.textMuted,
-                  borderRadius: '12px 12px 12px 2px',
-                }}><span className="typing-dots">...</span></div>
+                <div className="turn turn--joji">
+                  <span className="turn-who">Joji</span>
+                  <p><span className="typing-dots">...</span></p>
+                </div>
               )}
             </div>
 
-            <div style={{
-              padding: '12px 16px', borderTop: `1px solid ${theme.borderPrimary}`,
-              display: 'flex', gap: '8px',
-            }}>
+            <form
+              className="talk-form"
+              onSubmit={(e) => { e.preventDefault(); sendMessage(); }}
+            >
+              <label className="sr" htmlFor="talk-input">Your message</label>
               <input
-                type="text" value={input}
+                id="talk-input"
+                className="talk-input"
+                type="text"
+                value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-                placeholder="Type a message..."
-                style={{
-                  flex: 1, background: theme.bgSecondary,
-                  border: `1px solid ${theme.borderPrimary}`,
-                  padding: '10px 14px', color: theme.textPrimary,
-                  fontSize: '14px', fontFamily: "'Instrument Sans', sans-serif", outline: 'none',
-                }}
+                placeholder="Ask about a project…"
                 disabled={isLoading}
+                autoComplete="off"
               />
-              <button onClick={sendMessage} disabled={isLoading} style={{
-                width: '40px', height: '40px', background: theme.accent,
-                border: 'none', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                opacity: isLoading ? 0.5 : 1,
-              }}><Send size={16} color={theme.btnPrimaryText} /></button>
-            </div>
+              <button className="talk-send" type="submit" disabled={isLoading || !input.trim()}>
+                Send
+              </button>
+            </form>
           </div>
 
-          {/* Pixel room (right, bigger) */}
           <div>
-            <div style={{
-              border: `1px solid ${theme.borderPrimary}`,
-            }}>
+            <div className="room">
               <canvas
-                ref={canvasRef} width={CW} height={CH}
+                ref={canvasRef}
+                width={CW}
+                height={CH}
                 onClick={handleCanvasClick}
-                style={{
-                  width: '100%', height: 'auto', imageRendering: 'pixelated',
-                  cursor: 'pointer', display: 'block',
-                }}
+                aria-label="A small pixel room. The character walks to wherever you click. Decorative."
+                role="img"
               />
             </div>
-            <p style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: '11px',
-              color: theme.textMuted,
-              letterSpacing: '1px',
-              marginTop: '12px',
-              textAlign: 'center',
-            }}>
-              Send a message to enter the room. Click to move around.
-            </p>
+            <p className="room-note">Send a message to enter the room · Click to move around</p>
           </div>
-
         </div>
-      </div>
-    </div>
+      </section>
+    </MonoLayout>
   );
 };
 

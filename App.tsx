@@ -13,11 +13,23 @@ const CaseStudies = React.lazy(() => import('./components/mono/CaseStudies'));
 const AssistantPage = React.lazy(() => import('./components/AssistantPage'));
 const FreelancePage = React.lazy(() => import('./components/FreelancePage'));
 
+// The AI assistant is switched OFF. The Cloudflare Worker behind it stopped getting a
+// usable answer from the Anthropic API, so every visitor who opened the chat got an
+// apology instead of a reply. Rather than ship that, the widget and the /talk route are
+// both hidden until the worker is fixed.
+//
+// Nothing is deleted: components/AssistantPage.tsx, components/PixelAssistant.tsx, the
+// worker, and the /talk styling in mono.css are all still here. Flip this to `true` to
+// bring the whole thing back, and put /talk back in public/sitemap.xml.
+// Typed as boolean, not inferred as the literal `false`, so flipping it needs no other
+// edit and TypeScript does not treat the guarded branches as dead code.
+const ASSISTANT_ENABLED: boolean = false;
+
 // The older inline-styled pages, which still need the old nav, banner, sticky CTA and
 // grid overlay. Everything else is the Mono Index design, which brings its own masthead
 // and footer. Listing the exceptions rather than the rule means an unrecognised path
 // gets the current shell on its way to the redirect, not a flash of the old one.
-const LEGACY_ROUTES = ['/freelance', '/talk'];
+const LEGACY_ROUTES = ['/freelance'];
 
 // Reset scroll on route change. React Router preserves scroll across navigations
 // by default, which makes "All work and case studies" land you mid-page. A link that
@@ -133,7 +145,7 @@ const Shell: React.FC = () => {
         <Route path="/" element={<MonoHome />} />
         <Route path="/projects" element={<CaseStudies />} />
         <Route path="/freelance" element={<FreelancePage />} />
-        <Route path="/talk" element={<AssistantPage />} />
+        {ASSISTANT_ENABLED && <Route path="/talk" element={<AssistantPage />} />}
         {/* The host serves index.html for any path, so a URL with no route used to
             render an empty shell that still answered 200. /home-2, /home-3 and
             /home-4 existed until this redesign, so those are live examples. Send
@@ -146,7 +158,7 @@ const Shell: React.FC = () => {
   return (
     <>
       {isMono ? routes : <LegacyChrome>{routes}</LegacyChrome>}
-      <PixelAssistant />
+      {ASSISTANT_ENABLED && <PixelAssistant />}
     </>
   );
 };

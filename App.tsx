@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import UrgencyBanner from './components/UrgencyBanner';
@@ -13,9 +13,11 @@ const CaseStudies = React.lazy(() => import('./components/mono/CaseStudies'));
 const AssistantPage = React.lazy(() => import('./components/AssistantPage'));
 const FreelancePage = React.lazy(() => import('./components/FreelancePage'));
 
-// The Mono Index design. These pages bring their own masthead, footer and background,
-// so none of the older chrome (nav, banner, sticky CTA, grid overlay) renders on them.
-const MONO_ROUTES = ['/', '/projects'];
+// The older inline-styled pages, which still need the old nav, banner, sticky CTA and
+// grid overlay. Everything else is the Mono Index design, which brings its own masthead
+// and footer. Listing the exceptions rather than the rule means an unrecognised path
+// gets the current shell on its way to the redirect, not a flash of the old one.
+const LEGACY_ROUTES = ['/freelance', '/talk'];
 
 // Reset scroll on route change. React Router preserves scroll across navigations
 // by default, which makes "All work and case studies" land you mid-page. A link that
@@ -123,7 +125,7 @@ const LegacyChrome: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 // A Mono Index page renders its own shell, so it needs no wrapper at all.
 const Shell: React.FC = () => {
   const { pathname } = useLocation();
-  const isMono = MONO_ROUTES.includes(pathname);
+  const isMono = !LEGACY_ROUTES.includes(pathname);
 
   const routes = (
     <Suspense fallback={<div />}>
@@ -132,6 +134,11 @@ const Shell: React.FC = () => {
         <Route path="/projects" element={<CaseStudies />} />
         <Route path="/freelance" element={<FreelancePage />} />
         <Route path="/talk" element={<AssistantPage />} />
+        {/* The host serves index.html for any path, so a URL with no route used to
+            render an empty shell that still answered 200. /home-2, /home-3 and
+            /home-4 existed until this redesign, so those are live examples. Send
+            anything unrecognised to the front page rather than to a blank sheet. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );

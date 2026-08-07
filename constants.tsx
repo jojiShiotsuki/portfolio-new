@@ -284,7 +284,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'pundok-studios',
-    date: '2024-11',
+    date: '2024-10',
     title: 'Pundok Studios',
     category: 'Websites',
     description: 'Website and local SEO for a barbershop in Cebu. They weren\'t showing up on Google before. Now they rank #1 for "barbershop Cebu."',
@@ -307,7 +307,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'wecoat',
-    date: '2026-04',
+    date: '2023-12',
     title: 'We Coat Commercial Roofing',
     category: 'Websites',
     description: 'Design and build for a family-owned commercial roof coating company in Charlotte, NC, serving four states. Marketing site with multi-location service pages, lead-capture quote form, and a clear path from problem to quote.',
@@ -348,7 +348,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'samantha-angeli',
-    date: '2025-03',
+    date: '2025-04',
     title: 'Samantha Angeli',
     category: 'Websites',
     description: 'Website for a US strategic branding and marketing consultancy. Built with a clean editorial aesthetic to match her positioning around credibility, loyalty, and intentional growth for established entrepreneurs.',
@@ -407,7 +407,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'correct-electric',
-    date: '2025-02',
+    date: '2025-03',
     title: 'Correct Electric',
     category: 'Design Pitch',
     description: 'Homepage redesign concept for a commercial electrician in Houston. They\'ve done 200+ projects but their old site looked small-time.',
@@ -443,7 +443,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'maid-to-please',
-    date: '2025-04',
+    date: '2023-08',
     title: 'Maid To Please',
     category: 'Websites',
     description: 'Website for a cleaning company with 30+ years in business, serving DC, Maryland, and Virginia. Added an instant quote calculator.',
@@ -484,7 +484,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'youpercent',
-    date: '2024-12',
+    date: '2024-11',
     title: 'YOU% Nutrition',
     category: 'Websites',
     description: 'Pro bono website for a nutritionist friend in Cebu. Did 3 months of free SEO. Got them ranking #1 for "nutritionist in Cebu City."',
@@ -507,7 +507,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'tru-plumbing',
-    date: '2026-03',
+    date: '2023-11',
     title: 'Tru Plumbing & Excavating',
     category: 'Websites',
     description: 'Design adjustments and SEO implementation for a family-owned plumbing and excavation company in Beaver Falls, PA. Restructured service and area pages and tightened on-page SEO across the site.',
@@ -519,7 +519,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'spectrum-signs',
-    date: '2026-02',
+    date: '2023-10',
     title: 'Spectrum Signs & Wraps',
     category: 'Websites',
     description: 'SEO implementation, design adjustments, and ongoing maintenance for a vehicle wrap and signage company in the Greater Houston area. Service-page SEO, area-served structure, and the day-to-day care a busy WordPress site needs.',
@@ -531,7 +531,7 @@ export const PROJECTS: Project[] = ([
   },
   {
     id: 'mimis-jewelry',
-    date: '2026-01',
+    date: '2023-09',
     title: "Mimi's Jewelry",
     category: 'Websites',
     description: 'SEO implementation, design adjustments, and ongoing site maintenance for a 35+ year family-owned jeweler in Fountain Valley, CA. Custom engagement rings, jewelry repair, appraisals, and gold buying — ranking in a competitive Orange County market.',

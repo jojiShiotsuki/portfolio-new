@@ -1,0 +1,20 @@
+name = "proposal-sign"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://jojishiotsuki.com"
+# Where the "someone signed" email goes. Nothing is sent until the RESEND_API_KEY secret
+# also exists, so leaving this here on its own is safe.
+NOTIFY_EMAIL = "jojishiotsuki0@gmail.com"
+# The from address. It must sit on a domain verified inside Resend, or Resend rejects the
+# send. Signing still succeeds if it does, the email just does not arrive.
+NOTIFY_FROM = "proposals@jojishiotsuki.com"
+
+# Its own namespace, not the chat worker's RATE_LIMIT one. Signed proposals and chat rate
+# counters have different lifetimes and very different consequences if one wipes the other.
+[[kv_namespaces]]
+binding = "SIGNATURES"
+# Created by `wrangler kv namespace create SIGNATURES`. That command prints an id. Paste it
+# between the quotes below and save. See README.md, step 2.
+id = ""

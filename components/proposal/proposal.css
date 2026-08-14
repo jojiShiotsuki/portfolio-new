@@ -1,0 +1,1151 @@
+/* ==========================================================================
+   PROPOSAL SHEET
+   The signable client proposal, set in the Mono Index voice: hairline rules,
+   dot leaders, numbered sections, small caps labels with tracking.
+
+   Everything here is scoped under `.proposal`, which sits alongside `.mono`.
+   Nothing in this file may reach another page: the file is imported by
+   ProposalPage.tsx so it code splits with the lazy route and never loads on
+   the homepage, but scoping is what actually guarantees isolation.
+
+   COLOUR: tokens only. The palette lives on `.mono` in mono.css and flips for
+   dark mode there, so using --ink, --paper, --rule and friends means dark mode
+   costs nothing here and there is no dark-mode block in this file. The one
+   exception is the print block at the bottom, which redeclares the light
+   values on purpose so a printer is never handed the dark theme.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- locals */
+.mono .proposal {
+  /* Width of the contents rail on wide screens, and how far down the viewport the
+     rail comes to rest: clear of the action bar, which is the only thing pinned
+     above it. This page carries no masthead, on purpose. */
+  --pr-rail: 15.5rem;
+  --pr-stick: 4.6rem;
+  /* Reading measure. Roughly 66 characters of Azeret Mono, which is the
+     comfortable band for a document someone reads end to end. */
+  --pr-measure: 66ch;
+  /* Height reserved for the action bar when it is fixed to the bottom edge on
+     a phone, so the last line of the document is never sitting under it. */
+  --pr-bar: 3.9rem;
+
+  padding-bottom: calc(var(--pr-bar) + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 720px) {
+  /* Above phone width the bar sticks under the masthead instead of covering
+     the bottom edge, so nothing needs reserving. */
+  .mono .proposal { padding-bottom: 0 }
+}
+
+/* A jump from the contents list has to land clear of the action bar. On a phone the
+   bar is at the bottom edge and there is nothing overhead to clear. */
+.mono .proposal .pr-sec,
+.mono .proposal .pr-invest,
+.mono .proposal .pr-sign { scroll-margin-top: 1.5rem }
+@media (min-width: 720px) {
+  .mono .proposal .pr-sec,
+  .mono .proposal .pr-invest,
+  .mono .proposal .pr-sign { scroll-margin-top: 5rem }
+}
+
+/* Native controls come with rounded corners and a system font on iOS. This
+   design has neither, anywhere. */
+.mono .proposal button,
+.mono .proposal input,
+.mono .proposal select,
+.mono .proposal textarea {
+  font-family: var(--mono);
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.mono .proposal input[type="radio"],
+.mono .proposal input[type="checkbox"] {
+  -webkit-appearance: auto;
+  appearance: auto;
+  accent-color: var(--accent);
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: none;
+}
+
+/* ------------------------------------------------------------ action bar */
+/* Two controls only: print to PDF, and jump to the signature. On a phone it is
+   pinned to the bottom edge, where a thumb is; from 720px up it rides under the
+   sticky masthead so it never sits on top of the reading area. */
+.mono .proposal .pr-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  /* The bar spans the viewport but its controls line up with the sheet's own edges.
+     Below 70rem the max() collapses to the plain gutter, which is what a phone gets. */
+  --pr-gutter: max(var(--pad), calc((100% - 70rem) / 2 + var(--pad)));
+  padding: .55rem var(--pr-gutter) calc(.55rem + env(safe-area-inset-bottom, 0px));
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+}
+@media (min-width: 720px) {
+  .mono .proposal .pr-actions {
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    justify-content: flex-end;
+    padding: .6rem var(--pr-gutter);
+    border-top: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* Both controls are the same object: a hairline box with a tracked label. The
+   accept control is the filled one because it is the thing the page is for. */
+.mono .proposal .pr-dl,
+.mono .proposal .pr-accept {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding: .6rem 1.1rem;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease),
+              background var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+.mono .proposal .pr-accept {
+  color: var(--paper);
+  background: var(--ink);
+}
+.mono .proposal .pr-dl:hover,
+.mono .proposal .pr-accept:hover {
+  color: var(--paper);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.mono .proposal .pr-dl:focus-visible,
+.mono .proposal .pr-accept:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+@media (min-width: 720px) {
+  .mono .proposal .pr-dl,
+  .mono .proposal .pr-accept { flex: 0 0 auto }
+}
+
+/* ----------------------------------------------------------------- cover */
+.mono .proposal .pr-head {
+  padding-top: clamp(2.25rem, 6vw, 4.5rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+.mono .proposal .pr-head-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem 1.5rem;
+  justify-content: space-between;
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-title {
+  font-size: clamp(1.85rem, 6.4vw, 3.35rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.04em;
+  text-transform: uppercase;
+  max-width: 22ch;
+  overflow-wrap: break-word;
+}
+.mono .proposal .pr-sub {
+  margin-top: 1.15rem;
+  max-width: 56ch;
+  color: var(--ink-2);
+}
+
+/* The cover's fact list. Same dot-leader rows as the homepage spec block, but
+   always visible: on a proposal these are the terms of the document itself. */
+.mono .proposal .pr-spec {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  max-width: 32rem;
+  border-top: 1px solid var(--ink);
+  padding-top: .35rem;
+}
+.mono .proposal .pr-spec .r {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  padding-block: .6rem;
+  border-bottom: 1px dotted var(--faint);
+}
+.mono .proposal .pr-spec dt {
+  font-size: .68rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-spec dd {
+  margin: 0;
+  font-size: .72rem;
+  text-align: right;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+.mono .proposal .pr-spec dd a { border-bottom: 1px solid var(--rule) }
+.mono .proposal .pr-spec dd a:hover { color: var(--accent); border-bottom-color: var(--accent) }
+
+/* -------------------------------------------------------------- contents */
+.mono .proposal .pr-toc {
+  border-top: 1px solid var(--ink);
+  padding-top: 1rem;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+.mono .proposal .pr-toc-cap {
+  margin-bottom: .5rem;
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-toc li + li { border-top: 1px dotted var(--faint) }
+.mono .proposal .pr-toc a {
+  display: flex;
+  align-items: baseline;
+  gap: .85rem;
+  padding-block: .6rem;
+  color: var(--ink-2);
+  transition: color var(--dur-1) var(--ease);
+}
+/* Below the rail breakpoint the contents list is a stack of things a thumb taps, so the
+   rows take the 44px floor. Beside the text on a wide screen it is a margin note being
+   read rather than tapped, and taller rows there only push the rail past the viewport
+   height it has to fit inside. Measured at 390px: 40px before, 44px after. */
+@media (max-width: 1099px) {
+  .mono .proposal .pr-toc a { padding-block: .78rem }
+}
+.mono .proposal .pr-toc a:hover { color: var(--accent) }
+.mono .proposal .pr-toc a:hover .leader::after { transform: scaleX(1) }
+/* Reserved width, not shrink to fit. Pricing and acceptance carry no number, and
+   without a reserved column their titles would start further left than every
+   numbered row above them and the list would lose its left edge. */
+.mono .proposal .pr-toc .n {
+  flex: none;
+  min-width: 1.55rem;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--accent);
+}
+.mono .proposal .pr-toc .t {
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.mono .proposal .pr-toc .c {
+  font-size: .68rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* The section you are reading. Marked in the accent and given a full-strength
+   ink label, so the rail reads as a position indicator rather than decoration.
+   Keyed off aria-current alone, which is what ProposalToc sets: the marker is
+   information a screen reader should hear, so the attribute is the real signal
+   and a parallel class hook would only be a second thing to keep in step. */
+.mono .proposal .pr-toc a[aria-current] { color: var(--ink) }
+.mono .proposal .pr-toc a[aria-current] .t { color: var(--accent) }
+.mono .proposal .pr-toc a[aria-current] .leader::after { transform: scaleX(1) }
+
+/* --------------------------------------------------------------- section */
+.mono .proposal .pr-sec,
+.mono .proposal .pr-invest {
+  border-top: 1px solid var(--ink);
+  padding-top: clamp(1.75rem, 4.5vw, 2.75rem);
+  padding-bottom: var(--gap);
+}
+.mono .proposal .pr-sec-n {
+  display: block;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--accent);
+}
+/* The margin belongs to the pairing, not to the heading: the pricing and signature
+   blocks carry a .pr-sec-h with no number above it, and a lone heading should not
+   start with a gap where a number would have been. */
+.mono .proposal .pr-sec-n + .pr-sec-h { margin-top: .55rem }
+.mono .proposal .pr-sec-h {
+  font-size: .8125rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.mono .proposal .pr-sec-sub {
+  margin-top: .5rem;
+  max-width: var(--pr-measure);
+  font-size: .72rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-body { margin-top: clamp(1.5rem, 3.5vw, 2.25rem) }
+
+/* The document column beside the contents rail. All it needs of its own is permission
+   to shrink: without min-width:0 a long unbroken string anywhere inside it would push
+   the grid track wider than its share and drag the rail off the screen. */
+.mono .proposal .pr-main { min-width: 0 }
+
+/* ---------------------------------------------------------------- quotes */
+/* The client quotes band, sat directly under the opening letter. The figure inside it
+   is mono.css's own `.quote`, so all that is set here is the band's rhythm: the same
+   air under the heading that .pr-body gives a section, and a full gap between one
+   quote and the next. */
+.mono .proposal .pr-quotes .quote { margin-top: clamp(1.5rem, 3.5vw, 2.25rem) }
+
+/* ---------------------------------------------------------------- blocks */
+/* Spacing lives on the block classes rather than on `.pr-body > * + *` so the
+   rhythm survives whether or not the blocks are wrapped. */
+.mono .proposal .pr-p {
+  margin-top: 1.15rem;
+  max-width: var(--pr-measure);
+  color: var(--ink-2);
+}
+.mono .proposal .pr-p strong,
+.mono .proposal .pr-callout strong,
+.mono .proposal .pr-ul strong,
+.mono .proposal .pr-ol strong { color: var(--ink); font-weight: 600 }
+
+/* A short accent rule instead of a heavier type size. The document has one
+   heading scale; sub-headings earn their place with a mark, not with weight. */
+.mono .proposal .pr-h3 {
+  position: relative;
+  margin-top: clamp(2rem, 4.5vw, 2.75rem);
+  padding-top: 1rem;
+  font-size: .8125rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.mono .proposal .pr-h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.6rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+.mono .proposal .pr-ul,
+.mono .proposal .pr-ol {
+  margin-top: 1.15rem;
+  max-width: var(--pr-measure);
+  color: var(--ink-2);
+}
+.mono .proposal .pr-ul > li,
+.mono .proposal .pr-ol > li {
+  position: relative;
+  padding-left: 2.1rem;
+  padding-block: .28rem;
+}
+/* The same hairline dash the case studies use for results. */
+.mono .proposal .pr-ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .95em;
+  width: .8rem;
+  height: 1px;
+  background: var(--accent);
+}
+/* Two-digit numbers, to match the section marks and the contents list. */
+.mono .proposal .pr-ol { counter-reset: pr-ol }
+.mono .proposal .pr-ol > li::before {
+  counter-increment: pr-ol;
+  content: counter(pr-ol, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: .28rem;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--accent);
+}
+
+/* Term and value rows, set as dot leaders. */
+.mono .proposal .pr-kv {
+  margin-top: 1.5rem;
+  max-width: 44rem;
+  border-top: 1px solid var(--ink);
+  padding-top: .35rem;
+}
+.mono .proposal .pr-kv .r {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  padding-block: .62rem;
+  border-bottom: 1px dotted var(--faint);
+}
+.mono .proposal .pr-kv dt {
+  font-size: .68rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-kv dd {
+  margin: 0;
+  text-align: right;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+/* On a phone a proposal's terms are full sentences, not two words, so the two
+   halves stack rather than fighting over one line. */
+@media (max-width: 559px) {
+  .mono .proposal .pr-kv .r { display: block }
+  .mono .proposal .pr-kv .leader { display: none }
+  .mono .proposal .pr-kv dd { margin-top: .2rem; text-align: left }
+}
+
+/* One boxed statement per section, at most. The faint fill is meaning, not
+   decoration, so it is told to print. */
+.mono .proposal .pr-callout {
+  margin-top: 1.5rem;
+  max-width: 60ch;
+  padding: 1rem 1.15rem;
+  color: var(--ink);
+  background: var(--faint);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* First block in a section should not push off its heading. */
+.mono .proposal .pr-body > :first-child { margin-top: 0 }
+
+/* ------------------------------------------------------------ investment */
+.mono .proposal .pr-opts {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+@media (min-width: 860px) {
+  .mono .proposal .pr-opts { grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)) }
+}
+
+.mono .proposal .pr-opt {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.15rem, 3vw, 1.75rem);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+/* Recommended is carried by a doubled accent edge and an accent name, which is
+   how the rest of the site marks a preferred row. No banner, no badge. */
+.mono .proposal .pr-opt--rec {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.mono .proposal .pr-opt--rec .pr-opt-name { color: var(--accent) }
+.mono .proposal .pr-opt-flag {
+  display: block;
+  margin-bottom: .95rem;
+  padding-bottom: .7rem;
+  border-bottom: 1px solid var(--accent);
+  font-size: .66rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.mono .proposal .pr-opt-name {
+  font-size: .8125rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.mono .proposal .pr-opt-price {
+  display: block;
+  margin-top: .6rem;
+  font-size: clamp(1.5rem, 4.4vw, 2.05rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.04em;
+  color: var(--ink);
+}
+.mono .proposal .pr-opt-cadence {
+  display: block;
+  margin-top: .35rem;
+  font-size: .68rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-opt-summary {
+  margin-top: 1rem;
+  color: var(--ink-2);
+}
+.mono .proposal .pr-opt-includes { margin-top: 1.15rem }
+.mono .proposal .pr-opt-includes > li {
+  position: relative;
+  padding-left: 1.5rem;
+  padding-block: .26rem;
+  color: var(--ink-2);
+}
+.mono .proposal .pr-opt-includes > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .95em;
+  width: .8rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* `margin-top: auto` pins the money and the pick control to the bottom of the
+   card, so the two cards line up along their last rows however different the
+   include lists are. */
+.mono .proposal .pr-opt-lines {
+  margin-top: auto;
+  padding-top: 1.35rem;
+}
+.mono .proposal .pr-opt-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .1rem .85rem;
+  padding-block: .5rem;
+  border-top: 1px dotted var(--faint);
+  color: var(--ink-2);
+}
+.mono .proposal .pr-opt-line:first-child { border-top: 1px solid var(--ink) }
+.mono .proposal .pr-opt-line > :last-child {
+  color: var(--ink);
+  font-weight: 500;
+}
+/* The payment note sits inside the label half of the row, so it needs to be a block
+   to drop under it rather than trailing the label on the same line. */
+.mono .proposal .pr-opt-line-note {
+  display: block;
+  margin-top: .15rem;
+  font-size: .68rem;
+  font-weight: 400;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mono .proposal .pr-opt-pick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 1.35rem;
+  padding: .65rem 1rem;
+  font: inherit;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease),
+              background var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+/* The whole card is the label, so pointing anywhere on it lights the control the
+   click will actually operate. */
+.mono .proposal .pr-opt:hover .pr-opt-pick {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.mono .proposal .pr-opt-pick:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* Chosen. Marked with the accent rule and a faint fill rather than by inverting the
+   control: the radio inside it is painted in the accent too, and a filled accent box
+   would hide the one part of this that tells a screen-free reader what is ticked.
+
+   Two hooks, both live. `:has(input:checked)` is the state the browser already knows,
+   and `.pr-opt--on` is the class Investment.tsx sets, which is what carries the mark in
+   Safari below 15.4 and Firefox below 121 where :has() does not exist. */
+.mono .proposal .pr-opt-pick:has(input:checked),
+.mono .proposal .pr-opt--on .pr-opt-pick {
+  color: var(--accent);
+  background: var(--faint);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.mono .proposal .pr-opt:has(input:checked),
+.mono .proposal .pr-opt--on {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+/* The card is a label wrapping a radio, so the whole card is the target and the
+   focus ring belongs on the card, not on the 17px control buried in it. */
+.mono .proposal .pr-opt { cursor: pointer }
+.mono .proposal .pr-opt:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.mono .proposal .pr-invest .pr-opts + p,
+.mono .proposal .pr-opts + .pr-p {
+  margin-top: 1.35rem;
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------- signature */
+/* The serious end of the document, so it is the only block on the page drawn
+   in the full-strength ink rule rather than the hairline grey. */
+.mono .proposal .pr-sign {
+  margin-block: clamp(1rem, 3vw, 2rem) var(--gap);
+  padding: clamp(1.25rem, 4vw, 2.25rem);
+  border: 1px solid var(--ink);
+}
+.mono .proposal .pr-sign-statement {
+  max-width: 48ch;
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+  line-height: 1.5;
+  letter-spacing: -.015em;
+  color: var(--ink);
+}
+
+/* The sentence naming what is being accepted. Full-strength ink: it is the only line
+   in the block that states the deal in words, and it has to print. */
+.mono .proposal .pr-sign-accepting {
+  margin-top: 1.15rem;
+  max-width: 56ch;
+  color: var(--ink);
+}
+.mono .proposal .pr-sign-accepting strong { font-weight: 600; color: var(--accent) }
+
+/* The second chance to change the option, next to the pad. Rows, not a dropdown, so
+   the choice is readable without opening anything. */
+.mono .proposal .pr-sign-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1.5rem;
+  margin-top: 1.15rem;
+  padding-top: .35rem;
+  border-top: 1px solid var(--rule);
+}
+.mono .proposal .pr-sign-choice-opt {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-height: 44px;
+  padding-right: .25rem;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease);
+}
+.mono .proposal .pr-sign-choice-opt:hover { color: var(--accent) }
+.mono .proposal .pr-sign-choice-opt:has(input:checked) { color: var(--ink); font-weight: 500 }
+.mono .proposal .pr-sign-choice-opt:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mono .proposal .pr-sign-pad {
+  position: relative;
+  margin-top: clamp(1.5rem, 3.5vw, 2.25rem);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+/* The ruled signing line is painted as the canvas's own background rather than
+   on the pad, so it stays fixed to the drawing area no matter what else the
+   markup puts inside the pad, and the drawn ink sits on top of it. */
+.mono .proposal .pr-sign-canvas {
+  display: block;
+  width: 100%;
+  height: clamp(9rem, 30vw, 12rem);
+  cursor: crosshair;
+  touch-action: none;
+  background-image: linear-gradient(to right, var(--rule) 0 100%);
+  background-size: calc(100% - 3rem) 1px;
+  background-position: 1.5rem calc(100% - 2.2rem);
+  background-repeat: no-repeat;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.mono .proposal .pr-sign-canvas:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* Hint and Clear share a row under the pad. Clear is a real 44px target, not a
+   tiny link, because it is used with a fingertip on a phone. */
+.mono .proposal .pr-sign-hint {
+  font-size: .68rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-sign-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: .75rem;
+  padding: .55rem 1rem;
+  font: inherit;
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+.mono .proposal .pr-sign-clear:hover { color: var(--accent); border-color: var(--accent) }
+.mono .proposal .pr-sign-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+.mono .proposal .pr-sign-fields {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: clamp(1.5rem, 3.5vw, 2.25rem);
+}
+@media (min-width: 640px) {
+  .mono .proposal .pr-sign-fields { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+}
+.mono .proposal .pr-field {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  min-width: 0;
+}
+.mono .proposal .pr-field label,
+.mono .proposal .pr-field > span {
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* 16px, not the page's 13px: any smaller and iOS Safari zooms the whole page
+   the moment the field takes focus, which on a signing form is a nasty jolt
+   halfway through filling it in.
+
+   Tick boxes and radios are excluded by hand. They are inputs too, and without the
+   exclusion the box that turns on the typed-name fallback renders as a full width
+   46px panel with a hairline round it. */
+.mono .proposal .pr-field input:not([type="checkbox"]):not([type="radio"]),
+.mono .proposal .pr-field select,
+.mono .proposal .pr-field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: .65rem .75rem;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  transition: border-color var(--dur-1) var(--ease);
+}
+.mono .proposal .pr-field input::placeholder,
+.mono .proposal .pr-field textarea::placeholder { color: var(--muted) }
+.mono .proposal .pr-field input:focus,
+.mono .proposal .pr-field select:focus,
+.mono .proposal .pr-field textarea:focus { border-color: var(--accent) }
+.mono .proposal .pr-field input:focus-visible,
+.mono .proposal .pr-field select:focus-visible,
+.mono .proposal .pr-field textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.mono .proposal .pr-field input:disabled,
+.mono .proposal .pr-field textarea:disabled { color: var(--muted); background: var(--faint) }
+
+/* The typed-name fallback. A tick box and a sentence, laid out as a row with a real
+   44px target, and the sentence stays in sentence case: this one is prose to be read,
+   not a field label to be scanned. */
+.mono .proposal .pr-field--check {
+  flex-direction: row;
+  align-items: center;
+  gap: .7rem;
+  min-height: 44px;
+  margin-top: 1.35rem;
+}
+.mono .proposal .pr-field--check label {
+  font-size: inherit;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.mono .proposal .pr-field--check:hover label { color: var(--ink) }
+.mono .proposal .pr-field--check input { cursor: pointer }
+.mono .proposal .pr-field--check input:disabled,
+.mono .proposal .pr-field--check input:disabled + label { cursor: default; color: var(--muted) }
+
+.mono .proposal .pr-sign-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+  min-height: 50px;
+  margin-top: clamp(1.5rem, 3.5vw, 2rem);
+  padding: .8rem 1.6rem;
+  font: inherit;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease),
+              background var(--dur-1) var(--ease),
+              border-color var(--dur-1) var(--ease);
+}
+.mono .proposal .pr-sign-submit:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.mono .proposal .pr-sign-submit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px }
+.mono .proposal .pr-sign-submit:disabled {
+  color: var(--muted);
+  background: var(--faint);
+  border-color: var(--rule);
+  cursor: default;
+}
+@media (max-width: 559px) {
+  .mono .proposal .pr-sign-submit { width: 100% }
+}
+
+.mono .proposal .pr-sign-note {
+  margin-top: 1.15rem;
+  max-width: 62ch;
+  font-size: .7rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* Status line for the submit. There is no red in this palette and inventing one
+   would break dark mode, so attention is carried by an accent edge and by the
+   text going to full-strength ink. */
+.mono .proposal .pr-sign-state {
+  margin-top: 1.15rem;
+  padding-left: .85rem;
+  border-left: 2px solid var(--accent);
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+/* The live region is always in the DOM so a screen reader can hear it change. When it
+   has nothing to say it must not leave an accent tick floating under the button. */
+.mono .proposal .pr-sign-state:empty { display: none }
+
+/* The receipt. Once this is on screen the page is a record, so it is drawn as
+   one: a filled panel that survives being printed. */
+.mono .proposal .pr-sign-done {
+  margin-top: clamp(1.5rem, 3.5vw, 2rem);
+  padding: clamp(1.15rem, 3vw, 1.75rem);
+  color: var(--ink);
+  background: var(--faint);
+  border: 1px solid var(--accent);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* The receipt reuses the .pr-kv leader rows, so the row styling is not repeated here.
+   Repeating it would also have overridden the phone stacking those rows already have. */
+.mono .proposal .pr-sign-done > :first-child { margin-top: 0 }
+.mono .proposal .pr-sign-done .pr-kv { border-top-color: var(--accent) }
+
+/* ------------------------------------------------------------------ foot */
+.mono .proposal .pr-foot {
+  border-top: 1px solid var(--ink);
+  padding-block: 1.5rem clamp(2.5rem, 6vw, 4rem);
+  font-size: .7rem;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.mono .proposal .pr-foot p + p { margin-top: .3rem }
+.mono .proposal .pr-foot a { border-bottom: 1px solid var(--rule) }
+.mono .proposal .pr-foot a:hover { color: var(--accent); border-bottom-color: var(--accent) }
+
+/* -------------------------------------------------------- link not valid */
+/* The sheet a stale or truncated link lands on. It is a real page, not an error
+   state: someone the proposal was written for is looking at it. */
+.mono .proposal .pr-notfound {
+  padding-top: clamp(3.5rem, 12vw, 8rem);
+  padding-bottom: clamp(4rem, 14vw, 9rem);
+  max-width: 46rem;
+}
+.mono .proposal .pr-notfound .pr-title { max-width: 18ch }
+/* Keyed off the heading, not :first-of-type: the kicker above the heading is a <p>
+   too, so :first-of-type would have matched that instead and this would have
+   silently done nothing. */
+.mono .proposal .pr-notfound .pr-title + .pr-p { margin-top: 1.75rem }
+.mono .proposal .pr-notfound a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--rule);
+}
+.mono .proposal .pr-notfound a:hover { border-bottom-color: var(--accent) }
+
+/* ============================================================ wide layout */
+/* Above 1100px the contents list leaves the flow and becomes a rail beside the
+   document, marking where you are as you read. Below that it is a plain block
+   above the text, which is where it already sits in the source order.
+
+   Two selectors do the same job. `.pr-grid` is the shell the page actually
+   renders. `:has(> .pr-toc)` is the same rule stated structurally, so the rail
+   still works if the contents list is ever moved into a different wrapper: only
+   one element in the page can be the direct parent of .pr-toc. If the list ever
+   ends up alone inside a wrapper of its own, neither matches and it simply stays
+   a normal block, which is the phone layout. Degraded, never broken.
+
+   No row-gap on this grid on purpose. The rail spans a large number of rows so
+   sticky has something to travel inside, and a row-gap would be multiplied by
+   every one of those empty implicit rows. */
+@media (min-width: 1100px) {
+  .mono .proposal .pr-grid,
+  .mono .proposal:has(> .pr-toc),
+  .mono .proposal :has(> .pr-toc) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--pr-rail);
+    column-gap: clamp(2rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  .mono .proposal .pr-grid > *,
+  .mono .proposal:has(> .pr-toc) > *,
+  .mono .proposal :has(> .pr-toc) > * {
+    grid-column: 1;
+    min-width: 0;
+  }
+  .mono .proposal .pr-toc {
+    grid-column: 2;
+    grid-row: 1 / span 400;
+    position: sticky;
+    top: var(--pr-stick);
+    align-self: start;
+    max-height: calc(100vh - var(--pr-stick) - 2rem);
+    overflow-y: auto;
+    margin-bottom: 0;
+    /* No top rule in the rail. Beside the text it is a margin note, and a full
+       strength rule there reads as the start of another section. */
+    border-top: 0;
+    padding-top: 0;
+  }
+  /* The action bar sits outside the grid in the source, so this only matters if it
+     is ever moved inside one: it should span the document, not the text column. */
+  .mono .proposal .pr-actions { grid-column: 1 / -1 }
+}
+
+/* -------------------------------------------------------- reduced motion */
+/* mono.css already flattens transitions for the whole `.mono` subtree under
+   this setting. Repeated here so the proposal keeps honouring it even if this
+   stylesheet is ever lifted out on its own. */
+@media (prefers-reduced-motion: reduce) {
+  .mono .proposal,
+  .mono .proposal *,
+  .mono .proposal *::before,
+  .mono .proposal *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ================================================================== PRINT
+   This is the PDF. Download is the browser's own print to PDF, so these rules
+   are the document's second form, not a courtesy.
+
+   The literal colours below are the ONE deliberate exception to the tokens-only
+   rule in this file. A client reading in dark mode who prints the page must not
+   be handed white text on a black sheet, so the light palette from mono.css is
+   redeclared on the proposal for print only. The selectors are heavier than the
+   dark-mode rules in mono.css (`:root[data-theme="dark"] .mono` and
+   `:root:not([data-theme="light"]) .mono`) on purpose: they have to win on
+   specificity rather than on file order, because file order is decided by the
+   bundler and not by this file. Both forms are listed, one for .proposal on the
+   same element as .mono and one for .proposal nested inside it.
+   ========================================================================== */
+@page { margin: 18mm 16mm; }
+
+@media print {
+  .mono .proposal,
+  :root[data-theme] .proposal.mono,
+  :root[data-theme] .mono .proposal,
+  :root:not([data-theme="light"]) .proposal.mono,
+  :root:not([data-theme="light"]) .mono .proposal {
+    --paper: #FFFFFF;
+    --ink: #2A2820;
+    --ink-2: #5C5850;
+    --muted: #6B6860;
+    --accent: #3E6A43;
+    --rule: #D4D0C8;
+    --faint: #EBE8E2;
+  }
+
+  .mono .proposal {
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 10pt;
+    line-height: 1.55;
+    padding-bottom: 0;
+  }
+
+  /* Screen furniture. None of it means anything on paper: the contents list is a set
+     of in-page jumps that cannot be followed, and every hidden item below is either a
+     control or an instruction for operating one. What was actually agreed is carried
+     by .pr-sign-accepting, the signature image and the receipt, all of which stay. */
+  .mono .proposal .pr-actions,
+  .mono .proposal .pr-toc,
+  .mono .proposal .pr-opt-pick,
+  .mono .proposal .pr-sign-clear,
+  .mono .proposal .pr-sign-submit,
+  .mono .proposal .pr-sign-hint,
+  .mono .proposal .pr-sign-choice,
+  .mono .proposal .pr-field--check,
+  .mono .proposal .pr-sign-state,
+  .mono .proposal .skip { display: none !important }
+
+  /* Undo the reading rail so the text uses the full printed measure. */
+  .mono .proposal .pr-grid,
+  .mono .proposal:has(> .pr-toc),
+  .mono .proposal :has(> .pr-toc) { display: block }
+  .mono .proposal .sheet {
+    max-width: none;
+    padding-inline: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  /* A section, a price card and the signature block are each one thing. Splitting
+     any of them over two sheets makes the printed copy read as two documents. */
+  .mono .proposal .pr-sec,
+  .mono .proposal .pr-invest,
+  .mono .proposal .pr-opt,
+  .mono .proposal .pr-sign,
+  .mono .proposal .pr-sign-pad,
+  .mono .proposal .pr-sign-done,
+  .mono .proposal .pr-callout,
+  .mono .proposal .pr-kv .r,
+  .mono .proposal .pr-opt-line {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  /* A heading alone at the foot of a page is an orphan. */
+  .mono .proposal .pr-title,
+  .mono .proposal .pr-sec-n,
+  .mono .proposal .pr-sec-h,
+  .mono .proposal .pr-sec-sub,
+  .mono .proposal .pr-h3,
+  .mono .proposal .pr-opt-name,
+  .mono .proposal .pr-sign-statement {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .mono .proposal .pr-p,
+  .mono .proposal .pr-ul > li,
+  .mono .proposal .pr-ol > li { orphans: 3; widows: 3 }
+
+  /* Printed paper cannot follow a link, so the address goes next to the text.
+     In-page anchors are excluded: "#terms" tells a reader nothing. */
+  .mono .proposal a[href^="http"]::after {
+    content: " <" attr(href) ">";
+    font-size: .85em;
+    color: var(--muted);
+    word-break: break-all;
+  }
+  .mono .proposal a[href^="#"]::after { content: "" }
+
+  /* Tighter than the screen: 6rem of air between sections is right on a scroll
+     and wasteful on a sheet. */
+  .mono .proposal .pr-head { padding-top: 0; padding-bottom: 8mm }
+  .mono .proposal .pr-sec,
+  .mono .proposal .pr-invest { padding-top: 6mm; padding-bottom: 8mm }
+  .mono .proposal .pr-sign { margin-block: 8mm 0; padding: 6mm }
+  .mono .proposal .pr-foot { padding-block: 6mm 0 }
+  .mono .proposal .pr-title { font-size: 22pt }
+
+  /* Options print side by side. Two cards stacked over two sheets is not a
+     comparison. */
+  .mono .proposal .pr-opts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(60mm, 1fr));
+    gap: 6mm;
+  }
+
+  /* The record itself has to survive the printer. The signature is a canvas
+     bitmap, the ruled line under it is a background, and the accepted option and
+     the receipt panel are carried by fills, so all of them are told to print
+     rather than being dropped as decoration. */
+  .mono .proposal .pr-sign-canvas,
+  .mono .proposal .pr-sign-done,
+  .mono .proposal .pr-callout,
+  .mono .proposal .pr-opt--rec,
+  .mono .proposal .pr-opt--on,
+  .mono .proposal .pr-opt:has(input:checked) {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* Two fields to a row on paper regardless of the sheet width. */
+  .mono .proposal .pr-sign-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  /* Typed values print as text on a hairline, not as an empty form field. A field with
+     no border and no fill still prints the value the client typed, which is the point:
+     the printed copy has to be the record of what was entered. */
+  .mono .proposal .pr-field input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 0;
+    padding: 1mm 0;
+    font-size: 10pt;
+    color: var(--ink);
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mono .proposal .pr-sign-canvas { height: 34mm }
+
+  /* Without a marked card the printed copy does not say what was accepted. */
+  .mono .proposal .pr-opt--on,
+  .mono .proposal .pr-opt:has(input:checked) {
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: var(--accent);
+  }
+
+  .mono .proposal .pr-p,
+  .mono .proposal .pr-ul,
+  .mono .proposal .pr-ol,
+  .mono .proposal .pr-sec-sub { max-width: none }
+}

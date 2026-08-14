@@ -6,4 +6,9 @@ Allow: /
 # on from a search for the developer.
 Disallow: /freelance
 
+# Client proposals. Each one carries that client's pricing and a signature block, so
+# none of them should ever be crawled. A Disallow alone does not stop indexing if
+# something links in, so the pages also set noindex on themselves (see App.tsx).
+Disallow: /proposal/
+
 Sitemap: https://jojishiotsuki.com/sitemap.xml

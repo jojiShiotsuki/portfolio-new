@@ -14,7 +14,10 @@ AddType image/svg+xml .svg
     Header set Referrer-Policy "strict-origin-when-cross-origin"
     Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://claude-proxy.joji-dev.workers.dev;"
+    # connect-src carries two workers: the (currently disabled) chat proxy, and the
+    # endpoint that stores a signed proposal. img-src already allows data: URLs, which
+    # is what the signature pad produces before it is sent.
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://claude-proxy.joji-dev.workers.dev https://proposal-sign.joji-dev.workers.dev;"
 </IfModule>
 
 <IfModule mod_rewrite.c>

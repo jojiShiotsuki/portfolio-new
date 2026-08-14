@@ -12,6 +12,7 @@ import { useTheme } from './ThemeContext';
 const CaseStudies = React.lazy(() => import('./components/mono/CaseStudies'));
 const AssistantPage = React.lazy(() => import('./components/AssistantPage'));
 const FreelancePage = React.lazy(() => import('./components/FreelancePage'));
+const ProposalPage = React.lazy(() => import('./components/proposal/ProposalPage'));
 
 // The AI assistant is switched OFF. The Cloudflare Worker behind it stopped getting a
 // usable answer from the Anthropic API, so every visitor who opened the chat got an
@@ -60,10 +61,17 @@ const ScrollToTop: React.FC = () => {
 // not stop indexing if something links in, so set noindex on the page itself too.
 const NOINDEX_ROUTES = ['/freelance'];
 
+// Client proposals carry pricing and a signature block. Every path under /proposal is
+// hidden from search, so this is a prefix rather than an exact path like the ones above.
+const NOINDEX_PREFIXES = ['/proposal/'];
+
+const isNoindex = (pathname: string): boolean =>
+  NOINDEX_ROUTES.includes(pathname) || NOINDEX_PREFIXES.some(p => pathname.startsWith(p));
+
 const RouteMeta: React.FC = () => {
   const { pathname } = useLocation();
   React.useEffect(() => {
-    const shouldHide = NOINDEX_ROUTES.includes(pathname);
+    const shouldHide = isNoindex(pathname);
     let tag = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
     if (shouldHide) {
       if (!tag) {
@@ -145,6 +153,10 @@ const Shell: React.FC = () => {
         <Route path="/" element={<MonoHome />} />
         <Route path="/projects" element={<CaseStudies />} />
         <Route path="/freelance" element={<FreelancePage />} />
+        {/* Client proposals. The slug carries a random suffix, so an unknown slug is
+            either a typo or a guess; ProposalPage answers both with a real "not found"
+            sheet rather than the redirect below, which would look like the link died. */}
+        <Route path="/proposal/:slug" element={<ProposalPage />} />
         {ASSISTANT_ENABLED && <Route path="/talk" element={<AssistantPage />} />}
         {/* The host serves index.html for any path, so a URL with no route used to
             render an empty shell that still answered 200. /home-2, /home-3 and

@@ -3,6 +3,8 @@ import type { ProposalOption, ProposalSignature } from '../../lib/proposals/type
 import { submitSignature } from '../../lib/proposals/sign';
 
 interface SignatureBlockProps {
+  /** Its number in the document, derived in ProposalPage so this cannot disagree. */
+  n: string;
   slug: string;
   signature: ProposalSignature;
   options: ProposalOption[];
@@ -111,6 +113,7 @@ const canvasHasInk = (canvas: HTMLCanvasElement): boolean => {
 const EMAIL_SHAPE = /^\S+@\S+\.\S+$/;
 
 const SignatureBlock: React.FC<SignatureBlockProps> = ({
+  n,
   slug,
   signature,
   options,
@@ -375,6 +378,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
 
   return (
     <section className="pr-sign" id="signature" tabIndex={-1} aria-labelledby="signature-h">
+      <span className="pr-sec-n" aria-hidden="true">{n}</span>
       <h2 className="pr-sec-h" id="signature-h">Acceptance</h2>
 
       <p className="pr-sign-statement">{signature.statement}</p>

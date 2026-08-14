@@ -53,7 +53,6 @@ export const innerWealth: Proposal = {
   sections: [
     {
       id: 'welcome',
-      n: '01',
       heading: 'Welcome and thank you',
       blocks: [
         { kind: 'p', text: 'Thank you for the call on 14 August, and thanks to Mitchell for putting us in touch.' },
@@ -75,7 +74,6 @@ export const innerWealth: Proposal = {
 
     {
       id: 'overview',
-      n: '02',
       heading: 'Overview',
       subheading: 'Where the practice is, and where the website is',
       blocks: [
@@ -119,7 +117,6 @@ export const innerWealth: Proposal = {
 
     {
       id: 'scope-of-work',
-      n: '03',
       heading: 'Scope of work',
       subheading: 'Two parts: build the site, then work on getting it found',
       blocks: [
@@ -157,7 +154,6 @@ export const innerWealth: Proposal = {
 
     {
       id: 'timeline',
-      n: '04',
       heading: 'Timeline, start date and what we need',
       subheading: 'The two questions you asked on the call, answered',
       blocks: [
@@ -234,7 +230,6 @@ export const innerWealth: Proposal = {
   terms: [
     {
       id: 'terms',
-      n: '06',
       heading: 'Terms',
       subheading: 'Written plainly, and short enough to actually read',
       blocks: [

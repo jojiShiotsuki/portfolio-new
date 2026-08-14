@@ -27,8 +27,14 @@ export type Block =
 export interface ProposalSection {
   /** kebab-case, stable, used as the anchor id and in the contents nav. */
   id: string;
-  /** Two-digit number shown in the contents list, e.g. "03". */
-  n: string;
+  /*
+    No number here on purpose. Section numbers used to be written into the data and the
+    pricing block worked its own out by adding one to the last section, which meant a
+    proposal could number its headings differently from its own contents list, and two
+    blocks (the quotes and the acceptance) ended up with no number at all. The numbering
+    is derived once from render order in ProposalPage instead, so the rail and the
+    headings cannot disagree and inserting a section renumbers everything after it.
+  */
   heading: string;
   /** Optional line under the heading, set in the muted colour. */
   subheading?: string;

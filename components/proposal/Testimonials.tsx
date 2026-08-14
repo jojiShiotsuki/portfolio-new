@@ -3,6 +3,8 @@ import type { Testimonial } from '../../lib/proposals/types';
 
 interface TestimonialsProps {
   items: Testimonial[];
+  /** Its number in the document, derived in ProposalPage so this cannot disagree. */
+  n: string;
 }
 
 /*
@@ -18,11 +20,12 @@ interface TestimonialsProps {
   <figure> and <figcaption> so a screen reader announces the words and their source as
   one unit.
 */
-const Testimonials: React.FC<TestimonialsProps> = ({ items }) => {
+const Testimonials: React.FC<TestimonialsProps> = ({ items, n }) => {
   if (items.length === 0) return null;
 
   return (
     <section className="pr-sec pr-quotes" id="testimonials" aria-labelledby="testimonials-h">
+      <span className="pr-sec-n" aria-hidden="true">{n}</span>
       <h2 className="pr-sec-h" id="testimonials-h">What clients say</h2>
 
       {items.map(item => (

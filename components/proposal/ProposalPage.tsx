@@ -36,13 +36,40 @@ const formatDate = (iso: string): string => {
   and it takes 05. When they run straight on, the pricing carries no number rather than
   pushing the terms out of step with the document the client may already have read.
 */
-const investmentNumber = (proposal: Proposal): string => {
-  const last = proposal.sections[proposal.sections.length - 1]?.n;
-  const parsed = last ? Number.parseInt(last, 10) : Number.NaN;
-  if (Number.isNaN(parsed)) return '';
-  const next = String(parsed + 1).padStart(2, '0');
-  const taken = new Set([...proposal.sections, ...proposal.terms].map(section => section.n));
-  return taken.has(next) ? '' : next;
+/*
+  Every numbered block in the document, in the order it renders, numbered once.
+
+  This is the only place numbering happens. The contents list and the headings both read
+  from it, so they cannot drift apart, and inserting a section renumbers everything below
+  it without anyone editing a data file.
+*/
+type ChapterKind = 'section' | 'quotes' | 'investment' | 'terms' | 'signature';
+
+interface Chapter {
+  id: string;
+  n: string;
+  title: string;
+  kind: ChapterKind;
+  section?: ProposalSection;
+}
+
+const buildChapters = (proposal: Proposal): Chapter[] => {
+  const [first, ...rest] = proposal.sections;
+
+  const raw: Omit<Chapter, 'n'>[] = [
+    ...(first ? [{ id: first.id, title: first.heading, kind: 'section' as const, section: first }] : []),
+    /* The quotes band sits directly under the opening letter, which is where the proposal
+       this one is modelled on puts its own. */
+    ...((proposal.testimonials?.length ?? 0) > 0
+      ? [{ id: 'testimonials', title: 'What clients say', kind: 'quotes' as const }]
+      : []),
+    ...rest.map(section => ({ id: section.id, title: section.heading, kind: 'section' as const, section })),
+    { id: 'investment', title: 'Investment', kind: 'investment' as const },
+    ...proposal.terms.map(section => ({ id: section.id, title: section.heading, kind: 'terms' as const, section })),
+    { id: 'signature', title: 'Acceptance', kind: 'signature' as const },
+  ];
+
+  return raw.map((chapter, i) => ({ ...chapter, n: String(i + 1).padStart(2, '0') }));
 };
 
 /* The recommended option is the one preselected. Nobody is signed up to it by that: the
@@ -54,11 +81,12 @@ const defaultOptionId = (proposal: Proposal): string => {
 
 interface SectionProps {
   section: ProposalSection;
+  n: string;
 }
 
-const Section: React.FC<SectionProps> = ({ section }) => (
+const Section: React.FC<SectionProps> = ({ section, n }) => (
   <section className="pr-sec" id={section.id} aria-labelledby={`${section.id}-h`}>
-    <span className="pr-sec-n" aria-hidden="true">{section.n}</span>
+    <span className="pr-sec-n" aria-hidden="true">{n}</span>
     <h2 className="pr-sec-h" id={`${section.id}-h`}>{section.heading}</h2>
     {section.subheading ? <p className="pr-sec-sub">{section.subheading}</p> : null}
     <Blocks blocks={section.blocks} />
@@ -92,36 +120,18 @@ const ProposalPage: React.FC = () => {
     return () => { document.title = previous; };
   }, [proposal]);
 
-  /*
-    Contents. The quotes, the pricing and the acceptance carry no number: the proposal
-    data numbers its own sections and its terms in one run, which leaves nothing free
-    between them, and none of those three reads as another chapter of the argument.
+  /* One numbered run over the whole document, used by the contents and the headings
+     alike. Every block gets a number, the quotes and the acceptance included: a row in
+     the rail with an empty number column reads as a mistake, not as a decision. */
+  const chapters: Chapter[] = React.useMemo(
+    () => (proposal ? buildChapters(proposal) : []),
+    [proposal],
+  );
 
-    The quotes row sits second because the band itself does, directly under the opening
-    letter. Slicing rather than unshifting so a proposal with no sections at all still
-    produces a list in the right order instead of throwing.
-  */
-  const tocItems: TocItem[] = React.useMemo(() => {
-    if (!proposal) return [];
-    const sections = proposal.sections.map(section => ({
-      id: section.id,
-      n: section.n,
-      title: section.heading,
-    }));
-    const quotesRow: TocItem[] = (proposal.testimonials?.length ?? 0) > 0
-      /* No note on this row. The rail is narrow, and "What clients say" plus a dot leader
-         plus a right hand word wraps into itself and reads as two broken lines. */
-      ? [{ id: 'testimonials', n: '', title: 'What clients say' }]
-      : [];
-    return [
-      ...sections.slice(0, 1),
-      ...quotesRow,
-      ...sections.slice(1),
-      { id: 'investment', n: investmentNumber(proposal), title: 'Investment', note: 'Pricing' },
-      ...proposal.terms.map(section => ({ id: section.id, n: section.n, title: section.heading })),
-      { id: 'signature', n: '', title: 'Acceptance', note: 'Sign here' },
-    ];
-  }, [proposal]);
+  const tocItems: TocItem[] = React.useMemo(
+    () => chapters.map(({ id, n, title }) => ({ id, n, title })),
+    [chapters],
+  );
 
   if (!proposal) {
     /* Not a redirect. A link that quietly bounces to the home page looks like the
@@ -207,35 +217,48 @@ const ProposalPage: React.FC = () => {
 
           <div className="pr-grid sheet">
             <div className="pr-main">
-              {proposal.sections.map((section, index) => (
-                <React.Fragment key={section.id}>
-                  <Section section={section} />
-                  {/* The quotes band goes directly under the opening letter, which is
-                      where types.ts puts it and where the proposal this one is modelled
-                      on puts its own. Testimonials renders nothing when there are none,
-                      so this needs no second condition. */}
-                  {index === 0 ? <Testimonials items={proposal.testimonials ?? []} /> : null}
-                </React.Fragment>
-              ))}
-              {/* A proposal with no sections at all would otherwise put a row in the
-                  contents pointing at a band that was never rendered. */}
-              {proposal.sections.length === 0 ? (
-                <Testimonials items={proposal.testimonials ?? []} />
-              ) : null}
-
-              <Investment
-                options={proposal.options}
-                optionsNote={proposal.optionsNote}
-                n={investmentNumber(proposal)}
-                selectedOptionId={selectedOptionId}
-                onSelectOption={setSelectedOptionId}
-              />
-
-              {proposal.terms.map(section => (
-                <Section key={section.id} section={section} />
-              ))}
+              {/* Rendered straight off the same numbered run the contents list uses, so
+                  the order on the page and the order in the rail are the same list read
+                  twice rather than two lists kept in step by hand. */}
+              {chapters.map(chapter => {
+                switch (chapter.kind) {
+                  case 'section':
+                  case 'terms':
+                    return chapter.section
+                      ? <Section key={chapter.id} section={chapter.section} n={chapter.n} />
+                      : null;
+                  case 'quotes':
+                    return (
+                      <Testimonials
+                        key={chapter.id}
+                        n={chapter.n}
+                        items={proposal.testimonials ?? []}
+                      />
+                    );
+                  case 'investment':
+                    return (
+                      <Investment
+                        key={chapter.id}
+                        options={proposal.options}
+                        optionsNote={proposal.optionsNote}
+                        n={chapter.n}
+                        selectedOptionId={selectedOptionId}
+                        onSelectOption={setSelectedOptionId}
+                      />
+                    );
+                  case 'signature':
+                    return null;
+                  default: {
+                    /* Exhaustiveness. A new chapter kind must be handled here, not
+                       silently dropped out of a document someone is about to sign. */
+                    const never: never = chapter.kind;
+                    return never;
+                  }
+                }
+              })}
 
               <SignatureBlock
+                n={chapters[chapters.length - 1]?.n ?? ''}
                 slug={proposal.slug}
                 signature={proposal.signature}
                 options={proposal.options}

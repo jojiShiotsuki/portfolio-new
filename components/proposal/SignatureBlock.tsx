@@ -99,6 +99,41 @@ const paintStrokes = (
   }
 };
 
+/*
+  The typed alternative, painted here rather than inside the export so the pad and the
+  exported PNG are drawn by the same code. They used to be two paths, and the pad stayed
+  blank while the export carried a mark, which meant the client committed to a signature
+  they had never been shown.
+
+  The image says in words that it was typed, because a record that cannot tell a drawn
+  signature from a typed one is a record that is quietly wrong about what happened.
+*/
+const paintTypedName = (
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  name: string,
+  palette: Palette,
+): void => {
+  ctx.fillStyle = palette.ink;
+  ctx.textBaseline = 'alphabetic';
+
+  /* The size was guessed from the character count, and the guess ran long: a 34 character
+     name inked to the last pixel of a 938px pad, so the mark the client checked and the
+     PNG in the record were both cut off at the right edge. It is measured now, then shrunk
+     by exactly the amount it overruns, so the whole name is always on the pad. */
+  const usable = width * 0.88;
+  let size = Math.max(16, height * 0.3);
+  ctx.font = `${Math.round(size)}px ${palette.family}`;
+  const measured = ctx.measureText(name).width;
+  if (measured > usable) size = Math.max(8, (size * usable) / measured);
+
+  ctx.font = `${Math.round(size)}px ${palette.family}`;
+  ctx.fillText(name, width * 0.06, height * 0.56);
+  ctx.font = `${Math.max(10, Math.round(size * 0.34))}px ${palette.family}`;
+  ctx.fillText('Typed signature', width * 0.06, height * 0.82);
+};
+
 /* Whether the pad actually has ink on it, asked of the pixels rather than of a flag. A
    pointer event fires when someone rests a finger on the pad and takes it off again
    without moving, and a proposal should not count that as a signature. */
@@ -112,7 +147,53 @@ const canvasHasInk = (canvas: HTMLCanvasElement): boolean => {
   return false;
 };
 
-const EMAIL_SHAPE = /^\S+@\S+\.\S+$/;
+/*
+  Copied verbatim from EMAIL_RE in worker-sign/src/index.ts, and it has to stay that way.
+
+  The page used to test /^\S+@\S+\.\S+$/, which accepts an @ or a dot inside either half,
+  so an ordinary typo like "tony@innerwealth..au" enabled the Sign button and was refused
+  by the worker after the client had already drawn their signature and pressed it. The
+  page must not be looser than the thing it posts to. It must never be stricter either,
+  because a wrong rejection here costs a signature.
+*/
+const EMAIL_SHAPE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
+
+/*
+  The same alignment as the pattern above, for the same reason.
+
+  The worker refuses a name over 120 characters, a title over 120 and an address over 254
+  (MAX_NAME, MAX_TITLE and MAX_EMAIL in worker-sign/src/index.ts). The page had no cap at
+  all, so a pasted name or address that was too long enabled the Sign button, took the
+  client's signature and came back rejected. The fields stop at the limit and the button
+  stays off, so the refusal happens before the signature, not after it.
+*/
+const MAX_NAME = 120;
+const MAX_TITLE = 120;
+const MAX_EMAIL = 254;
+
+/*
+  The date on the client's copy of the signed record.
+
+  The locale is pinned to en-AU for the same reason ProposalPage pins it: the client is
+  Australian, and a record that prints 8/14/2026 on a machine that is not day first is a
+  document disagreeing with itself. The zone is named because this proposal is signed in
+  one country and recorded in another, and an undated or ambiguously dated record is the
+  one thing a signature page cannot be. The server stamps the authoritative time against
+  the reference; this is the same instant the payload carried.
+*/
+const AU_SIGNED_AT: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+  timeZoneName: 'short',
+};
+
+const formatSignedAt = (iso: string): string => {
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime()) ? '' : date.toLocaleString('en-AU', AU_SIGNED_AT);
+};
 
 const SignatureBlock: React.FC<SignatureBlockProps> = ({
   n,
@@ -132,6 +213,14 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
      style recalculation, and a pointermove handler runs on every reported position. */
   const inkRef = React.useRef('');
   const mountedRef = React.useRef(true);
+  /* What the pad should be painting when it is repainted by something that is not a
+     render: a resize, a device pixel ratio change, a theme change. Held in a ref so the
+     painter can stay a callback with no dependencies, which is what stops the
+     ResizeObserver being torn down and rebuilt on every keystroke of the name field. */
+  const typedRef = React.useRef({ on: false, name: '' });
+  /* The receipt takes focus on success, so a keyboard or screen reader user lands on the
+     confirmation instead of at the top of a 12,000px document. */
+  const doneRef = React.useRef<HTMLDivElement | null>(null);
 
   const [hasInk, setHasInk] = React.useState(false);
   const [useTypedSignature, setUseTypedSignature] = React.useState(false);
@@ -153,7 +242,19 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   */
   const [signedOption, setSignedOption] = React.useState<ProposalOption | null>(null);
   const [signedName, setSignedName] = React.useState('');
+  const [signedTitle, setSignedTitle] = React.useState('');
   const [signedEmail, setSignedEmail] = React.useState('');
+  /*
+    The mark itself, kept on the page after signing.
+
+    The pad lives inside the form, and the form is replaced by the receipt at success, so
+    the signed document used to have no signature anywhere on it: a client who signed and
+    then pressed Download PDF got a proposal with a receipt and no mark, which is the one
+    thing the whole feature exists to produce. This is the exact data URL that was posted,
+    not a re-export, so the image on the page is the image in the record.
+  */
+  const [signedImage, setSignedImage] = React.useState('');
+  const [signedAt, setSignedAt] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const locked = state === 'submitting' || state === 'done';
@@ -196,9 +297,18 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
     ctxRef.current = ctx;
     sizeRef.current = { w: rect.width, h: rect.height };
 
-    inkRef.current = readPalette(canvas).ink;
+    const palette = readPalette(canvas);
+    inkRef.current = palette.ink;
     ctx.clearRect(0, 0, rect.width, rect.height);
-    paintStrokes(ctx, rect.width, rect.height, strokesRef.current, inkRef.current);
+
+    /* In typed mode the pad shows the typed mark rather than the strokes. The strokes are
+       still there and are painted again the moment the box is unticked. */
+    const typed = typedRef.current;
+    if (typed.on) {
+      if (typed.name) paintTypedName(ctx, rect.width, rect.height, typed.name, palette);
+      return;
+    }
+    paintStrokes(ctx, rect.width, rect.height, strokesRef.current, palette.ink);
   }, []);
 
   React.useEffect(() => {
@@ -209,6 +319,21 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
     setupCanvas();
     return () => observer.disconnect();
   }, [setupCanvas]);
+
+  /* Keep the pad honest about what will be recorded. Ticking the box or typing another
+     letter of the name repaints the mark, so the client signs while looking at the same
+     image the server is about to be sent, not at an empty box. */
+  React.useEffect(() => {
+    typedRef.current = { on: useTypedSignature, name: fullName.trim() };
+    setupCanvas();
+  }, [useTypedSignature, fullName, setupCanvas]);
+
+  /* Success is the one outcome in this document that has to be handed to the reader. The
+     receipt takes focus so a keyboard user lands on it rather than at the top of the
+     page, and so a screen reader reads it even if the live region is missed. */
+  React.useEffect(() => {
+    if (state === 'done') doneRef.current?.focus();
+  }, [state]);
 
   /* Ink drawn in one theme is invisible in the other, so a theme change repaints it in
      the new token colour. The class carries no colour of its own, so this is the only
@@ -317,25 +442,19 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   const exportDrawnSignature = (): string | null =>
     buildImage((ctx, palette, w, h) => paintStrokes(ctx, w, h, strokesRef.current, palette.ink));
 
-  /* The typed alternative. The image says in words that it was typed, because the payload
-     has nowhere else to carry that and a record that cannot tell a drawn signature from a
-     typed one is a record that is quietly wrong about what happened. */
   const exportTypedSignature = (name: string): string | null =>
-    buildImage((ctx, palette, w, h) => {
-      ctx.fillStyle = palette.ink;
-      ctx.textBaseline = 'alphabetic';
-      const size = Math.max(16, Math.min(h * 0.3, (w * 0.88) / Math.max(name.length, 10) * 1.8));
-      ctx.font = `${Math.round(size)}px ${palette.family}`;
-      ctx.fillText(name, w * 0.06, h * 0.56);
-      ctx.font = `${Math.max(10, Math.round(size * 0.34))}px ${palette.family}`;
-      ctx.fillText('Typed signature', w * 0.06, h * 0.82);
-    });
+    buildImage((ctx, palette, w, h) => paintTypedName(ctx, w, h, name, palette));
 
   const trimmedName = fullName.trim();
   const trimmedEmail = email.trim();
-  const emailLooksReal = EMAIL_SHAPE.test(trimmedEmail);
+  const emailLooksReal = EMAIL_SHAPE.test(trimmedEmail) && trimmedEmail.length <= MAX_EMAIL;
+  const nameFits = trimmedName.length > 0 && trimmedName.length <= MAX_NAME;
+  const titleFits = roleTitle.trim().length <= MAX_TITLE;
   const signatureReady = useTypedSignature ? trimmedName.length > 0 : hasInk;
-  const canSubmit = signatureReady && trimmedName.length > 0 && emailLooksReal && !locked;
+  const canSubmit = signatureReady && nameFits && titleFits && emailLooksReal && !locked;
+  /* While a signature is in flight the button is kept enabled and inert rather than
+     disabled, because disabling a focused button hands focus to <body>. */
+  const submitDisabled = state === 'submitting' ? false : !canSubmit;
 
   const selectedOption = options.find(option => option.id === selectedOptionId) ?? options[0];
 
@@ -346,8 +465,31 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         : 'Draw your signature above, or tick the box to sign with your typed name.';
     }
     if (trimmedName.length === 0) return 'Add your full name.';
-    if (!emailLooksReal) return 'Add the email address the copy should go to.';
+    /* Said in the same words the field limit uses, because the alternative is a client
+       looking at a button that will not turn on and no reason given. */
+    if (!nameFits) return `Shorten your name to ${MAX_NAME} characters or fewer.`;
+    if (!titleFits) return `Shorten your title to ${MAX_TITLE} characters or fewer.`;
+    /* Not "the address the copy goes to". Nothing emails the client, so nothing here says
+       it will. See the receipt row for the same correction. */
+    if (!emailLooksReal) return 'Add the email address this should be recorded against.';
     return '';
+  };
+
+  /*
+    What the live region says, in every state.
+
+    This sentence used to live inside the form, and the form is replaced wholesale at
+    success, so the one moment worth announcing was the one moment with no live region on
+    the page: the client heard "Signing", then silence, and focus fell to the top of the
+    document. The paragraph now sits outside both branches, so the same DOM node survives
+    the swap and the change of text is what gets read out.
+  */
+  const liveMessage = (): string => {
+    if (state === 'done') {
+      return `Signed and recorded. Thank you, ${signedName}. Your reference is ${reference}.`;
+    }
+    if (state === 'error') return errorMessage;
+    return missing();
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -367,6 +509,8 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
     setState('submitting');
     setErrorMessage('');
 
+    const clientTime = new Date().toISOString();
+
     const result = await submitSignature({
       slug,
       drawing,
@@ -374,7 +518,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       typedTitle: roleTitle.trim(),
       email: trimmedEmail,
       optionId: selectedOption.id,
-      clientTime: new Date().toISOString(),
+      clientTime,
       /* The image says "Typed signature" on its face, but a stored record should not
          need reading with your eyes to answer which of the two this was. */
       typedSignature: useTypedSignature,
@@ -386,7 +530,12 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       setReference(result.reference);
       setSignedOption(selectedOption ?? null);
       setSignedName(trimmedName);
+      setSignedTitle(roleTitle.trim());
       setSignedEmail(trimmedEmail);
+      /* The posted image, not a fresh export: the record on the page has to be the record
+         that was sent, and the pad it came from is about to be unmounted. */
+      setSignedImage(drawing);
+      setSignedAt(clientTime);
       setState('done');
       onSigned();
       return;
@@ -432,31 +581,58 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       ) : null}
 
       {state === 'done' ? (
-        <div className="pr-sign-done">
-          <p className="pr-p">
-            Signed and recorded. Thank you, {signedName}.
-          </p>
-          <dl className="pr-kv">
-            <div className="r">
-              <dt>Reference</dt>
-              <span className="leader" aria-hidden="true" />
-              <dd>{reference}</dd>
-            </div>
-            <div className="r">
-              <dt>Option accepted</dt>
-              <span className="leader" aria-hidden="true" />
-              <dd>{signedOption ? signedOption.name : ''}</dd>
-            </div>
-            <div className="r">
-              <dt>Copy sent to</dt>
-              <span className="leader" aria-hidden="true" />
-              <dd>{signedEmail}</dd>
-            </div>
-          </dl>
-          <p className="pr-sign-note">
-            Keep the reference. This proposal has been signed and cannot be signed again from
-            this page.
-          </p>
+        /* tabIndex -1 so success can be handed to the reader. It is focused, never
+           tabbed to: a receipt is not a control. */
+        <div className="pr-sign-done" ref={doneRef} tabIndex={-1}>
+          <div className="pr-sign-record">
+            {signedImage ? (
+              <img
+                className="pr-sign-record-img"
+                src={signedImage}
+                alt={`Signature of ${signedName}`}
+              />
+            ) : null}
+            <div className="pr-sign-record-line" aria-hidden="true" />
+            <dl className="pr-kv pr-sign-record-fields">
+              <div className="r">
+                <dt>Signed by</dt>
+                <span className="leader" aria-hidden="true" />
+                <dd>{signedName}</dd>
+              </div>
+              {/* Title is the one field the form does not insist on, so the row is not
+                  drawn at all rather than printed with a dot leader running into a gap. */}
+              {signedTitle ? (
+                <div className="r">
+                  <dt>Title or role</dt>
+                  <span className="leader" aria-hidden="true" />
+                  <dd>{signedTitle}</dd>
+                </div>
+              ) : null}
+              <div className="r">
+                {/* Not "Copy sent to". Nothing in the system emails the signer, and a
+                    receipt that states a delivery that did not happen is the one line on
+                    this page that could be held against it. */}
+                <dt>Recorded against</dt>
+                <span className="leader" aria-hidden="true" />
+                <dd>{signedEmail}</dd>
+              </div>
+              <div className="r">
+                <dt>Signed on</dt>
+                <span className="leader" aria-hidden="true" />
+                <dd>{formatSignedAt(signedAt)}</dd>
+              </div>
+              <div className="r">
+                <dt>Reference</dt>
+                <span className="leader" aria-hidden="true" />
+                <dd>{reference}</dd>
+              </div>
+              <div className="r">
+                <dt>Option accepted</dt>
+                <span className="leader" aria-hidden="true" />
+                <dd>{signedOption ? signedOption.name : ''}</dd>
+              </div>
+            </dl>
+          </div>
         </div>
       ) : (
         <form onSubmit={handleSubmit} noValidate>
@@ -477,10 +653,38 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
             />
           </div>
 
+          {/*
+            Print only, and deliberately absent from the screen.
+
+            Printing this page and signing it by hand is a live delivery path: the worker
+            that records a signature is not deployed yet, so for now it is the ONLY path.
+            On paper the pad became an unlabelled box with nowhere to write a date and
+            nothing tying the sheet to the proposal, because on screen the date is stamped
+            by the server and the reference only arrives with the receipt. Neither exists
+            on a page nobody has submitted, so both are drawn here for the printed copy.
+
+            aria-hidden and no tab stop: on screen this is not there at all, and a screen
+            reader should not meet a field that only exists on paper.
+          */}
+          <div className="pr-sign-hand" aria-hidden="true">
+            <div className="r">
+              <span className="k">Date signed</span>
+              <span className="v" />
+            </div>
+            <div className="r">
+              <span className="k">Proposal reference</span>
+              <span className="v v--filled">{slug}</span>
+            </div>
+          </div>
+
+          {/* The way out for someone who cannot draw is said here, in text everybody
+              reaches. It used to be said only inside the canvas aria-label, and the canvas
+              is not a tab stop, so a screen reader user in forms mode met a "Clear
+              signature" button with nothing having told them what there was to clear. */}
           <p className="pr-sign-hint">
             {useTypedSignature
               ? 'Your typed name is being used as your signature. Untick the box to draw instead.'
-              : 'Draw your signature in the box.'}
+              : 'Draw your signature in the box, or tick the box below to sign with your typed name instead.'}
           </p>
 
           {/* Not disabled when the pad is empty. Disabling it the moment it is used takes
@@ -495,21 +699,35 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
           </button>
 
           <div className="pr-field pr-field--check">
-            <input
-              id="pr-sign-typed"
-              type="checkbox"
-              checked={useTypedSignature}
-              disabled={locked}
-              onChange={event => {
-                setUseTypedSignature(event.target.checked);
-                if (event.target.checked) {
-                  strokesRef.current = [];
-                  setHasInk(false);
-                  setupCanvas();
-                }
-              }}
-            />
-            <label htmlFor="pr-sign-typed">Use my typed name as my signature</label>
+            {/*
+              The label wraps the box, the way the option radios above already do, so the
+              whole row is the target rather than a 17px square and a line of text. This
+              is the accessible path to signing, the control a client uses precisely
+              because a fingertip cannot draw a usable mark, so it is the last control on
+              the page that should be hard to hit.
+
+              The height is set here rather than in the stylesheet because the 44px floor
+              is behaviour, not decoration, and it must hold even if the row's styling
+              changes. No colour is set: those stay in the tokens.
+            */}
+            <label
+              htmlFor="pr-sign-typed"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minHeight: '44px' }}
+            >
+              {/* Ticking this used to empty strokesRef, and the strokes are the only copy
+                  of the ink, so a client who ticked the box to see what it did lost the
+                  signature they had just drawn, with no warning and no way back. The
+                  strokes are kept now: padDisabled stops any further drawing and the
+                  painter shows the typed mark instead, so unticking restores the drawing. */}
+              <input
+                id="pr-sign-typed"
+                type="checkbox"
+                checked={useTypedSignature}
+                disabled={locked}
+                onChange={event => setUseTypedSignature(event.target.checked)}
+              />
+              <span>Use my typed name as my signature</span>
+            </label>
           </div>
 
           <div className="pr-sign-fields">
@@ -519,6 +737,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
                 id="pr-sign-name"
                 type="text"
                 autoComplete="name"
+                maxLength={MAX_NAME}
                 value={fullName}
                 disabled={locked}
                 onChange={event => setFullName(event.target.value)}
@@ -531,6 +750,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
                 id="pr-sign-title"
                 type="text"
                 autoComplete="organization-title"
+                maxLength={MAX_TITLE}
                 value={roleTitle}
                 disabled={locked}
                 onChange={event => setRoleTitle(event.target.value)}
@@ -544,6 +764,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
                 type="email"
                 inputMode="email"
                 autoComplete="email"
+                maxLength={MAX_EMAIL}
                 value={email}
                 disabled={locked}
                 onChange={event => setEmail(event.target.value)}
@@ -551,19 +772,30 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
             </div>
           </div>
 
-          <button type="submit" className="pr-sign-submit" disabled={!canSubmit}>
+          {/* Stays enabled while the request is in flight. Disabling the control that has
+              focus blurs it to <body>, which drops a keyboard user at the top of a
+              12,000px document at the exact moment the answer arrives. handleSubmit
+              refuses a second press instead. */}
+          <button type="submit" className="pr-sign-submit" disabled={submitDisabled}>
             {state === 'submitting' ? 'Signing' : 'Sign and accept'}
           </button>
-
-          {/* One live region for both the reason the button is off and the reason the
-              last attempt failed, so a screen reader hears the change either way. */}
-          <p className="pr-sign-state" role="status" aria-live="polite">
-            {state === 'error' ? errorMessage : missing()}
-          </p>
-
-          <p className="pr-sign-note">{signature.note}</p>
         </form>
       )}
+
+      {/* One live region, outside both branches, so the same node survives the swap from
+          the form to the receipt and success is announced rather than silently replacing
+          the region that would have announced it. It carries the reason the button is off,
+          the reason an attempt failed, and the confirmation, so a screen reader hears the
+          change whichever way it goes. */}
+      <p className="pr-sign-state" role="status" aria-live="polite">
+        {liveMessage()}
+      </p>
+
+      <p className="pr-sign-note">
+        {state === 'done'
+          ? 'Keep the reference. This proposal has been signed and cannot be signed again from this page.'
+          : signature.note}
+      </p>
     </section>
   );
 };

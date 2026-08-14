@@ -100,8 +100,17 @@ const ProposalToc: React.FC<ProposalTocProps> = ({ items }) => {
             >
               <span className="n">{item.n}</span>
               <span className="t">{item.title}</span>
-              <span className="leader" aria-hidden="true" />
-              {item.note ? <span className="c">{item.note}</span> : null}
+              {/* A leader is a bridge between a title and a note, so it only renders when
+                  there is a note to reach. These rows carry none, and below 1100px, where
+                  the list is a block rather than the rail, the dots ran the width of the
+                  page and stopped at nothing. mono.css treats its own rows the same way,
+                  hiding the leader wherever the right hand column is gone. */}
+              {item.note ? (
+                <>
+                  <span className="leader" aria-hidden="true" />
+                  <span className="c">{item.note}</span>
+                </>
+              ) : null}
             </a>
           </li>
         ))}

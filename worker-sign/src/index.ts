@@ -18,6 +18,14 @@
 interface Env {
   /** Set in wrangler.toml [vars]. The one production origin allowed to call this. */
   ALLOWED_ORIGIN: string;
+  /**
+   * Var. Set to the string "false" in wrangler.toml to stop the deployed worker accepting
+   * http://localhost and http://127.0.0.1 origins. It is left on by default because the
+   * dev page at localhost:5199 posts to this same deployed worker (SIGN_ENDPOINT in
+   * lib/proposals/sign.ts is absolute), so closing it by default would silently break the
+   * only way Joji can test signing. Turn it off once the proposal has been signed.
+   */
+  ALLOW_LOCAL_ORIGINS?: string;
   /** Created with `wrangler kv namespace create SIGNATURES`. Holds records and rate counters. */
   SIGNATURES: KVNamespace;
   /* Everything below is optional at runtime. The worker degrades instead of breaking. */
@@ -122,19 +130,54 @@ const REF_LENGTH = 10;
 
 // --- Origins ---
 
+/** The only hosts a development origin is ever allowed to be. Exact matches, never prefixes. */
+const LOCAL_HOSTNAMES: readonly string[] = ['localhost', '127.0.0.1', '[::1]'];
+
+/*
+  This used to be `origin.startsWith('http://localhost')`, which is a prefix match on the
+  whole origin string rather than on the host, so http://localhost.evil.com and
+  http://127.0.0.1.evil.com both passed. Both are ordinary registrable domains an attacker
+  can own and serve a page from, which turned the one check whose entire job is to keep
+  writes coming from the real site into no check at all.
+
+  Parsing and comparing the hostname exactly fixes that. Comparing url.origin back to the
+  input as well rejects anything carrying a path, credentials or a trailing slash, so only
+  a genuine Origin header value gets through, with any port.
+*/
 function isLocalOrigin(origin: string): boolean {
-  return origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1');
+  let parsed: URL;
+  try {
+    parsed = new URL(origin);
+  } catch {
+    return false;
+  }
+
+  if (parsed.origin !== origin || parsed.protocol !== 'http:') {
+    return false;
+  }
+
+  return LOCAL_HOSTNAMES.includes(parsed.hostname);
 }
 
-function isAllowedOrigin(origin: string, allowedOrigin: string): boolean {
-  return origin === allowedOrigin || isLocalOrigin(origin);
+function isAllowedOrigin(origin: string, env: Env): boolean {
+  if (origin === env.ALLOWED_ORIGIN) {
+    return true;
+  }
+
+  // Absent means on, so a missing var cannot lock Joji out of his own dev page. Only the
+  // explicit string "false" closes it, which is the one line to add before this is handed on.
+  if (env.ALLOW_LOCAL_ORIGINS === 'false') {
+    return false;
+  }
+
+  return isLocalOrigin(origin);
 }
 
-function corsHeaders(origin: string, allowedOrigin: string): Record<string, string> {
-  const allowed = isAllowedOrigin(origin, allowedOrigin);
+function corsHeaders(origin: string, env: Env): Record<string, string> {
+  const allowed = isAllowedOrigin(origin, env);
 
   return {
-    'Access-Control-Allow-Origin': allowed ? origin : allowedOrigin,
+    'Access-Control-Allow-Origin': allowed ? origin : env.ALLOWED_ORIGIN,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     // Authorization is here for GET /signatures, which is bearer protected.
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -170,25 +213,65 @@ function dailyKey(): string {
   return `rl:day:${day}`;
 }
 
+/** A counter that has expired, was never set, or holds junk reads as zero rather than NaN. */
+async function readCounter(env: Env, key: string): Promise<number> {
+  const parsed = parseInt((await env.SIGNATURES.get(key)) || '0', 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
+
+/*
+  How long the IP lockout actually lasts. The key carries the wall clock hour, so the
+  allowance is restored when that hour rolls over, not a fixed interval after the last
+  attempt. The old copy said "a few minutes" for a wait that can be a full hour, which is
+  the kind of promise that turns a signer into an email.
+*/
+function minutesUntilHourRollover(): number {
+  const msRemaining = 3600000 - (Date.now() % 3600000);
+  return Math.max(1, Math.ceil(msRemaining / 60000));
+}
+
+/*
+  Reads the counters. Writes nothing.
+
+  This used to increment on the way past, before the payload had been validated, so every
+  rejected attempt spent one of the five. A signer who mistyped their email five times was
+  then locked out of the only action on the page for up to an hour, while being told to
+  press Sign again. The counters are named "signatures accepted", so they now count exactly
+  that: recordAcceptedSignature below is called after a record has been stored, and nowhere
+  else. A malformed body costs the sender nothing here because it is already cheap to
+  refuse, bounded by MAX_BODY_BYTES before the JSON is even read.
+*/
 async function checkRateLimit(env: Env, ip: string): Promise<{ allowed: boolean; reason?: string }> {
-  const ipk = ipKey(ip);
-  const ipCount = parseInt((await env.SIGNATURES.get(ipk)) || '0', 10);
+  const ipCount = await readCounter(env, ipKey(ip));
   if (ipCount >= MAX_PER_IP_PER_HOUR) {
-    return { allowed: false, reason: 'Too many attempts from this connection. Please wait a few minutes and try again.' };
+    const wait = minutesUntilHourRollover();
+    return {
+      allowed: false,
+      reason: `Too many signatures from this connection. Please try again in about ${wait} minute${wait === 1 ? '' : 's'}, or email jojishiotsuki0@gmail.com and it will be recorded by hand.`,
+    };
   }
 
-  const dk = dailyKey();
-  const globalCount = parseInt((await env.SIGNATURES.get(dk)) || '0', 10);
+  const globalCount = await readCounter(env, dailyKey());
   if (globalCount >= MAX_GLOBAL_PER_DAY) {
     return { allowed: false, reason: 'Signing is temporarily unavailable. Please email jojishiotsuki0@gmail.com and it will be sorted straight away.' };
   }
+
+  return { allowed: true };
+}
+
+/**
+ * Counts one stored signature against both buckets. Called only after the KV write has
+ * succeeded, so the limit can never be spent by a request that produced no record.
+ */
+async function recordAcceptedSignature(env: Env, ip: string): Promise<void> {
+  const ipk = ipKey(ip);
+  const dk = dailyKey();
+  const [ipCount, globalCount] = await Promise.all([readCounter(env, ipk), readCounter(env, dk)]);
 
   await Promise.all([
     env.SIGNATURES.put(ipk, String(ipCount + 1), { expirationTtl: 3600 }),
     env.SIGNATURES.put(dk, String(globalCount + 1), { expirationTtl: 86400 }),
   ]);
-
-  return { allowed: true };
 }
 
 // --- Narrowing untrusted input ---
@@ -205,7 +288,16 @@ function readString(source: Record<string, unknown>, key: string): string {
 
 /*
   Deliberately loose. A stricter pattern rejects addresses that are legal and in use, and a
-  wrong rejection here costs a signature. This catches typos and junk, which is the job.
+  wrong rejection here costs a signature. This catches typos and junk, which is the job:
+  exactly one @, at least one dot after it, and no empty label anywhere, so ordinary slips
+  like tony@innerwealth..au and tony@.com.au are refused.
+
+  THIS PATTERN IS THE SOURCE OF TRUTH AND IS THE STRICTER OF THE TWO. EMAIL_SHAPE in
+  components/proposal/SignatureBlock.tsx must be kept identical to it, the same way
+  SignaturePayload above is kept in step by hand. The client's copy is what disables the
+  Sign button, so if the client is the looser of the two, the signer is rejected here,
+  after they have already drawn their signature and pressed the only button on the page.
+  If this ever has to change, loosen the client first and this second.
 */
 const EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/;
 
@@ -511,8 +603,17 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
     return json({ ok: false, error: 'The signature could not be saved. Please try again, or email jojishiotsuki0@gmail.com.' }, 500, headers);
   }
 
-  // Stored is the point of no return. Whatever the notification does from here, the answer
-  // to the signer is success.
+  /*
+    Stored is the point of no return. Whatever happens from here, the answer to the signer
+    is success, so the counter write is wrapped: a rate limit that fails to increment is a
+    smaller problem than a stored signature reported as an error.
+  */
+  try {
+    await recordAcceptedSignature(env, ip);
+  } catch (err) {
+    console.error('Rate counter update failed:', err instanceof Error ? err.message : 'unknown');
+  }
+
   const notified = await notify(env, record);
 
   return json({ ok: true, reference, notified }, 200, headers);
@@ -568,7 +669,7 @@ async function handleList(request: Request, env: Env, headers: Record<string, st
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = request.headers.get('Origin') || '';
-    const headers = corsHeaders(origin, env.ALLOWED_ORIGIN);
+    const headers = corsHeaders(origin, env);
     const url = new URL(request.url);
 
     if (request.method === 'OPTIONS') {
@@ -585,7 +686,7 @@ export default {
           signing path. It is a first gate, not the only one: the slug allow list and the
           field validation stand behind it for anything that arrives without a browser.
         */
-        if (!isAllowedOrigin(origin, env.ALLOWED_ORIGIN)) {
+        if (!isAllowedOrigin(origin, env)) {
           return json({ ok: false, error: 'Forbidden.' }, 403, headers);
         }
         return await handleSign(request, env, headers);

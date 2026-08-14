@@ -141,6 +141,21 @@
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+/* Below 380px the pair will not sit side by side at full tracking. At 320px the accept
+   button ran 28px past the viewport and, because body clips horizontally, it was cut off
+   rather than scrollable to: the primary call to action on the page read "ACCEPT AND SI".
+   The tracking and the side padding are what give, not the bar: two full width rows would
+   double the height of a thing already pinned over the reading area on the smallest
+   screens. The 44px target is untouched. */
+@media (max-width: 379px) {
+  .mono .proposal .pr-dl,
+  .mono .proposal .pr-accept {
+    gap: .4rem;
+    padding-inline: .45rem;
+    font-size: .66rem;
+    letter-spacing: .05em;
+  }
+}
 @media (min-width: 720px) {
   .mono .proposal .pr-dl,
   .mono .proposal .pr-accept { flex: 0 0 auto }
@@ -197,6 +212,10 @@
   font-size: .68rem;
   letter-spacing: .13em;
   text-transform: uppercase;
+  /* A label is a name, not a sentence. Without this "Prepared for" broke across two lines
+     as "PREPARED / FOR" on a phone, which reads as a layout fault on the first screen of
+     the document. mono.css sets the same thing on its own spec rows. */
+  white-space: nowrap;
   color: var(--muted);
 }
 .mono .proposal .pr-spec dd {
@@ -208,6 +227,15 @@
 }
 .mono .proposal .pr-spec dd a { border-bottom: 1px solid var(--rule) }
 .mono .proposal .pr-spec dd a:hover { color: var(--accent); border-bottom-color: var(--accent) }
+/* Below 560px the label and the value cannot share a line without one of them breaking:
+   the leader was collapsing to a four dot stub and the client's own company name was
+   losing "Ltd" to a second line, right-aligned under itself. Stack the halves instead,
+   which is what .pr-kv already does at the same width. */
+@media (max-width: 559px) {
+  .mono .proposal .pr-spec .r { display: block }
+  .mono .proposal .pr-spec .leader { display: none }
+  .mono .proposal .pr-spec dd { margin-top: .2rem; text-align: left }
+}
 
 /* -------------------------------------------------------------- contents */
 .mono .proposal .pr-toc {
@@ -271,7 +299,11 @@
    information a screen reader should hear, so the attribute is the real signal
    and a parallel class hook would only be a second thing to keep in step. */
 .mono .proposal .pr-toc a[aria-current] { color: var(--ink) }
-.mono .proposal .pr-toc a[aria-current] .t { color: var(--accent) }
+/* Weight as well as hue. Accent green against the warm grey of a non-current row measures
+   1.13:1, so on its own the colour is not a marker at all for a reader who cannot
+   separate those two, which is the deuteranopia axis exactly. The weight change is the
+   part that does not depend on seeing a colour. */
+.mono .proposal .pr-toc a[aria-current] .t { color: var(--accent); font-weight: 600 }
 .mono .proposal .pr-toc a[aria-current] .leader::after { transform: scaleX(1) }
 
 /* --------------------------------------------------------------- section */
@@ -346,14 +378,19 @@
   text-transform: uppercase;
   color: var(--ink);
 }
+/* Drawn as a border, not as a background.
+   Chrome's print dialog ships with "Background graphics" unchecked and the Download PDF
+   button is that dialog, so a mark painted as a background is a mark that is not in the
+   PDF the client actually gets. Borders print either way. Same reason the callout's left
+   edge survives when its fill does not. This applies to every accent mark below too. */
 .mono .proposal .pr-h3::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
   width: 1.6rem;
-  height: 1px;
-  background: var(--accent);
+  height: 0;
+  border-top: 1px solid var(--accent);
 }
 
 .mono .proposal .pr-ul,
@@ -368,15 +405,17 @@
   padding-left: 2.1rem;
   padding-block: .28rem;
 }
-/* The same hairline dash the case studies use for results. */
+/* The same hairline dash the case studies use for results. A border, for the printing
+   reason set out above .pr-h3::before: as a background every bullet in the document
+   disappeared from the PDF and the lists degraded to unmarked indented paragraphs. */
 .mono .proposal .pr-ul > li::before {
   content: "";
   position: absolute;
   left: 0;
   top: .95em;
   width: .8rem;
-  height: 1px;
-  background: var(--accent);
+  height: 0;
+  border-top: 1px solid var(--accent);
 }
 /* Two-digit numbers, to match the section marks and the contents list. */
 .mono .proposal .pr-ol { counter-reset: pr-ol }
@@ -410,14 +449,26 @@
   font-size: .68rem;
   letter-spacing: .13em;
   text-transform: uppercase;
+  /* "Option A" was wrapping to "OPTION / A" at 1440px, the widest the page ever gets, on
+     three of the five rows of the table that states the money. A term is a label and does
+     not break. */
+  white-space: nowrap;
   color: var(--muted);
 }
 .mono .proposal .pr-kv dd {
   margin: 0;
-  text-align: right;
+  /* Left, not right. These values are full sentences, not two-word amounts, and a
+     right-aligned sentence wrapped over two lines is ragged down the edge a reader
+     actually reads from. Short values are unaffected: the leader still pushes them to
+     the right of the row, and a single line sits flush right either way. */
+  text-align: left;
   color: var(--ink);
   overflow-wrap: break-word;
 }
+/* The leader between a label and a sentence has almost no room left, and mono.css's 1.5rem
+   floor let it collapse to four dots, which reads as a broken rule rather than a bridge.
+   Give it enough length to be recognisable as one. */
+.mono .proposal .pr-kv .leader { min-width: 2.5rem }
 /* On a phone a proposal's terms are full sentences, not two words, so the two
    halves stack rather than fighting over one line. */
 @media (max-width: 559px) {
@@ -478,6 +529,23 @@
   text-transform: uppercase;
   color: var(--accent);
 }
+/* Reserve the banner's slot on every card that has not got one.
+   The two headline prices are the comparison this whole section exists to make, and the
+   banner was pushing the recommended card's price 45px below the other one, so the one
+   pair of numbers meant to be read side by side was the one pair that did not line up.
+   The spacer mirrors the banner's own metrics rather than guessing a height, and the
+   non-breaking space is what gives an otherwise empty block a line box to be that tall. */
+.mono .proposal .pr-opts .pr-opt:not(.pr-opt--rec)::before {
+  content: "\a0";
+  display: block;
+  margin-bottom: .95rem;
+  padding-bottom: .7rem;
+  border-bottom: 1px solid transparent;
+  font-size: .66rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
 .mono .proposal .pr-opt-name {
   font-size: .8125rem;
   font-weight: 600;
@@ -519,8 +587,8 @@
   left: 0;
   top: .95em;
   width: .8rem;
-  height: 1px;
-  background: var(--accent);
+  height: 0;
+  border-top: 1px solid var(--accent);
 }
 
 /* `margin-top: auto` pins the money and the pick control to the bottom of the
@@ -530,12 +598,18 @@
   margin-top: auto;
   padding-top: 1.35rem;
 }
+/* A two column grid, not a wrapping flex row.
+   As `flex-wrap: wrap` with `justify-content: space-between`, the moment the label plus
+   its note plus the amount would not fit, the amount dropped to a second flex line where
+   space-between pins it hard LEFT. So one of the four amounts on the price card printed
+   flush left underneath a note while its three neighbours sat right-aligned against their
+   labels, on screen from 320 to 1440 and in every PDF. A grid cannot do that: the amount
+   has a column of its own and the label wraps inside its own. */
 .mono .proposal .pr-opt-line {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  justify-content: space-between;
-  gap: .1rem .85rem;
+  column-gap: .85rem;
   padding-block: .5rem;
   border-top: 1px dotted var(--faint);
   color: var(--ink-2);
@@ -544,6 +618,7 @@
 .mono .proposal .pr-opt-line > :last-child {
   color: var(--ink);
   font-weight: 500;
+  text-align: right;
 }
 /* The payment note sits inside the label half of the row, so it needs to be a block
    to drop under it rather than trailing the label on the same line. */
@@ -617,13 +692,18 @@
   outline-offset: 3px;
 }
 
+/* The note under the price cards, set as body copy.
+   It used to get footnote treatment (11px, all caps, tracked, --muted) which was right
+   when it said "All figures are in Australian dollars" and nothing else. It has since
+   grown to roughly 650 characters and now carries the recommendation itself, including the
+   sentence naming the option to take. Six hundred characters of letter-spaced block
+   capitals in the faintest grey in the palette is the hardest thing on the page to read,
+   and it was sitting directly under the price. */
 .mono .proposal .pr-invest .pr-opts + p,
 .mono .proposal .pr-opts + .pr-p {
   margin-top: 1.35rem;
-  font-size: .7rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--muted);
+  max-width: var(--pr-measure);
+  color: var(--ink-2);
 }
 
 /* ------------------------------------------------------------- signature */
@@ -700,9 +780,22 @@
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
+/* Kept deliberately, and it is expected never to match today.
+   The pad is pointer-only by design: it carries role="img" and no tabIndex, and the
+   keyboard route to signing is the typed-name tick box below it, not this canvas. This
+   rule is not an invitation to add key handling here. It exists so that if the pad ever
+   does take focus it is not the one control on the page without a ring. */
 .mono .proposal .pr-sign-canvas:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
+}
+/* Clear is disabled exactly when the pad is (the typed-name box is ticked, or the
+   proposal is already signed), so a disabled Clear inside the form is the one hook in
+   the DOM that says the pad is dead. A crosshair over a surface that will not take a
+   line is the cursor telling the client the opposite of the truth. */
+.mono .proposal .pr-sign form:has(.pr-sign-clear:disabled) .pr-sign-canvas {
+  cursor: default;
+  background-color: var(--faint);
 }
 
 /* Hint and Clear share a row under the pad. Clear is a real 44px target, not a
@@ -731,8 +824,17 @@
   cursor: pointer;
   transition: color var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
 }
-.mono .proposal .pr-sign-clear:hover { color: var(--accent); border-color: var(--accent) }
+.mono .proposal .pr-sign-clear:hover:not(:disabled) { color: var(--accent); border-color: var(--accent) }
 .mono .proposal .pr-sign-clear:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+/* The same treatment the submit button's disabled state already had. Without it this
+   button rendered byte-identical live and dead: same ink, same border, same white fill,
+   same pointer cursor, at the moment the client is trying to sign. */
+.mono .proposal .pr-sign-clear:disabled {
+  color: var(--muted);
+  background: var(--faint);
+  border-color: var(--rule);
+  cursor: default;
+}
 
 .mono .proposal .pr-sign-fields {
   display: grid;
@@ -889,6 +991,43 @@
 .mono .proposal .pr-sign-done > :first-child { margin-top: 0 }
 .mono .proposal .pr-sign-done .pr-kv { border-top-color: var(--accent) }
 
+/* The signed mark, standing where the pad stood.
+   The pad lives inside the form and the form is replaced wholesale at success, so before
+   this block existed a client who signed and pressed Download PDF got a proposal with no
+   signature anywhere on it: the one thing the whole feature exists to produce. This is
+   the record, so it is drawn as the pad it replaces (a paper panel, the mark, a ruled
+   line under it) and everything that carries meaning here is a border or an image, never
+   a background, because Chrome prints with background graphics off by default. */
+.mono .proposal .pr-sign-record {
+  margin-top: clamp(1.25rem, 3vw, 1.75rem);
+  padding: clamp(1rem, 2.5vw, 1.35rem) clamp(1rem, 3vw, 1.5rem);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* Height from the image's own proportions, not from a box we impose: the pad exports a
+   wide, mostly empty PNG and stretching it would change the shape of the mark the client
+   actually made. Capped in width so a 940px export does not run the full column. */
+.mono .proposal .pr-sign-record-img {
+  display: block;
+  width: 100%;
+  max-width: 26rem;
+  height: auto;
+}
+/* The same ruled line the live pad draws under the mark. On the pad it is a background
+   gradient, which is right there because it has to sit inside the canvas box; here it is
+   a real element, so it is a border and prints without being asked twice. */
+.mono .proposal .pr-sign-record-line {
+  height: 0;
+  max-width: 26rem;
+  margin-top: .35rem;
+  border-top: 1px solid var(--rule);
+}
+/* The .pr-kv rows carry their own top margin and rule, so all this adds is the air
+   between the mark and the names under it. */
+.mono .proposal .pr-sign-record-fields { margin-top: 1.35rem }
+
 /* ------------------------------------------------------------------ foot */
 .mono .proposal .pr-foot {
   border-top: 1px solid var(--ink);
@@ -983,6 +1122,17 @@
   .mono .proposal .pr-toc { overflow-x: hidden }
   .mono .proposal .pr-toc a { gap: .7rem }
 
+  /* On a phone the dot leader is what marks the row you are on: it fills left to right in
+     the accent and its presence, not its hue, is the signal. The rail has no leader, so
+     without this the only thing separating the current row from the rest up here is a
+     colour difference measuring 1.13:1. A rule in the margin is a mark you can see with
+     any colour vision. The margin and padding cancel so the titles do not shift. */
+  .mono .proposal .pr-toc a[aria-current] {
+    margin-left: -.7rem;
+    padding-left: calc(.7rem - 2px);
+    border-left: 2px solid var(--accent);
+  }
+
   /* The bar is pinned to the viewport, so it has to be told about the rail too or it
      runs underneath it. */
   .mono .proposal .pr-actions { left: var(--pr-rail) }
@@ -1003,6 +1153,37 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ------------------------------------------------------------ tap targets */
+/*
+  The two mailto links are the document's only route back to Joji, and at 375px they
+  measured 15px and 14px tall against a 44px floor.
+
+  They sit inside dot-leader rows, so giving the link itself 44px of line box would open
+  a visible gap in every row around it. The target is grown with an invisible overlay
+  instead: same ink, same rhythm, 44px to a fingertip.
+
+  Scoped to a coarse pointer, because that is the only place the floor is about. On a
+  mouse the overlay would reach 2px into the rows above and below for no benefit.
+*/
+@media (pointer: coarse) {
+  .mono .proposal .pr-tap { position: relative }
+  .mono .proposal .pr-tap::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+}
+
+/* ------------------------------------------------- print-only hand signing */
+/* Exists for the printed sheet only. See SignatureBlock for why: a client who prints
+   this to sign it by hand has nowhere to write a date and nothing tying the page to the
+   proposal, because on screen both of those arrive from the server after submitting. */
+.mono .proposal .pr-sign-hand { display: none }
 
 /* ================================================================== PRINT
    This is the PDF. Download is the browser's own print to PDF, so these rules
@@ -1035,6 +1216,21 @@
     --faint: #EBE8E2;
   }
 
+  /* The tokens above land on .proposal, but the sheet .proposal sits on is .mono and the
+     ground behind that is <body>. A reader in dark mode kept both, so the last page of the
+     PDF printed a solid black slab across the 23% of it below the footer, and every one of
+     the pages carried a dark hairline down each margin where the wrapper showed
+     past the white sheet. Force the paper onto the surfaces too, not only onto the
+     document. Scoped with :has so this file still cannot reach a page it is not on, and
+     .mono.proposal covers the case where the two classes are on one element. */
+  html:has(.proposal),
+  body:has(.proposal),
+  .mono:has(.proposal),
+  .mono.proposal {
+    --paper: #FFFFFF;
+    background: #FFFFFF;
+  }
+
   .mono .proposal {
     background: var(--paper);
     color: var(--ink);
@@ -1045,8 +1241,12 @@
 
   /* Screen furniture. None of it means anything on paper: the contents list is a set
      of in-page jumps that cannot be followed, and every hidden item below is either a
-     control or an instruction for operating one. What was actually agreed is carried
-     by .pr-sign-accepting, the signature image and the receipt, all of which stay. */
+     control or an instruction for operating one.
+
+     What was actually agreed is carried by .pr-sign-accepting and, once signed, by
+     .pr-sign-record (the mark, the ruled line and who signed) inside the receipt. Before
+     that block existed this comment claimed the canvas survived into the signed document.
+     It does not: the canvas is inside the form and the form is gone by then. */
   .mono .proposal .pr-actions,
   .mono .proposal .pr-toc,
   .mono .proposal .pr-opt-pick,
@@ -1060,7 +1260,7 @@
 
   /* Undo the rail so the text uses the full printed measure. The contents list is
      hidden above, but the inset that reserved its column is on .proposal itself and
-     would otherwise print as a wide empty left margin on all fifteen pages. */
+     would otherwise print as a wide empty left margin on every page. */
   .mono .proposal { padding-left: 0 !important }
   .mono .proposal .pr-grid,
   .mono .proposal:has(> .pr-toc),
@@ -1072,14 +1272,22 @@
     border-right: 0;
   }
 
-  /* A section, a price card and the signature block are each one thing. Splitting
-     any of them over two sheets makes the printed copy read as two documents. */
-  .mono .proposal .pr-sec,
-  .mono .proposal .pr-invest,
+  /* Keep together only the things that fit on a sheet.
+     .pr-sec and .pr-invest used to be in this list and both are routinely taller than an
+     A4 page. Chrome's answer to break-inside: avoid on a box that cannot fit is to push it
+     to a fresh sheet and then break it anyway, which stranded the tail: page 6 of 13 came
+     out 82% empty carrying one sub-heading and a paragraph, page 10 came out 90% empty
+     carrying three lines. Two near-blank pages in a thirteen page proposal read as a
+     printing fault. The orphans and widows rules below are what actually protect the
+     prose; these entries protect the boxes that genuinely are single objects.
+
+     Changing anything here re-paginates the whole document, so re-render and count the
+     pages rather than trusting the rule. */
   .mono .proposal .pr-opt,
   .mono .proposal .pr-sign,
   .mono .proposal .pr-sign-pad,
   .mono .proposal .pr-sign-done,
+  .mono .proposal .pr-sign-record,
   .mono .proposal .pr-callout,
   .mono .proposal .pr-kv .r,
   .mono .proposal .pr-opt-line {
@@ -1116,8 +1324,14 @@
   .mono .proposal .pr-head { padding-top: 0; padding-bottom: 8mm }
   .mono .proposal .pr-sec,
   .mono .proposal .pr-invest { padding-top: 6mm; padding-bottom: 8mm }
-  .mono .proposal .pr-sign { margin-block: 8mm 0; padding: 6mm }
-  .mono .proposal .pr-foot { padding-block: 6mm 0 }
+  /* Tighter than they were, and the reason is pagination rather than taste. The signature
+     block cannot be split across two sheets, so at the old spacing it landed low on the
+     last page and pushed the footer onto a sheet of its own: one confidentiality line on
+     an otherwise blank page, which is the same fault as the stranded tails above. At these
+     values the whole thing closes on one page with about 30px of the text area to spare.
+     Measured, not assumed. If the copy grows, re-render and count. */
+  .mono .proposal .pr-sign { margin-block: 3mm 0; padding: 5mm }
+  .mono .proposal .pr-foot { padding-block: 3mm 0 }
   .mono .proposal .pr-title { font-size: 22pt }
 
   /* Options print side by side. Two cards stacked over two sheets is not a
@@ -1127,13 +1341,28 @@
     grid-template-columns: repeat(auto-fit, minmax(60mm, 1fr));
     gap: 6mm;
   }
+  /* On screen the recommended banner is one line and the spacer that reserves its slot on
+     the other card mirrors it exactly. In an A4 column the banner wraps to two, and the
+     prices came apart again by 12pt in the PDF. A floor tall enough for two lines, applied
+     to the banner and the spacer alike, holds them level on paper. */
+  .mono .proposal .pr-opt-flag,
+  .mono .proposal .pr-opts .pr-opt:not(.pr-opt--rec)::before { min-height: 13mm }
 
   /* The record itself has to survive the printer. The signature is a canvas
      bitmap, the ruled line under it is a background, and the accepted option and
      the receipt panel are carried by fills, so all of them are told to print
-     rather than being dropped as decoration. */
+     rather than being dropped as decoration.
+
+     .leader is here because mono.css paints the dot leaders as a repeating radial
+     gradient, and with Chrome's Background graphics off (which is the default, and the
+     Download PDF button is that dialog) all seven leaders on the cover fact list vanished,
+     leaving labels and values floating with nothing between them. The bullets and the
+     sub-heading rules had the same fault and were redrawn as borders instead, which is the
+     better answer where it is available; a dotted leader cannot be a border. */
   .mono .proposal .pr-sign-canvas,
   .mono .proposal .pr-sign-done,
+  .mono .proposal .pr-sign-record,
+  .mono .proposal .leader,
   .mono .proposal .pr-callout,
   .mono .proposal .pr-opt--rec,
   .mono .proposal .pr-opt--on,
@@ -1141,11 +1370,29 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+  /* An outline is not a border, so the reset below does not reach it and a field that
+     still held focus when the sheet was printed carried its focus ring into the record:
+     the client's email address boxed in accent green on the acceptance page.
+
+     Every selector that draws a ring on screen is repeated here at its own weight. A bare
+     `.proposal :focus-visible` reset is three classes and loses on specificity to the four
+     class rules that set the rings, so it read as a fix and changed nothing: with only
+     that line, the printed email field still computed `outline: 2px solid #3E6A43` while
+     holding focus, and the ring was in the PDF. Equal weight plus later source order is
+     what actually wins, and both halves of that are inside this file. */
+  .mono .proposal :focus-visible,
+  .mono .proposal .pr-field input:focus-visible,
+  .mono .proposal .pr-field select:focus-visible,
+  .mono .proposal .pr-field textarea:focus-visible,
+  .mono .proposal .pr-opt:has(input:focus-visible),
+  .mono .proposal .pr-sign-choice-opt:has(input:focus-visible) { outline: none }
   /* Two fields to a row on paper regardless of the sheet width. */
   .mono .proposal .pr-sign-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) }
   /* Typed values print as text on a hairline, not as an empty form field. A field with
      no border and no fill still prints the value the client typed, which is the point:
-     the printed copy has to be the record of what was entered. */
+     an UNSIGNED copy printed to be filled in by hand has to carry what was entered. Once
+     signed there is no form left, and the names are carried by .pr-sign-record-fields. */
   .mono .proposal .pr-field input:not([type="checkbox"]):not([type="radio"]) {
     min-height: 0;
     padding: 1mm 0;
@@ -1156,6 +1403,71 @@
     border-bottom: 1px solid var(--rule);
   }
   .mono .proposal .pr-sign-canvas { height: 34mm }
+
+  /* The sentence naming the pad is screen furniture and is hidden above, which left the
+     printed acceptance page with an unlabelled rectangle and a faint line in it. The
+     canvas explains itself in an aria-label, and an aria-label does not print. Caption it
+     on paper instead, without repeating "tick the box below": the tick box does not print
+     either. This matters because print-and-sign-by-hand is a live delivery path. */
+  .mono .proposal .pr-sign-pad::before {
+    content: "Signature";
+    display: block;
+    padding: 1.5mm 2mm 0;
+    font-size: 7pt;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* The hand-signing rows. A ruled line to write a date on, and the reference printed
+     as text so a loose sheet can always be matched back to the proposal it came from. */
+  .mono .proposal .pr-sign-hand {
+    display: block;
+    margin-top: 6mm;
+    max-width: 75mm;
+  }
+  .mono .proposal .pr-sign-hand .r {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    padding-top: 4mm;
+  }
+  .mono .proposal .pr-sign-hand .k {
+    flex: none;
+    font-size: 7pt;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mono .proposal .pr-sign-hand .v {
+    flex: 1 1 auto;
+    border-bottom: 1px solid var(--rule);
+    min-height: 5mm;
+  }
+  /* The reference is printed, not written, so it needs the ink rather than the rule. */
+  .mono .proposal .pr-sign-hand .v--filled {
+    border-bottom: 0;
+    font-size: 9pt;
+    color: var(--ink);
+  }
+
+  /* The signed mark on paper. Sized in mm rather than left to the screen clamp so the
+     record occupies the same space on every sheet it lands on. */
+  .mono .proposal .pr-sign-record { padding: 4mm }
+  .mono .proposal .pr-sign-record-img,
+  .mono .proposal .pr-sign-record-line { max-width: 75mm }
+  .mono .proposal .pr-sign-record-img { max-height: 26mm }
+  .mono .proposal .pr-sign-record-fields { margin-top: 5mm }
+  /* Pagination, not taste. The receipt adds the mark and six rows to a block that cannot
+     be split, and at the .pr-kv row spacing the signed acceptance page ran 50px past the
+     text area: the footer was pushed onto a twelfth sheet carrying two lines and nothing
+     else, which is the same near blank page fault the section break rules above exist to
+     stop. Six rows at this padding bring it back onto the same sheet. Scoped to the
+     receipt so the Terms table keeps its reading spacing. Measured: 12 sheets before, 11
+     after, footer on the last one. If the receipt gains a row, re-render and count. */
+  .mono .proposal .pr-sign-record-fields .r { padding-block: .34rem }
 
   /* Without a marked card the printed copy does not say what was accepted. */
   .mono .proposal .pr-opt--on,

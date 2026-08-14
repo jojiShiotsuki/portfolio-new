@@ -15,17 +15,26 @@ import './proposal.css';
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 /*
-  Render the stored ISO date in the reader's own format.
+  Every date on the sheet, put through one Australian format.
 
-  `new Date('2026-08-15')` is midnight UTC, which prints as the 14th for anyone west of
-  Greenwich, and a proposal that disagrees with itself about its own date is not a
-  document anyone should sign. Appending the time makes it local midnight instead.
+  Two faults lived here. `new Date('2026-08-15')` is midnight UTC, which prints as the
+  14th for anyone west of Greenwich, so the time is appended and it parses as local
+  midnight instead. And the locale was the reader's own, which set "August 15, 2026"
+  three rows above the written out "14 September 2026" on the cover of a document for a
+  Sydney firm, and pressed that disagreement into every PDF printed on a machine that is
+  not day first. The locale is pinned now: the client is Australian, so the document is.
+
+  It accepts dates written out in words as well as ISO ones, because `validUntil` is
+  stored in words and lives in a data file this component does not own. Anything it
+  cannot parse comes back untouched, so an unreadable date is still the author's date and
+  never a wrong one.
 */
-const formatDate = (iso: string): string => {
-  if (!ISO_DATE.test(iso)) return iso;
-  const date = new Date(`${iso}T00:00:00`);
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+const AU_DATE: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+
+const formatDate = (value: string): string => {
+  const date = new Date(ISO_DATE.test(value) ? `${value}T00:00:00` : value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString('en-AU', AU_DATE);
 };
 
 /*
@@ -159,10 +168,16 @@ const ProposalPage: React.FC = () => {
     { term: 'Prepared by', value: `${proposal.preparedBy}, ${proposal.preparedByRole}` },
     {
       term: 'Email',
-      value: <a href={`mailto:${proposal.preparedByEmail}`}>{proposal.preparedByEmail}</a>,
+      value: (
+        <a className="pr-tap" href={`mailto:${proposal.preparedByEmail}`}>
+          {proposal.preparedByEmail}
+        </a>
+      ),
     },
+    /* Both dates go through the one formatter. Two code paths is how the cover came to
+       carry two formats, so there is only one now. */
     { term: 'Date', value: formatDate(proposal.preparedOn) },
-    ...(proposal.validUntil ? [{ term: 'Valid until', value: proposal.validUntil }] : []),
+    ...(proposal.validUntil ? [{ term: 'Valid until', value: formatDate(proposal.validUntil) }] : []),
     { term: 'Reference', value: proposal.slug },
   ];
 
@@ -208,8 +223,18 @@ const ProposalPage: React.FC = () => {
               proposal.css lifts it out of the flow entirely and pins it to the left edge
               as a full height rail, and the whole sheet is inset by the rail's width to
               make room. Keeping it here rather than in a grid cell is what lets it run
-              the full height of the viewport instead of starting below the cover. */}
-          <ProposalToc items={tocItems} />
+              the full height of the viewport instead of starting below the cover.
+
+              The .sheet wrapper is what gives it the document's own gutters while it is
+              still in the flow. Without it the list ran edge to edge while every other
+              block sat inside the margins, and from 940px up, where .sheet draws the
+              side hairlines, the frame of the page visibly broke across it. The wrapper
+              rather than the class on the nav itself, because above 1100px the nav goes
+              position: fixed and leaves the wrapper behind, so the rail keeps its own
+              width, padding and single right hand border and inherits nothing. */}
+          <div className="sheet">
+            <ProposalToc items={tocItems} />
+          </div>
 
           <div className="pr-grid sheet">
             <div className="pr-main">
@@ -268,7 +293,11 @@ const ProposalPage: React.FC = () => {
 
           <footer className="pr-foot sheet">
             <p>{proposal.preparedBy}, {proposal.preparedByRole}</p>
-            <p><a href={`mailto:${proposal.preparedByEmail}`}>{proposal.preparedByEmail}</a></p>
+            <p>
+              <a className="pr-tap" href={`mailto:${proposal.preparedByEmail}`}>
+                {proposal.preparedByEmail}
+              </a>
+            </p>
             <p>Prepared for {proposal.client} on {formatDate(proposal.preparedOn)}. Confidential.</p>
           </footer>
         </main>

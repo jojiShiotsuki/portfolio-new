@@ -119,6 +119,10 @@ const PNG_MAGIC = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 */
 const KNOWN_SLUGS: readonly string[] = [
   'inner-wealth-u3_c-eCtTSpj',
+  /* A rehearsal copy of the same proposal, so signing can be tested without writing to the
+     real client's record. Its records carry this slug, and so does the alert email, which
+     is what makes a test signature tellable from Tony's at a glance. */
+  'sandbox-rehearsal-Ua4p9EqERZt',
 ];
 
 /*

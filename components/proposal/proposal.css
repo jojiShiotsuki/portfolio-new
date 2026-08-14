@@ -1401,6 +1401,10 @@
   .mono .proposal .pr-sign-choice,
   .mono .proposal .pr-field--check,
   .mono .proposal .pr-sign-state,
+  /* The line telling a client to press Download PDF and pick Save as PDF. It is the one
+     paragraph on the page that exists only to operate the page, so inside the PDF it is
+     instructions for producing the thing the reader is already holding. */
+  .mono .proposal .pr-sign-copyhint,
   .mono .proposal .skip { display: none !important }
 
   /* Undo the rail so the text uses the full printed measure. The contents list is

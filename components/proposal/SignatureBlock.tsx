@@ -868,6 +868,32 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
           ? 'Keep the reference. This proposal has been signed and cannot be signed again from this page.'
           : signature.note}
       </p>
+
+      {/*
+        How to keep a copy, shown only after signing.
+
+        Nothing emails the client. Not this page, not the worker, which only notifies Joji.
+        So without this line a person signs, sees a receipt, closes the tab and has nothing,
+        and the one control that would have given them a copy is a button they have already
+        scrolled past and have no reason to press now that they are finished.
+
+        It names the destination step deliberately. The button opens the browser's print
+        dialog, and a print dialog opens on whatever that person last printed to, which for
+        most people is a printer. No page can preselect "Save as PDF": the destination
+        belongs to the browser and there is no web API that reaches it. So the choice has to
+        be described rather than made for them.
+
+        Not worded as "at the top of the page" on purpose: that bar is pinned to the top on
+        a laptop and to the BOTTOM edge on a phone, so naming a position would be wrong for
+        half the readers. The button's own label is the only reliable landmark.
+      */}
+      {state === 'done' && (
+        <p className="pr-sign-note pr-sign-copyhint">
+          For your own copy, press <strong>Download PDF</strong> on this page, then set the
+          destination to <strong>Save as PDF</strong>. The copy will include your signature
+          and this receipt.
+        </p>
+      )}
     </section>
   );
 };

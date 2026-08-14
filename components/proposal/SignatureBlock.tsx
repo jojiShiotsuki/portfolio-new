@@ -1022,6 +1022,72 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         </form>
       )}
 
+      {/*
+        How to keep a copy. Steps, directly under the receipt, and only after signing.
+
+        Nothing emails the client. Not this page, not the worker, which only notifies Joji.
+        So without this a person signs, sees a receipt, closes the tab and has nothing, and
+        the one control that would have given them a copy is a button they scrolled past
+        long ago and have no reason to press now that they are finished.
+
+        Written as numbered steps rather than the sentence this replaced, because it is a
+        procedure in someone else's software and a sentence describing three actions reads
+        as a remark about the page. It sits against the receipt for the same reason: it is
+        the next thing to do, so it belongs where the eye already is, not below two
+        paragraphs of small print.
+
+        The destination step is named deliberately. Download PDF opens the browser's print
+        dialog, which opens on whatever that person last printed to, and for most people
+        that is a printer. No page can preselect "Save as PDF": the destination belongs to
+        the browser and no web API reaches it. So it has to be described rather than done
+        for them.
+
+        Not worded as "at the top of the page": that bar is pinned to the top on a laptop
+        and to the BOTTOM edge on a phone, so naming a position would be wrong for half the
+        readers. The button's own label is the only reliable landmark.
+
+        Hidden from the PDF by the print stylesheet, which already targets pr-sign-copyhint.
+        Instructions for making a copy have no business being inside the copy.
+      */}
+      {state === 'done' && !alreadySigned && (
+        <div className="pr-sign-copyhint">
+          <p className="pr-sign-copyhint-h">To keep your own copy</p>
+          <ol className="pr-ol">
+            <li>
+              Press <strong>Download PDF</strong> on this page.
+            </li>
+            <li>
+              In the window that opens, set <strong>Destination</strong> to{' '}
+              <strong>Save as PDF</strong>.
+            </li>
+            <li>
+              Press <strong>Save</strong>. Your copy will include your signature and this
+              receipt.
+            </li>
+          </ol>
+        </div>
+      )}
+
+      {/*
+        The same need, for somebody arriving at a proposal that was already signed.
+
+        They get different words because they can be given a different thing. This page
+        holds no signature image: the record has one, and it is deliberately not returned
+        by the status route, because that route is reachable by anyone holding the link and
+        a signature image is the last thing to hand out on those terms. So printing here
+        would produce a copy with the mark missing, and telling them to print would be
+        promising something the page cannot deliver.
+      */}
+      {state === 'done' && alreadySigned && (
+        <div className="pr-sign-copyhint">
+          <p className="pr-sign-copyhint-h">To get a copy</p>
+          <p className="pr-sign-note">
+            Reply to the email this proposal arrived in and a signed copy will be sent
+            back to you. Printing from this page now would leave the signature off.
+          </p>
+        </div>
+      )}
+
       {/* One live region, outside both branches, so the same node survives the swap from
           the form to the receipt and success is announced rather than silently replacing
           the region that would have announced it. It carries the reason the button is off,
@@ -1061,15 +1127,6 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         a laptop and to the BOTTOM edge on a phone, so naming a position would be wrong for
         half the readers. The button's own label is the only reliable landmark.
       */}
-      {/* Not shown on an already-signed reply: that page holds no signature image, so it
-          would promise a PDF containing a mark the copy cannot contain. */}
-      {state === 'done' && !alreadySigned && (
-        <p className="pr-sign-note pr-sign-copyhint">
-          For your own copy, press <strong>Download PDF</strong> on this page, then set the
-          destination to <strong>Save as PDF</strong>. The copy will include your signature
-          and this receipt.
-        </p>
-      )}
     </section>
   );
 };

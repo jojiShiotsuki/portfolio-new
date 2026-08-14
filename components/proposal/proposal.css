@@ -1112,6 +1112,31 @@
    between the mark and the names under it. */
 .mono .proposal .pr-sign-record-fields { margin-top: 1.35rem }
 
+/*
+  The "keep a copy" steps, sat directly under the receipt.
+
+  Given the accent left rule the live region uses, because it is the same kind of thing:
+  the page telling you what to do next, rather than part of the document being signed. It
+  is screen-only and the print stylesheet already drops it.
+*/
+.mono .proposal .pr-sign-copyhint {
+  margin-top: clamp(1.25rem, 3vw, 1.75rem);
+  max-width: 62ch;
+  padding-left: .85rem;
+  border-left: 2px solid var(--accent);
+}
+.mono .proposal .pr-sign-copyhint-h {
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* Tighter than a body list: three short steps, not prose. */
+.mono .proposal .pr-sign-copyhint .pr-ol { margin-top: .55rem; max-width: none }
+.mono .proposal .pr-sign-copyhint .pr-ol > li { padding-block: .22rem }
+.mono .proposal .pr-sign-copyhint .pr-sign-note { margin-top: .5rem }
+
 /* ------------------------------------------------------------------ foot */
 .mono .proposal .pr-foot {
   border-top: 1px solid var(--ink);

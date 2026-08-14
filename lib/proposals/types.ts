@@ -131,4 +131,16 @@ export interface SignatureResult {
   /** Present on success. The receipt id the client is shown. */
   reference?: string;
   error?: string;
+  /*
+    True when this proposal was ALREADY signed and the server declined to record a second
+    acceptance. The signature is safe, it is simply the earlier one, so this is a success
+    and not an error. What it changes is what the page may claim: the two fields below are
+    what was actually recorded, and the page must render those rather than whatever is
+    selected on screen, or it would print an acceptance the store does not hold.
+  */
+  alreadySigned?: boolean;
+  /** The option id in the stored record. May differ from the one currently selected. */
+  recordedOptionId?: string;
+  /** ISO server time of the stored record. */
+  recordedAt?: string;
 }

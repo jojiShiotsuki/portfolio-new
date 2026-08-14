@@ -486,6 +486,38 @@ function requestKey(requestId: string): string {
   return `req:${requestId}`;
 }
 
+/*
+  The one-signature-per-proposal lock.
+
+  Its own prefix again, for the same reason: `sig:` is what a listing walks, so this must
+  not sit in that space. The slug is safe as a key because nothing reaches here that is not
+  already in KNOWN_SLUGS.
+*/
+function slugLockKey(slug: string): string {
+  return `signed:${slug}`;
+}
+
+/** What the lock holds. Enough for a second attempt to be told the truth about the first. */
+interface SlugLock {
+  reference: string;
+  optionId: string;
+  serverTime: string;
+}
+
+/*
+  Rehearsal slugs forget they were signed, after five minutes.
+
+  The lock has to apply to the rehearsal copy or the rehearsal stops being a rehearsal: a
+  test that skips the branch it is meant to test proves nothing about the real page. But a
+  permanent lock would make the rehearsal single-use, and a test rig you can only fire once
+  is a test rig nobody runs. A TTL gives both: the same code path, the same lock, the same
+  reply, and the slug is signable again shortly afterwards.
+
+  Five minutes is longer than any single test and shorter than the gap between them.
+*/
+const REHEARSAL_SLUGS: readonly string[] = ['sandbox-rehearsal-Ua4p9EqERZt'];
+const REHEARSAL_LOCK_TTL = 300;
+
 // --- Notification ---
 
 type NotifyStatus = 'sent' | 'skipped' | 'failed';
@@ -631,6 +663,52 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
     }
   }
 
+  /*
+    Has this PROPOSAL already been signed by anybody?
+
+    Checked second, and that order is the whole of it. The requestId check above answers
+    "is this the same press of the button", and a genuine retry must still succeed. This
+    one answers "is this a second acceptance of the same document", which must not.
+
+    The gap it closes: the page's own "already signed" state lived only in React memory, so
+    a refresh gave back a blank form with the options live again. Signing twice was two
+    presses away, and the second could name a DIFFERENT option. Two stored acceptances of
+    one document, disagreeing about the price, with the client holding a PDF of whichever
+    they printed. There is no honest way to resolve that afterwards, so it must not be
+    reachable.
+
+    A second attempt is answered with the FIRST record's reference, option and time, and
+    nothing is written. It is deliberately not an error: the person did sign, their
+    signature is held, and telling them it failed would be the lie this endpoint exists to
+    prevent. The client renders the recorded option rather than the one on screen, so the
+    page cannot claim an acceptance the store does not hold.
+
+    A lookup failure falls through to signing, exactly like the idempotency lookup above.
+    Of the two ways to be wrong, a duplicate record is recoverable by hand and a client who
+    cannot sign at all is not.
+  */
+  let existingLock: SlugLock | null = null;
+  try {
+    const raw = await env.SIGNATURES.get(slugLockKey(payload.slug));
+    if (raw) existingLock = JSON.parse(raw) as SlugLock;
+  } catch (err) {
+    console.error('Slug lock lookup failed:', err instanceof Error ? err.message : 'unknown');
+  }
+  if (existingLock && existingLock.reference) {
+    return json(
+      {
+        ok: true,
+        reference: existingLock.reference,
+        alreadySigned: true,
+        recordedOptionId: existingLock.optionId,
+        recordedAt: existingLock.serverTime,
+        notified: 'already-signed',
+      },
+      200,
+      headers,
+    );
+  }
+
   const serverTime = new Date().toISOString();
   const reference = makeReference();
 
@@ -682,6 +760,27 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
     } catch (err) {
       console.error('Idempotency write failed:', err instanceof Error ? err.message : 'unknown');
     }
+  }
+
+  /*
+    The lock, written after the record for the same reason the idempotency key is: a lock
+    that exists without its record would refuse the next attempt while pointing at a
+    reference nobody stored, which locks the client out of signing at all. Written second,
+    a failure here only leaves the old behaviour, and the old behaviour is what this whole
+    block is an improvement on rather than a dependency of.
+
+    No TTL for a real proposal: a signed document stays signed. Rehearsal slugs get one so
+    the test rig survives its own test.
+  */
+  const lock: SlugLock = { reference, optionId: record.optionId, serverTime };
+  try {
+    await env.SIGNATURES.put(
+      slugLockKey(payload.slug),
+      JSON.stringify(lock),
+      REHEARSAL_SLUGS.includes(payload.slug) ? { expirationTtl: REHEARSAL_LOCK_TTL } : {},
+    );
+  } catch (err) {
+    console.error('Slug lock write failed:', err instanceof Error ? err.message : 'unknown');
   }
 
   /*

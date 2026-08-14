@@ -179,6 +179,20 @@ export async function submitSignature(payload: SignatureRequest): Promise<Signat
 
   const reference = typeof parsed.reference === 'string' ? parsed.reference.trim() : '';
   if (parsed.ok === true && reference) {
+    /* A proposal that was already signed comes back as a success carrying the FIRST
+       record's details, because the person's signature is genuinely held. Passed through
+       rather than flattened to a plain success: the caller has to know it must render the
+       recorded option instead of the selected one. */
+    if (parsed.alreadySigned === true) {
+      return {
+        ok: true,
+        reference,
+        alreadySigned: true,
+        recordedOptionId:
+          typeof parsed.recordedOptionId === 'string' ? parsed.recordedOptionId : undefined,
+        recordedAt: typeof parsed.recordedAt === 'string' ? parsed.recordedAt : undefined,
+      };
+    }
     return { ok: true, reference };
   }
 

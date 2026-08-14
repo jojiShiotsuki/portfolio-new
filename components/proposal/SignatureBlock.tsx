@@ -298,6 +298,18 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   const [signedImage, setSignedImage] = React.useState('');
   const [signedAt, setSignedAt] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
+  /*
+    True when the server answered that this proposal was already signed and refused to
+    record a second acceptance.
+
+    It exists because the page's "signed" state is only in memory: a refresh returns a
+    blank form with the options live again, so a client could sign, reload, and sign again
+    naming a different option. The server now holds the first record and returns it. This
+    flag is what stops the page dressing that reply up as a fresh signature, because the
+    two differ in ways the client must see: the mark they just drew was NOT stored, and the
+    option that counts may not be the one they have selected.
+  */
+  const [wasAlreadySigned, setWasAlreadySigned] = React.useState(false);
 
   const locked = state === 'submitting' || state === 'done';
 
@@ -539,6 +551,11 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   */
   const liveMessage = (): string => {
     if (state === 'done') {
+      if (wasAlreadySigned) {
+        return `This proposal has already been signed. The acceptance on file is ${
+          signedOption ? signedOption.name : 'the option recorded at the time'
+        }, reference ${reference}. Nothing further was recorded.`;
+      }
       return `Signed and recorded. Thank you, ${signedName}. Your reference is ${reference}.`;
     }
     if (state === 'error') return errorMessage;
@@ -589,6 +606,32 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
     if (!mountedRef.current) return;
 
     if (result.ok && result.reference) {
+      /*
+        The proposal was already signed and this attempt was not recorded. Everything shown
+        from here has to come from the STORED record rather than from this form, because
+        the two can disagree and only one of them is the agreement.
+
+        The option is looked up by the id the server returned. The mark is deliberately
+        left empty: the stroke just drawn was never stored, and painting it next to the
+        earlier reference would produce a PDF showing a signature that is not the one on
+        file. The name and email fields are the earlier signer's as far as the record goes,
+        so they are not claimed either.
+      */
+      if (result.alreadySigned) {
+        const recorded = options.find(o => o.id === result.recordedOptionId) ?? null;
+        setReference(result.reference);
+        setSignedOption(recorded);
+        setSignedName('');
+        setSignedTitle('');
+        setSignedEmail('');
+        setSignedImage('');
+        setSignedAt(result.recordedAt ?? '');
+        setWasAlreadySigned(true);
+        setState('done');
+        onSigned();
+        return;
+      }
+
       setReference(result.reference);
       setSignedOption(selectedOption ?? null);
       setSignedName(trimmedName);
@@ -656,11 +699,16 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
             ) : null}
             <div className="pr-sign-record-line" aria-hidden="true" />
             <dl className="pr-kv pr-sign-record-fields">
-              <div className="r">
-                <dt>Signed by</dt>
-                <span className="leader" aria-hidden="true" />
-                <dd>{signedName}</dd>
-              </div>
+              {/* Empty only on an already-signed reply, where the name on file belongs to
+                  the earlier signing and this page was never told it. Same treatment as
+                  Title: the row is not drawn rather than printed as a leader into a gap. */}
+              {signedName ? (
+                <div className="r">
+                  <dt>Signed by</dt>
+                  <span className="leader" aria-hidden="true" />
+                  <dd>{signedName}</dd>
+                </div>
+              ) : null}
               {/* Title is the one field the form does not insist on, so the row is not
                   drawn at all rather than printed with a dot leader running into a gap. */}
               {signedTitle ? (
@@ -670,14 +718,16 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
                   <dd>{signedTitle}</dd>
                 </div>
               ) : null}
-              <div className="r">
-                {/* Not "Copy sent to". Nothing in the system emails the signer, and a
-                    receipt that states a delivery that did not happen is the one line on
-                    this page that could be held against it. */}
-                <dt>Recorded against</dt>
-                <span className="leader" aria-hidden="true" />
-                <dd>{signedEmail}</dd>
-              </div>
+              {signedEmail ? (
+                <div className="r">
+                  {/* Not "Copy sent to". Nothing in the system emails the signer, and a
+                      receipt that states a delivery that did not happen is the one line on
+                      this page that could be held against it. */}
+                  <dt>Recorded against</dt>
+                  <span className="leader" aria-hidden="true" />
+                  <dd>{signedEmail}</dd>
+                </div>
+              ) : null}
               <div className="r">
                 <dt>Signed on</dt>
                 <span className="leader" aria-hidden="true" />
@@ -865,7 +915,9 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
 
       <p className="pr-sign-note">
         {state === 'done'
-          ? 'Keep the reference. This proposal has been signed and cannot be signed again from this page.'
+          ? wasAlreadySigned
+            ? 'This proposal was already signed, so this attempt was not recorded and the acceptance above still stands. If it names the wrong option, reply to the email this proposal arrived in rather than signing again, because signing again will keep returning this same record.'
+            : 'Keep the reference. This proposal has been signed and cannot be signed again from this page.'
           : signature.note}
       </p>
 
@@ -887,7 +939,9 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         a laptop and to the BOTTOM edge on a phone, so naming a position would be wrong for
         half the readers. The button's own label is the only reliable landmark.
       */}
-      {state === 'done' && (
+      {/* Not shown on an already-signed reply: that page holds no signature image, so it
+          would promise a PDF containing a mark the copy cannot contain. */}
+      {state === 'done' && !wasAlreadySigned && (
         <p className="pr-sign-note pr-sign-copyhint">
           For your own copy, press <strong>Download PDF</strong> on this page, then set the
           destination to <strong>Save as PDF</strong>. The copy will include your signature

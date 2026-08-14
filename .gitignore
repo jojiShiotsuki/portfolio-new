@@ -47,3 +47,6 @@ nul
 docs/
 QA.md
 .claude/settings.local.json
+
+# Local wrangler dev state (local KV, caches). Never belongs in the repo.
+worker-sign/.wrangler/

@@ -354,17 +354,33 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         setState('idle');
         return;
       }
+      const recorded = options.find(o => o.id === status.optionId) ?? null;
       setReference(status.reference);
-      setSignedOption(options.find(o => o.id === status.optionId) ?? null);
+      setSignedOption(recorded);
       setSignedAt(status.serverTime ?? '');
       setAlreadySigned('onLoad');
+      /*
+        Move the whole page onto the recorded option, not just this receipt.
+
+        Without this the page contradicts itself out loud. The radios reset to the
+        proposal's default on a reload, and the line above them reads from that live
+        selection, so a proposal signed for Option A came back saying "You are accepting
+        Option B, AUD 1,500 per month" directly above a receipt reading "Option accepted:
+        Option A". Two halves each correct on their own, and a client printing that PDF
+        would hold a document arguing with itself about the price.
+
+        Told to the parent rather than kept here, because the pricing block above renders
+        from the same selection and has to agree too.
+      */
+      if (recorded) onSelectOption(recorded.id);
       setState('done');
     })();
     return () => {
       cancelled = true;
     };
-    /* Once per proposal. `options` is static data from the proposal file and re-running on
-       its identity would re-ask the server on every unrelated render. */
+    /* Once per proposal. `options` is static data from the proposal file and
+       `onSelectOption` is the parent's state setter, so re-running on either identity
+       would re-ask the server on every unrelated render. */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
@@ -693,6 +709,10 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       */
       if (result.alreadySigned) {
         const recorded = options.find(o => o.id === result.recordedOptionId) ?? null;
+        /* Same reason as the load-time check: the selection on screen is the one this
+           person just made, and it is not the one on file. The page moves onto the record
+           so nothing above the receipt keeps naming the option that was refused. */
+        if (recorded) onSelectOption(recorded.id);
         setReference(result.reference);
         setSignedOption(recorded);
         setSignedName('');

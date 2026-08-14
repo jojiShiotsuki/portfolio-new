@@ -956,6 +956,26 @@
   background: var(--accent);
   border-color: var(--accent);
 }
+
+/*
+  While a signature is in flight the button stops responding to the pointer.
+
+  It is NOT given the disabled attribute, and that is deliberate: disabling a button that
+  currently holds focus hands focus to <body>, which drops a keyboard user out of the form
+  at the exact moment the page is telling them something. So it stays focusable and stays in
+  the tab order, and pointer-events is what makes it inert to a second click.
+
+  The handler already refused a second submit, so this changes no outcome. What it changes
+  is what a person believes: a button that still lifts under the cursor invites the press
+  that the code then silently ignores, and after being told once that a signature failed,
+  that is exactly the press somebody makes.
+*/
+.mono .proposal .pr-sign-submit[aria-busy='true'] {
+  pointer-events: none;
+  background: var(--ink);
+  border-color: var(--ink);
+  cursor: default;
+}
 .mono .proposal .pr-sign-submit:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px }
 .mono .proposal .pr-sign-submit:disabled {
   color: var(--muted);

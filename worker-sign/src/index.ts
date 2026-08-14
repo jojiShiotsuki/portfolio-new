@@ -68,6 +68,12 @@ interface SignaturePayload {
   typedSignature: boolean;
   /** Optional hash of the proposal text as rendered, so we can prove what was agreed to. */
   proposalHash?: string;
+  /**
+   * One id per press of Sign, reused by that press's retry. It is what lets a retry be
+   * safe: the same id returns the reference already stored rather than writing a second
+   * record. Optional, so a page cached before this existed still signs.
+   */
+  requestId?: string;
 }
 
 /** What actually goes into KV. Never returned to the caller. */
@@ -309,6 +315,11 @@ const BASE64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
 const OPTION_ID_RE = /^[a-z0-9][a-z0-9_-]*$/i;
 const HASH_RE = /^[A-Za-z0-9_-]+$/;
 
+/* A UUID's alphabet and nothing else, with a hard length bound. This string is concatenated
+   into a KV key, so it is checked rather than trusted: no slashes, no prefix characters, no
+   way to write outside the req: namespace or to collide with a sig: record. */
+const REQUEST_ID_RE = /^[A-Za-z0-9-]{8,64}$/;
+
 /**
  * Confirms the drawing is genuinely a PNG data URL of a sane size, not an arbitrary blob
  * wearing a PNG label. Checks the prefix, the base64 alphabet, the decoded size, and then
@@ -422,6 +433,12 @@ function validatePayload(raw: unknown): { payload: SignaturePayload } | { error:
     return { error: 'Malformed request.' };
   }
 
+  /* Validated to a strict shape rather than trusted, because it becomes a KV key. Anything
+     that is not a plain id is dropped rather than rejected: a bad id should cost the retry
+     protection, not the signature. */
+  const requestIdRaw = readString(raw, 'requestId').trim();
+  const requestId = REQUEST_ID_RE.test(requestIdRaw) ? requestIdRaw : '';
+
   const payload: SignaturePayload = {
     slug,
     drawing,
@@ -432,6 +449,7 @@ function validatePayload(raw: unknown): { payload: SignaturePayload } | { error:
     clientTime,
     typedSignature,
     ...(proposalHashRaw.length > 0 ? { proposalHash: proposalHashRaw } : {}),
+    ...(requestId.length > 0 ? { requestId } : {}),
   };
 
   return { payload };
@@ -460,6 +478,12 @@ function makeReference(): string {
 */
 function recordKey(serverTime: string, reference: string): string {
   return `sig:${serverTime}:${reference}`;
+}
+
+/* Its own prefix, so idempotency keys are never listed as signatures and never collide
+   with the rl: counters. The id is already validated to a safe shape before it gets here. */
+function requestKey(requestId: string): string {
+  return `req:${requestId}`;
 }
 
 // --- Notification ---
@@ -572,6 +596,41 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
   }
 
   const payload = checked.payload;
+
+  /*
+    Has this exact attempt already been recorded?
+
+    This exists because of a real incident on 15 August, not a hypothetical. A signature was
+    written here, the reply never reached the browser, and the client correctly concluded
+    that it had no answer and told the person nothing had been recorded. It had. The page and
+    the store disagreed, which is the one outcome this whole endpoint is built to prevent.
+
+    The client's retry made it worse rather than better: retrying was justified with "nothing
+    reached the worker, so posting again is safe", and that reasoning is wrong. A failed
+    fetch means no ANSWER came back. It says nothing about whether the request arrived, and
+    an answer can be lost after the write.
+
+    So the client now sends a requestId, generated once per press and reused by its retry.
+    The first attempt to arrive writes the record and stores requestId -> reference. Any
+    later attempt carrying the same id gets that same reference back instead of a second
+    record. A lost reply therefore turns into a correct success on the retry, and pressing
+    Sign twice for one signature cannot produce two acceptances.
+
+    A missing id keeps the old behaviour rather than failing, so an older page still signs.
+  */
+  if (payload.requestId) {
+    let seen: string | null = null;
+    try {
+      seen = await env.SIGNATURES.get(requestKey(payload.requestId));
+    } catch (err) {
+      // A lookup failure must not block a signature. Worst case is the old behaviour.
+      console.error('Idempotency lookup failed:', err instanceof Error ? err.message : 'unknown');
+    }
+    if (seen) {
+      return json({ ok: true, reference: seen, notified: 'duplicate' }, 200, headers);
+    }
+  }
+
   const serverTime = new Date().toISOString();
   const reference = makeReference();
 
@@ -605,6 +664,24 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
   } catch (err) {
     console.error('Signature store failed:', err instanceof Error ? err.message : 'unknown');
     return json({ ok: false, error: 'The signature could not be saved. Please try again, or email jojishiotsuki0@gmail.com.' }, 500, headers);
+  }
+
+  /*
+    Only now, once the record is safely stored. Written second on purpose: if this write
+    fails the signature still exists and a retry simply makes a second record, which is the
+    old behaviour and recoverable. Written FIRST, a failure here would leave an id claiming a
+    reference that was never stored, and the retry would be told everything was fine while
+    nothing had been saved. Of the two ways to be wrong, only one loses a signature.
+
+    A day is long enough: this exists to cover a retry seconds later and a person pressing
+    the button again after being told it failed, not to deduplicate across sessions.
+  */
+  if (payload.requestId) {
+    try {
+      await env.SIGNATURES.put(requestKey(payload.requestId), reference, { expirationTtl: 86400 });
+    } catch (err) {
+      console.error('Idempotency write failed:', err instanceof Error ? err.message : 'unknown');
+    }
   }
 
   /*

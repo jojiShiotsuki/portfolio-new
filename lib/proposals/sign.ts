@@ -36,6 +36,25 @@ const TIMEOUT_MS = 20000;
 /* The pause between the two attempts. */
 const RETRY_DELAY_MS = 600;
 
+/**
+ * A fresh id for one press of Sign.
+ *
+ * randomUUID is only exposed on secure origins, and while this page is always https in
+ * production, the fallback is here so a missing id can never be the reason a signature
+ * cannot be sent. Uniqueness is what matters, not unguessability: the id is a key on our
+ * own store, not a secret, and knowing one buys nothing.
+ */
+const newRequestId = (): string => {
+  const c = globalThis.crypto;
+  if (c && typeof c.randomUUID === 'function') return c.randomUUID();
+  if (c && typeof c.getRandomValues === 'function') {
+    return Array.from(c.getRandomValues(new Uint8Array(16)))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+  return `${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 14)}`;
+};
+
 /* Every error the client sees ends with a way out that does not depend on this page
    working, because if they are reading it, this page is the thing that failed. */
 const FALLBACK =
@@ -54,22 +73,32 @@ export async function submitSignature(payload: SignatureRequest): Promise<Signat
   /*
     One post, with one silent retry if the connection itself fails.
 
-    This exists because of a measured fault rather than a theoretical one. Reaching the
-    worker from Joji's network repeatedly failed at the TCP level on the FIRST attempt and
-    then succeeded in about 26ms on the second, on the same URL, seconds apart. Left alone
-    that is a client staring at a spinner for twenty seconds and then being told nothing was
-    recorded, when pressing the same button again would have worked. A worker cold start is
-    single digit milliseconds, so a twenty second failure is never the server thinking.
+    This exists because of a measured fault. Reaching the worker from Joji's network failed
+    at the TCP level on the FIRST attempt and then succeeded in about 26ms on the second,
+    same URL, seconds apart. Left alone that is a spinner for twenty seconds and then
+    "nothing was recorded", when pressing the same button again would have worked. A Worker
+    cold start is single digit milliseconds, so a twenty second failure is never the server
+    thinking.
 
-    Only a CONNECTION failure is retried. A response, of any status, is an answer from the
-    worker and is returned as it is. Retrying a real response is how a signature gets
-    recorded twice: the record is written before the reply is sent, so a 500 read as
-    "try again" would store two acceptances for one signature.
+    A CORRECTION, from an incident on 15 August. The first version of this retry justified
+    itself with "nothing reached the worker, so posting again is safe". That is wrong, and it
+    is the dangerous kind of wrong. A rejected fetch means no ANSWER came back. It says
+    nothing about whether the request arrived. On that day the worker stored a signature and
+    the reply was lost on the way home, so the person was told nothing had been recorded
+    while the record existed, and a retry on that shape would have written a second one.
 
-    The retry is silent on purpose. The client is told what happened only once both attempts
-    have failed, because a message that appears and then resolves itself teaches a person to
-    distrust the next one.
+    Hence requestId: generated ONCE here and reused by the retry, so both attempts are the
+    same attempt as far as the worker is concerned. The worker returns the reference it
+    already stored instead of writing again. That turns a lost reply into a correct success
+    rather than a false failure, and makes the retry safe by construction rather than by an
+    argument about what a network error implies.
+
+    Still only a connection failure is retried. A response of any status is an answer and is
+    returned as it is.
   */
+  const requestId = newRequestId();
+  const body = JSON.stringify({ ...payload, requestId });
+
   let response: Response | null = null;
 
   for (let attempt = 0; attempt < 2 && response === null; attempt += 1) {
@@ -85,12 +114,14 @@ export async function submitSignature(payload: SignatureRequest): Promise<Signat
       response = await fetch(SIGN_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body,
         signal: controller.signal,
       });
     } catch {
-      /* Connection refused, DNS, or the timeout above firing. Nothing reached the worker,
-         so nothing was written and posting the identical body again is safe. */
+      /* Connection refused, DNS, or the timeout above firing. It is NOT known whether the
+         request arrived, which is why the body carries a requestId: if it did arrive, the
+         second attempt is recognised as the same one and returns the same reference rather
+         than storing a second signature. */
     } finally {
       clearTimeout(timer);
     }

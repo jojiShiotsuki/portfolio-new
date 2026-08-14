@@ -229,6 +229,7 @@ export const innerWealth: Proposal = {
         'Awards, reviews and credentials placed where buyers see them',
         'Rebuilt mobile first',
         'Handover, and a walkthrough of how to edit it',
+        'No ongoing maintenance after the first 30 days',
       ],
       lines: [
         { label: 'To start', amount: 'AUD 1,000', note: '50% before work begins' },
@@ -254,6 +255,7 @@ export const innerWealth: Proposal = {
         'Four articles a month, written with your input',
         'Google Business Profile management',
         'Monthly report and a review call',
+        'Site maintenance, backups, security and small edits included',
       ],
       lines: [
         /* The clawback rides on the line that makes the giveaway. It used to live only in section
@@ -274,6 +276,8 @@ export const innerWealth: Proposal = {
       heading: 'Terms',
       subheading: 'Written plainly, and short enough to actually read',
       blocks: [
+        { kind: 'h3', text: 'Who you are contracting with' },
+        { kind: 'p', text: 'Me, Joji Shiotsuki, as an individual working with a small team: a specialist on SEO, a specialist on web design, and me across both and running the project. I am not an incorporated agency and I am not going to pretend to be one. I am based in Cebu in the Philippines, which is why invoices are paid by transfer through Wise rather than into an Australian bank account. I am your point of contact throughout, and the work does not change hands.' },
         { kind: 'h3', text: 'Money' },
         {
           kind: 'kv',
@@ -284,6 +288,7 @@ export const innerWealth: Proposal = {
             /* "Invoices are issued monthly" sat three rows under Option A's one off 50/50 schedule,
                where there are exactly two invoices and neither is monthly. Scoped per option. */
             { term: 'Payment', value: 'By bank transfer through Wise. Option A is invoiced in two parts, 50% and 50%. Option B is invoiced monthly.' },
+            { term: 'First invoice', value: 'Under Option A, the 50% deposit, before work starts. Under Option B, the first month at AUD 1,500, at the start of the work rather than at launch.' },
             { term: 'Work outside this proposal', value: 'AUD 100 per hour, quoted and agreed in writing before it starts. No surprise invoices.' },
           ],
         },
@@ -298,7 +303,17 @@ export const innerWealth: Proposal = {
               call". The vault record of the call does not contain that, so the justification now
               points at the Timeline section, which Tony can check inside this document. */
         { kind: 'p', text: 'The SEO is an ongoing monthly service, not a fixed term contract. There is no lock-in period, with one condition, and you can stop it with 30 days notice at any time. The same applies in the other direction.' },
-        { kind: 'p', text: 'The condition, and it is the only one in this document. Under Option B the AUD 2,000 website build is not invoiced to you, because the monthly work is what pays for it. If the monthly service ends inside the first six months, that AUD 2,000 becomes payable, in addition to the monthly fees already paid. The six months runs to the last month of service, whenever notice is given. After six months it does not apply, whatever happens. Six months is not an arbitrary number. It is the three to six months set out under Timeline, which is how long this work needs before there is anything worth judging.' },
+        { kind: 'p', text: 'The condition, and it is the only one in this document. Under Option B the AUD 2,000 website build is not invoiced to you, because the monthly work is what pays for it. If the monthly service ends inside the first six months, that AUD 2,000 becomes payable, in addition to the monthly fees already paid. The six months runs to the last month of service, whenever notice is given. After six months it does not apply, whatever happens. It also only applies if you end the service. If I end it inside six months, for any reason, the AUD 2,000 is not payable and never becomes payable. Six months is not an arbitrary number. It is the three to six months set out under Timeline, which is how long this work needs before there is anything worth judging.' },
+        { kind: 'h3', text: 'Who looks after the site once it is live' },
+        { kind: 'p', text: 'WordPress needs looking after in a way Wix does not, so this is worth being exact about rather than leaving you to find out.' },
+        {
+          kind: 'ul',
+          items: [
+            '**Under Option B this is included.** Keeping WordPress, its theme and its plugins up to date, backups, security, and small edits: a phone number, a paragraph, a price, a staff change, a new document to link. Send them over and they get done.',
+            '**Bigger pieces of work are quoted first.** A new page you ask for, a change of layout, a new section, a rebuild of something we already built. Those are AUD 100 per hour, and you get the estimate before anything starts.',
+            '**Under Option A there is no ongoing maintenance.** The site is yours, on hosting in your name, and after the 30 day post-launch period it is yours to look after or to ask me about at the hourly rate. That is not a catch, it is the difference between the two options and you should read it before choosing.',
+          ],
+        },
         { kind: 'h3', text: 'Costs that sit outside these fees' },
         { kind: 'p', text: 'Moving off Wix means the site needs WordPress hosting, which the firm does not currently pay for. We will recommend a plan and set it up, the account goes in Inner Wealth\'s name, and you pay the host directly. It is a small monthly cost and it is yours, not ours, so you are never locked to us by your own hosting.' },
         { kind: 'p', text: 'Domain renewal, any paid plugins and any licensed images also sit outside the fees above. Nothing in that category gets bought without clearing it with you first. Your Wix subscription is yours to cancel once the new site is live and you are happy, and not before.' },

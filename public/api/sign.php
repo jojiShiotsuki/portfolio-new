@@ -29,6 +29,11 @@
 declare(strict_types=1);
 
 const WORKER_URL   = 'https://proposal-sign.joji-dev.workers.dev/sign';
+const WORKER_STATUS_URL = 'https://proposal-sign.joji-dev.workers.dev/status';
+/* Shorter than the signing timeout on purpose. This runs while somebody is waiting to see
+   the page, and a slow answer here must never be the reason the proposal is slow to read.
+   Falling through to "not signed" costs nothing: the lock still refuses a second record. */
+const STATUS_TIMEOUT = 6;
 const SITE_ORIGIN  = 'https://jojishiotsuki.com';
 const NOTIFY_EMAIL = 'jojishiotsuki0@gmail.com';
 const MAX_BODY     = 2 * 1024 * 1024;   // a signature is ~90KB; this is a generous ceiling
@@ -44,6 +49,80 @@ function reply(array $payload, int $status): void {
     http_response_code($status);
     echo json_encode($payload);
     exit;
+}
+
+/*
+  GET is the status question the page asks as it loads: has this proposal been signed?
+
+  It lives in this file rather than its own because of the fallback directory below. A
+  signature stored here, when the worker could not be reached, is one the worker has never
+  heard of, so a status check that only asked Cloudflare would tell a client their
+  proposal was unsigned while this server held their signature. That is the same lie in a
+  new place. The two stores are therefore both consulted, and this file is the only thing
+  that can see the second one.
+
+  It answers whether, which option, when and the reference. Never a name or an email: this
+  is reachable by anyone holding the link.
+*/
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET') {
+    $slug = trim((string) ($_GET['slug'] ?? ''));
+    if ($slug === '' || strlen($slug) > 120 || !preg_match('/^[A-Za-z0-9_-]+$/', $slug)) {
+        // Not an error. An unusable slug is simply not a signed one, and saying more would
+        // help someone probe for which proposals exist.
+        reply(['ok' => true, 'signed' => false], 200);
+    }
+
+    // The worker first, because that is where a normally stored signature lives.
+    if (function_exists('curl_init')) {
+        $ch = curl_init(WORKER_STATUS_URL . '?slug=' . rawurlencode($slug));
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => STATUS_TIMEOUT,
+            CURLOPT_CONNECTTIMEOUT => 4,
+        ]);
+        $res    = curl_exec($ch);
+        $code   = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($res !== false && $code >= 200 && $code < 300) {
+            $decoded = json_decode($res, true);
+            if (is_array($decoded) && ($decoded['signed'] ?? false) === true) {
+                http_response_code(200);
+                echo $res;
+                exit;
+            }
+        }
+    }
+
+    /*
+      The worker says no, or could not be asked. Before answering "not signed", look in the
+      local fallback directory, because a signature taken while Cloudflare was unreachable
+      is only here. Records are named <stamp>-<REF>.json and carry the payload, so the newest
+      matching slug wins.
+    */
+    $dir = __DIR__ . '/records';
+    if (is_dir($dir)) {
+        $files = glob($dir . '/*.json') ?: [];
+        rsort($files);   // filenames start with an ISO stamp, so newest first
+        foreach ($files as $file) {
+            $raw = @file_get_contents($file);
+            if ($raw === false) {
+                continue;
+            }
+            $rec = json_decode($raw, true);
+            if (!is_array($rec) || (($rec['payload']['slug'] ?? '') !== $slug)) {
+                continue;
+            }
+            reply([
+                'ok'         => true,
+                'signed'     => true,
+                'reference'  => (string) ($rec['reference'] ?? ''),
+                'optionId'   => (string) ($rec['payload']['optionId'] ?? ''),
+                'serverTime' => (string) ($rec['serverTime'] ?? ''),
+            ], 200);
+        }
+    }
+
+    reply(['ok' => true, 'signed' => false], 200);
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {

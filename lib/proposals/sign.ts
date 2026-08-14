@@ -49,6 +49,65 @@ export const SIGN_ENDPOINT = isLocalHost()
 */
 export type SignatureRequest = SignaturePayload & { typedSignature?: boolean };
 
+/* The same reasoning as SIGN_ENDPOINT: the deployed page asks its own host, and only
+   localhost talks to the worker directly because Vite runs no PHP. */
+const STATUS_ENDPOINT = isLocalHost()
+  ? 'https://proposal-sign.joji-dev.workers.dev/status'
+  : '/api/sign.php';
+
+/** What the page learns about a proposal before it renders the signing form. */
+export interface SignedStatus {
+  signed: boolean;
+  reference?: string;
+  optionId?: string;
+  serverTime?: string;
+}
+
+/*
+  Short, and it has to be. This runs while a client is waiting to read the proposal, and
+  the answer only changes whether they see a receipt or a signing form. Being slow to say
+  "not signed" would be worse than being wrong about it, because the lock catches a second
+  signature at signing time regardless.
+*/
+const STATUS_TIMEOUT_MS = 6000;
+
+/**
+ * Has this proposal already been signed?
+ *
+ * Never throws and never reports uncertainty as "signed". Every failure answers `false`,
+ * which shows the normal signing form: the behaviour the page had before this existed, and
+ * the only safe direction to be wrong in. Answering "signed" on a failed lookup would show
+ * a receipt for a signature that might not exist, and worse, would stop a client signing.
+ */
+export async function fetchSignedStatus(slug: string): Promise<SignedStatus> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), STATUS_TIMEOUT_MS);
+  try {
+    const url = `${STATUS_ENDPOINT}?slug=${encodeURIComponent(slug)}`;
+    const response = await fetch(url, { method: 'GET', signal: controller.signal });
+    if (!response.ok) return { signed: false };
+
+    const parsed: unknown = await response.json();
+    if (!isRecord(parsed) || parsed.signed !== true) return { signed: false };
+
+    const reference = typeof parsed.reference === 'string' ? parsed.reference.trim() : '';
+    /* A "signed" with no reference is an answer this page cannot render honestly, so it is
+       treated as not signed rather than shown as a receipt with an empty field. */
+    if (!reference) return { signed: false };
+
+    return {
+      signed: true,
+      reference,
+      optionId: typeof parsed.optionId === 'string' ? parsed.optionId : undefined,
+      serverTime: typeof parsed.serverTime === 'string' ? parsed.serverTime : undefined,
+    };
+  } catch {
+    return { signed: false };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /* Long enough for a cold worker to wake up, short enough that a dead network shows as an
    error rather than as a button that spins forever.
 

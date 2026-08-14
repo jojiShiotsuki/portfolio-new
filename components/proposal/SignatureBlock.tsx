@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ProposalOption, ProposalSignature } from '../../lib/proposals/types';
-import { submitSignature } from '../../lib/proposals/sign';
+import { submitSignature, fetchSignedStatus } from '../../lib/proposals/sign';
 
 interface SignatureBlockProps {
   /** Its number in the document, derived in ProposalPage so this cannot disagree. */
@@ -14,7 +14,20 @@ interface SignatureBlockProps {
   onSigned: () => void;
 }
 
-type SubmitState = 'idle' | 'submitting' | 'done' | 'error';
+/*
+  `checking` is the state the page opens in: it is asking the server whether this proposal
+  has already been signed before deciding whether to draw a signing form or a receipt.
+
+  It exists because the signed state used to live only in this component's memory, so a
+  refresh gave a person who had just signed a blank pad and an empty name field, which
+  reads as "that did not work" at the one moment it matters. The record was safe the whole
+  time and the page was the only thing saying otherwise.
+
+  It is deliberately a state rather than a spinner over the whole section, and it always
+  ends: the lookup fails open to `idle` on any error or after its own timeout, so the worst
+  case is the form appearing a moment late rather than a client who cannot sign.
+*/
+type SubmitState = 'checking' | 'idle' | 'submitting' | 'done' | 'error';
 
 /** A point on the pad, stored as a fraction of the pad's width and height. */
 interface Point {
@@ -269,7 +282,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   const [fullName, setFullName] = React.useState('');
   const [roleTitle, setRoleTitle] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [state, setState] = React.useState<SubmitState>('idle');
+  const [state, setState] = React.useState<SubmitState>('checking');
   const [reference, setReference] = React.useState('');
   /*
     What was actually submitted, frozen at the moment the server accepted it.
@@ -309,9 +322,55 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
     two differ in ways the client must see: the mark they just drew was NOT stored, and the
     option that counts may not be the one they have selected.
   */
-  const [wasAlreadySigned, setWasAlreadySigned] = React.useState(false);
+  /*
+    Null when this page is showing a signature it just took. Otherwise it says HOW we
+    learned the proposal was already signed, because the two need different words: arriving
+    at a signed proposal is ordinary and needs no explanation, whereas having an attempt
+    refused needs to say plainly that the attempt was not recorded and the earlier
+    acceptance stands.
+  */
+  const [alreadySigned, setAlreadySigned] = React.useState<null | 'onLoad' | 'onAttempt'>(null);
 
-  const locked = state === 'submitting' || state === 'done';
+  /*
+    Ask the server, once, on the way in.
+
+    Everything here fails towards the signing form. A rejected lookup, a slow one, a reply
+    this page cannot read, an unmount mid-flight: all of them land on `idle`, which is the
+    page as it behaved before this existed. The one outcome that must never happen is a
+    client who signed nothing being unable to sign, so "not signed" is the answer to every
+    question this cannot resolve.
+
+    The option is resolved from the id the server returns rather than from the selection,
+    because the selection is whatever the radios default to and has nothing to do with what
+    was agreed. If the id matches no option the receipt simply omits that row instead of
+    naming the wrong one.
+  */
+  React.useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const status = await fetchSignedStatus(slug);
+      if (cancelled || !mountedRef.current) return;
+      if (!status.signed || !status.reference) {
+        setState('idle');
+        return;
+      }
+      setReference(status.reference);
+      setSignedOption(options.find(o => o.id === status.optionId) ?? null);
+      setSignedAt(status.serverTime ?? '');
+      setAlreadySigned('onLoad');
+      setState('done');
+    })();
+    return () => {
+      cancelled = true;
+    };
+    /* Once per proposal. `options` is static data from the proposal file and re-running on
+       its identity would re-ask the server on every unrelated render. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
+
+  /* `checking` locks too: the option radios must not be movable while we are still finding
+     out whether this proposal already has an accepted option. */
+  const locked = state === 'checking' || state === 'submitting' || state === 'done';
 
   /*
     The setup half matters as much as the cleanup half.
@@ -397,8 +456,17 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
      receipt takes focus so a keyboard user lands on it rather than at the top of the
      page, and so a screen reader reads it even if the live region is missed. */
   React.useEffect(() => {
-    if (state === 'done') doneRef.current?.focus();
-  }, [state]);
+    /*
+      Focus follows an ACTION, never an arrival.
+
+      Moving focus is right after somebody presses Sign: they did something and the result
+      is 12,000px of document away from where their attention was. It is wrong when the
+      page merely opens on an already-signed proposal, because focusing the receipt scrolls
+      the reader past the entire document to the last section of a thing they came to read.
+      That is the load-time check quietly undoing the reason the document exists.
+    */
+    if (state === 'done' && alreadySigned !== 'onLoad') doneRef.current?.focus();
+  }, [state, alreadySigned]);
 
   /* Ink drawn in one theme is invisible in the other, so a theme change repaints it in
      the new token colour. The class carries no colour of its own, so this is the only
@@ -550,11 +618,17 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
     the swap and the change of text is what gets read out.
   */
   const liveMessage = (): string => {
+    if (state === 'checking') return 'Checking whether this proposal has already been signed.';
     if (state === 'done') {
-      if (wasAlreadySigned) {
-        return `This proposal has already been signed. The acceptance on file is ${
-          signedOption ? signedOption.name : 'the option recorded at the time'
-        }, reference ${reference}. Nothing further was recorded.`;
+      if (alreadySigned) {
+        const option = signedOption ? signedOption.name : 'the option recorded at the time';
+        /* Two wordings, because the two arrivals are not the same event. Landing on a
+           proposal that was signed earlier is ordinary. Having an attempt refused needs to
+           say so, or the person is left thinking the press they just made is what is on
+           file. */
+        return alreadySigned === 'onAttempt'
+          ? `This proposal has already been signed. The acceptance on file is ${option}, reference ${reference}. Nothing further was recorded.`
+          : `This proposal was signed. The acceptance on file is ${option}, reference ${reference}.`;
       }
       return `Signed and recorded. Thank you, ${signedName}. Your reference is ${reference}.`;
     }
@@ -626,7 +700,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         setSignedEmail('');
         setSignedImage('');
         setSignedAt(result.recordedAt ?? '');
-        setWasAlreadySigned(true);
+        setAlreadySigned('onAttempt');
         setState('done');
         onSigned();
         return;
@@ -685,7 +759,18 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         </div>
       ) : null}
 
-      {state === 'done' ? (
+      {state === 'checking' ? (
+        /*
+          Neither the form nor a receipt, for the moment it takes to ask.
+
+          The alternative was to draw the signing form immediately and swap it for a
+          receipt when the answer came back, and that is worse than it sounds: a client who
+          has already signed would be shown a pad, and some of them would start drawing on
+          it before it vanished under them. A short wait that resolves is calmer than a
+          form that changes its mind.
+        */
+        <p className="pr-sign-note">Checking whether this proposal has already been signed.</p>
+      ) : state === 'done' ? (
         /* tabIndex -1 so success can be handed to the reader. It is focused, never
            tabbed to: a receipt is not a control. */
         <div className="pr-sign-done" ref={doneRef} tabIndex={-1}>
@@ -914,11 +999,15 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       </p>
 
       <p className="pr-sign-note">
-        {state === 'done'
-          ? wasAlreadySigned
-            ? 'This proposal was already signed, so this attempt was not recorded and the acceptance above still stands. If it names the wrong option, reply to the email this proposal arrived in rather than signing again, because signing again will keep returning this same record.'
-            : 'Keep the reference. This proposal has been signed and cannot be signed again from this page.'
-          : signature.note}
+        {state === 'checking'
+          ? signature.note
+          : state === 'done'
+            ? alreadySigned === 'onAttempt'
+              ? 'This proposal was already signed, so this attempt was not recorded and the acceptance above still stands. If it names the wrong option, reply to the email this proposal arrived in rather than signing again, because signing again will keep returning this same record.'
+              : alreadySigned === 'onLoad'
+                ? 'This proposal has been signed and the acceptance above is what is on file. If anything about it is wrong, reply to the email this proposal arrived in rather than signing again.'
+                : 'Keep the reference. This proposal has been signed and cannot be signed again from this page.'
+            : signature.note}
       </p>
 
       {/*
@@ -941,7 +1030,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       */}
       {/* Not shown on an already-signed reply: that page holds no signature image, so it
           would promise a PDF containing a mark the copy cannot contain. */}
-      {state === 'done' && !wasAlreadySigned && (
+      {state === 'done' && !alreadySigned && (
         <p className="pr-sign-note pr-sign-copyhint">
           For your own copy, press <strong>Download PDF</strong> on this page, then set the
           destination to <strong>Save as PDF</strong>. The copy will include your signature

@@ -846,6 +846,57 @@ async function handleList(request: Request, env: Env, headers: Record<string, st
   return json({ ok: true, count: records.length, records }, 200, headers);
 }
 
+/*
+  Has this proposal been signed? Asked by the page as it loads.
+
+  It exists because the lock alone was not enough. Stopping a second record being written
+  fixed what the store holds, and did nothing for what the client SEES: a refresh still
+  gave back a blank form with the pad empty, so a person who had just signed was looking at
+  a page that behaved as though they had not. The signature was safe and the page said
+  nothing, which is the same disagreement between page and store that this endpoint exists
+  to prevent, just pointing the other way.
+
+  Deliberately thin. It answers whether, which option, when and the reference, and nothing
+  else. Name and email are in the record and stay there: this route is reachable by anyone
+  holding the link, and while such a person could learn the same by attempting to sign,
+  that is a reason to keep the answer small rather than an excuse to widen it.
+
+  Unknown slugs get `signed: false` rather than an error, so it cannot be used to find out
+  which proposals exist.
+*/
+async function handleStatus(request: Request, env: Env, headers: Record<string, string>): Promise<Response> {
+  const url = new URL(request.url);
+  const slug = (url.searchParams.get('slug') || '').trim();
+
+  if (!KNOWN_SLUGS.includes(slug)) {
+    return json({ ok: true, signed: false }, 200, headers);
+  }
+
+  let lock: SlugLock | null = null;
+  try {
+    const raw = await env.SIGNATURES.get(slugLockKey(slug));
+    if (raw) lock = JSON.parse(raw) as SlugLock;
+  } catch (err) {
+    /*
+      A lookup failure answers "not signed", which makes the page show its normal signing
+      form. That is the safe direction: the worst case is the behaviour we had before this
+      route existed, and a second attempt is still refused by the lock at signing time. The
+      opposite default would show a receipt on a guess, or block signing outright.
+    */
+    console.error('Status lookup failed:', err instanceof Error ? err.message : 'unknown');
+  }
+
+  if (!lock || !lock.reference) {
+    return json({ ok: true, signed: false }, 200, headers);
+  }
+
+  return json(
+    { ok: true, signed: true, reference: lock.reference, optionId: lock.optionId, serverTime: lock.serverTime },
+    200,
+    headers,
+  );
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = request.headers.get('Origin') || '';
@@ -870,6 +921,21 @@ export default {
           return json({ ok: false, error: 'Forbidden.' }, 403, headers);
         }
         return await handleSign(request, env, headers);
+      }
+
+      /*
+        No origin gate, unlike /sign. It is reached through api/sign.php on the site, and a
+        server to server call carries no Origin of its own; sign.php states one for the POST
+        because the worker demands it there, and adding a second place that has to remember
+        to do that is a way to break the page's load. The route is safe to leave open
+        because it writes nothing, reveals nothing personal, and answers identically for an
+        unknown slug and an unsigned one.
+      */
+      if (url.pathname === '/status') {
+        if (request.method !== 'GET') {
+          return json({ ok: false, error: 'Method not allowed.' }, 405, headers);
+        }
+        return await handleStatus(request, env, headers);
       }
 
       if (url.pathname === '/signatures') {

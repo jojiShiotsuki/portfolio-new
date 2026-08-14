@@ -144,6 +144,29 @@ if (!is_array($parsed)) {
 
 // --- Try the worker first -------------------------------------------------------------
 
+/*
+  The address of the person signing, passed on so the worker's hourly limit counts them
+  rather than this server.
+
+  Forwarding created this problem: from the worker's side every signature now arrives from
+  this machine, so a limit written as "five per connection per hour" silently became five
+  per hour for everybody at once, and testing could lock a real client out.
+
+  X-Forwarded-For is read first because the host may sit behind its own proxy, and it is a
+  list where the FIRST entry is the original client. Only the characters an address can
+  contain are kept, which stops a forged header from injecting anything into the header
+  block, and the value is capped because it is attacker-supplied.
+*/
+$signerIp = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+$forwarded = (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? '');
+if ($forwarded !== '') {
+    $first = trim(explode(',', $forwarded)[0]);
+    if ($first !== '') {
+        $signerIp = $first;
+    }
+}
+$signerIp = substr(preg_replace('/[^0-9a-fA-F:.]/', '', $signerIp) ?? '', 0, 45);
+
 $workerBody   = null;
 $workerStatus = 0;
 
@@ -159,6 +182,10 @@ if (function_exists('curl_init')) {
                real protection is its slug allow list and field validation, which its own
                comment says stand behind this gate. */
             'Origin: ' . SITE_ORIGIN,
+            /* Sanitised above to address characters only, so it cannot carry a newline
+               and forge a second header. Absent rather than empty when unknown, which
+               lets the worker fall back to the connecting address by itself. */
+            ...($signerIp !== '' ? ['X-Signer-IP: ' . $signerIp] : []),
         ],
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT        => WORKER_TIMEOUT,

@@ -602,12 +602,28 @@ function safeEqual(a: string, b: string): boolean {
 // --- Routes ---
 
 async function handleSign(request: Request, env: Env, headers: Record<string, string>): Promise<Response> {
-  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  /*
+    Who is signing, for the per-signer hourly limit.
 
-  const rateCheck = await checkRateLimit(env, ip);
-  if (!rateCheck.allowed) {
-    return json({ ok: false, error: rateCheck.reason }, 429, headers);
-  }
+    CF-Connecting-IP is the address of whatever opened the socket, and since 15 August that
+    is api/sign.php on the website rather than the person. Every signature in the world
+    therefore arrived from ONE address, and the limit meant to stop one person spamming
+    became five signatures an hour shared by everybody. Measured, not guessed: the counted
+    address was the web host's, while the machine doing the signing was on a different
+    network entirely. Half an hour of testing locked the endpoint, which is exactly what it
+    would have done to Tony.
+
+    So the forwarder states the address it received the request from, and that is used when
+    present. It is a header and headers can be forged, which is tolerable here: the slug
+    allow list is two entries long, a proposal can now only be signed once whatever the
+    limit says, and the daily cap underneath is not per address. Forging it buys an attacker
+    a slightly larger share of a cap they were already subject to, while NOT reading it
+    breaks the limit for every real signer, which is the failure that actually happened.
+  */
+  const ip =
+    request.headers.get('X-Signer-IP')?.trim() ||
+    request.headers.get('CF-Connecting-IP') ||
+    'unknown';
 
   // Reject an oversized body before reading it, so a large upload cannot be used to burn CPU.
   const declaredLength = parseInt(request.headers.get('Content-Length') || '0', 10);
@@ -628,6 +644,28 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
   }
 
   const payload = checked.payload;
+
+  /*
+    Rehearsal signings do not count against anything, and the check moved down here so the
+    slug is known before that can be decided.
+
+    Testing the rehearsal copy was spending the real allowance: five presses on the sandbox
+    and the client with the actual proposal is refused for the rest of the hour. A test rig
+    that can disable the thing it is testing is worse than no test rig, because it fails at
+    exactly the moment somebody is finally using it for real.
+
+    Moving the check past validation is right on its own terms too, and matches what the
+    counters have always claimed to count. A malformed attempt now costs nothing, and the
+    body it had to read first is already bounded above.
+  */
+  const isRehearsal = REHEARSAL_SLUGS.includes(payload.slug);
+
+  if (!isRehearsal) {
+    const rateCheck = await checkRateLimit(env, ip);
+    if (!rateCheck.allowed) {
+      return json({ ok: false, error: rateCheck.reason }, 429, headers);
+    }
+  }
 
   /*
     Has this exact attempt already been recorded?
@@ -788,10 +826,12 @@ async function handleSign(request: Request, env: Env, headers: Record<string, st
     is success, so the counter write is wrapped: a rate limit that fails to increment is a
     smaller problem than a stored signature reported as an error.
   */
-  try {
-    await recordAcceptedSignature(env, ip);
-  } catch (err) {
-    console.error('Rate counter update failed:', err instanceof Error ? err.message : 'unknown');
+  if (!isRehearsal) {
+    try {
+      await recordAcceptedSignature(env, ip);
+    } catch (err) {
+      console.error('Rate counter update failed:', err instanceof Error ? err.message : 'unknown');
+    }
   }
 
   const notified = await notify(env, record);

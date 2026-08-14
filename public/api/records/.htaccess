@@ -1,0 +1,31 @@
+# Signature records written by sign.php when Cloudflare could not be reached.
+#
+# These files hold a client's name, email address and their signature image. Nothing in
+# here may ever be fetched over the web, and the filenames are predictable enough
+# (timestamp plus reference) that obscurity is not protection.
+#
+# Both syntaxes are present on purpose: Apache 2.4 uses Require, 2.2 uses Order/Deny, and
+# a host silently ignoring the one it does not understand must not leave the directory
+# open. IfModule guards stop the unknown directive being a 500 instead.
+
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>
+
+# Belt and braces: even if the rules above are overridden, refuse to hand back a .json.
+<FilesMatch "\.(json|php)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+Options -Indexes

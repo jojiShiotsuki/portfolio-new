@@ -11,8 +11,32 @@ import type { SignaturePayload, SignatureResult } from './types';
   same answer to the person signing: nothing has been recorded, here is what to do.
 */
 
-/** The Cloudflare Worker that records signatures. Deployed separately from this bundle. */
-export const SIGN_ENDPOINT = 'https://proposal-sign.joji-dev.workers.dev/sign';
+/*
+  Where a signature is posted.
+
+  In production this is a path on THIS site, not the Cloudflare Worker, and that is the
+  whole point. The page posted straight to the worker until 15 August, when Joji's
+  connection turned out to be unable to open a socket to the two addresses that worker
+  answers on: DNS resolved, other Cloudflare hosts connected, his own site connected, and
+  those two refused, on and off, for minutes. It lost a signature once and reported a stored
+  one as failed once.
+
+  A relative path removes the failure. The document the client is reading was served by this
+  host over this exact route, so if they can read it they can reach this. There is no second
+  connection to fail, and no CORS, because it is the same origin. api/sign.php forwards to
+  the worker from a data centre and falls back to storing the signature itself.
+
+  Development is the exception: Vite serves the app but does not run PHP, so localhost keeps
+  posting to the worker directly. That means the local path is NOT the production path, and
+  anything about the PHP hop has to be checked against the deployed site rather than here.
+*/
+const isLocalHost = (): boolean =>
+  typeof location !== 'undefined' &&
+  ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+
+export const SIGN_ENDPOINT = isLocalHost()
+  ? 'https://proposal-sign.joji-dev.workers.dev/sign'
+  : '/api/sign.php';
 
 /*
   What the page actually posts: the shared payload plus one flag types.ts has no room for.

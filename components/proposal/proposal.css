@@ -937,37 +937,55 @@
    sticky has something to travel inside, and a row-gap would be multiplied by
    every one of those empty implicit rows. */
 @media (min-width: 1100px) {
-  .mono .proposal .pr-grid,
-  .mono .proposal:has(> .pr-toc),
-  .mono .proposal :has(> .pr-toc) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--pr-rail);
-    column-gap: clamp(2rem, 4vw, 3.5rem);
-    align-items: start;
-  }
-  .mono .proposal .pr-grid > *,
-  .mono .proposal:has(> .pr-toc) > *,
-  .mono .proposal :has(> .pr-toc) > * {
-    grid-column: 1;
-    min-width: 0;
-  }
+  /* The rail leaves the flow completely and owns the full height of the viewport,
+     from the very top of the page rather than from below the cover. The document is
+     inset by its width instead of sharing a grid with it, which is what lets the rail
+     stay put while every part of the sheet, cover included, scrolls past it. */
+  .mono .proposal { padding-left: var(--pr-rail) }
+
   .mono .proposal .pr-toc {
-    grid-column: 2;
-    grid-row: 1 / span 400;
-    position: sticky;
-    top: var(--pr-stick);
-    align-self: start;
-    max-height: calc(100vh - var(--pr-stick) - 2rem);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--pr-rail);
+    /* Not 100vh: on mobile browsers that would be wrong, and dvh is right everywhere
+       it is supported. Both are declared so an older engine still gets a full column. */
+    height: 100vh;
+    height: 100dvh;
+    z-index: 8;
+    margin: 0;
     overflow-y: auto;
-    margin-bottom: 0;
-    /* No top rule in the rail. Beside the text it is a margin note, and a full
-       strength rule there reads as the start of another section. */
+    overscroll-behavior: contain;
+    background: var(--paper);
+    border-right: 1px solid var(--rule);
+    /* No top rule. The right hand border already separates the rail from the document,
+       and a second line across the top reads as the start of a section. */
     border-top: 0;
-    padding-top: 0;
+    padding: var(--pr-stick) clamp(1rem, 1.6vw, 1.6rem) 2rem;
   }
-  /* The action bar sits outside the grid in the source, so this only matters if it
-     is ever moved inside one: it should span the document, not the text column. */
-  .mono .proposal .pr-actions { grid-column: 1 / -1 }
+
+  /*
+    Drop the right hand notes and their dot leaders inside the rail.
+
+    They were designed for a wide margin column. In a 15.5rem rail they pushed the rows
+    32px past its edge, which produced two symptoms that looked unrelated: the words were
+    clipped mid-letter ("PRICI", "SIGN"), and the rail gained a horizontal scrollbar whose
+    accent coloured thumb read as a stray green bar across the bottom of the page. One
+    overflow, two bugs. The section names carry the list without them, which is also how
+    the proposal this rail is modelled on does it.
+
+    overflow-x is pinned closed as well, so a long section title added later cannot bring
+    the scrollbar back.
+  */
+  .mono .proposal .pr-toc .c,
+  .mono .proposal .pr-toc .leader { display: none }
+  .mono .proposal .pr-toc { overflow-x: hidden }
+  .mono .proposal .pr-toc a { gap: .7rem }
+
+  /* The bar is pinned to the viewport, so it has to be told about the rail too or it
+     runs underneath it. */
+  .mono .proposal .pr-actions { left: var(--pr-rail) }
 }
 
 /* -------------------------------------------------------- reduced motion */
@@ -1040,7 +1058,10 @@
   .mono .proposal .pr-sign-state,
   .mono .proposal .skip { display: none !important }
 
-  /* Undo the reading rail so the text uses the full printed measure. */
+  /* Undo the rail so the text uses the full printed measure. The contents list is
+     hidden above, but the inset that reserved its column is on .proposal itself and
+     would otherwise print as a wide empty left margin on all fifteen pages. */
+  .mono .proposal { padding-left: 0 !important }
   .mono .proposal .pr-grid,
   .mono .proposal:has(> .pr-toc),
   .mono .proposal :has(> .pr-toc) { display: block }

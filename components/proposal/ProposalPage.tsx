@@ -197,13 +197,15 @@ const ProposalPage: React.FC = () => {
             </dl>
           </header>
 
-          {/* The contents list comes after the cover and before the document, which is
-              the reading order on a phone. On a wide screen proposal.css turns whatever
-              element directly contains .pr-toc into the two column grid, so this wrapper
-              is what becomes the grid: contents in the rail, document in the column. */}
-          <div className="pr-grid sheet">
-            <ProposalToc items={tocItems} />
+          {/* The contents list comes after the cover in the source, which is the reading
+              order on a phone, where it is a plain block above the text. Above 1100px
+              proposal.css lifts it out of the flow entirely and pins it to the left edge
+              as a full height rail, and the whole sheet is inset by the rail's width to
+              make room. Keeping it here rather than in a grid cell is what lets it run
+              the full height of the viewport instead of starting below the cover. */}
+          <ProposalToc items={tocItems} />
 
+          <div className="pr-grid sheet">
             <div className="pr-main">
               {proposal.sections.map((section, index) => (
                 <React.Fragment key={section.id}>

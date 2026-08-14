@@ -25,36 +25,63 @@ interface ProposalTocProps {
 const ProposalToc: React.FC<ProposalTocProps> = ({ items }) => {
   const [activeId, setActiveId] = React.useState<string>(items[0]?.id ?? '');
 
+  /*
+    Which section is the reader actually on.
+
+    This was an IntersectionObserver keeping a set of everything crossing a band near the
+    top of the viewport, and taking the first of them in document order. It read one
+    behind: land on Overview and the contents still said the quotes above it. A band has
+    two edges and a tall section can span both, so "first thing touching the band" is not
+    the same question as "what am I reading", and tuning the margins only moves where it
+    is wrong.
+
+    So it asks the question directly instead. A probe line sits a quarter of the way down
+    the viewport, and the active section is the last one whose top has passed it. There is
+    no band, no set and no ordering rule to get wrong, and it can be checked by reading two
+    numbers off the page. Costs one rect per section per frame, on a page with eight.
+  */
   React.useEffect(() => {
     const ids = items.map(item => item.id);
-    const elements = ids
-      .map(id => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (elements.length === 0) return;
+    if (ids.length === 0) return;
 
-    // A band near the top of the viewport. Whatever is crossing it is what the reader is
-    // reading. Kept in the set rather than read from the entry list because the callback
-    // only carries the sections that changed, not every section.
-    const inBand = new Set<string>();
+    let frame = 0;
 
-    const observer = new IntersectionObserver(
-      entries => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) inBand.add(entry.target.id);
-          else inBand.delete(entry.target.id);
-        }
-        // Document order, so a tall section that starts above the band still wins over
-        // the one below it.
-        const next = ids.find(id => inBand.has(id));
-        if (next) setActiveId(next);
-      },
-      { rootMargin: '-72px 0px -62% 0px', threshold: 0 },
-    );
+    const measure = () => {
+      frame = 0;
+      const probe = window.innerHeight * 0.28;
 
-    elements.forEach(el => observer.observe(el));
+      // The last section can be too short to ever reach the probe, so it would never
+      // light up however far you scrolled. At the bottom of the page it is the answer by
+      // definition. 2px of slack because zoom levels make this fractional.
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        setActiveId(ids[ids.length - 1]);
+        return;
+      }
+
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= probe) current = id;
+        else break;
+      }
+      setActiveId(current);
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(measure);
+    };
+
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     return () => {
-      observer.disconnect();
-      inBand.clear();
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, [items]);
 

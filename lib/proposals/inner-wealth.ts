@@ -21,10 +21,10 @@ export const innerWealth: Proposal = {
   slug: 'inner-wealth-u3_c-eCtTSpj',
   client: 'Inner Wealth Solutions Pty Ltd',
   contact: 'Tony Lu',
-  title: 'Website rebuild and ongoing search work',
-  subtitle: 'Rebuilding innerwealth.com.au off Wix, and the search work that follows it',
+  title: 'Website rebuild and ongoing SEO',
+  subtitle: 'Rebuilding innerwealth.com.au off Wix, and the SEO that follows it',
   preparedBy: 'Joji Shiotsuki',
-  preparedByRole: 'Web development and search',
+  preparedByRole: 'Web development and SEO',
   preparedByEmail: 'jojishiotsuki0@gmail.com',
   preparedOn: '2026-08-15',
   validUntil: '14 September 2026',
@@ -58,15 +58,15 @@ export const innerWealth: Proposal = {
       blocks: [
         { kind: 'p', text: 'Thank you for the call on 14 August, and thanks to Mitchell for putting us in touch.' },
         { kind: 'p', text: 'You said the thing that matters most in the first few minutes. You are bringing on a new adviser, and you want that adviser as busy as possible, as quickly as possible. Everything in here is pointed at that. At the moment your enquiries come from your Google reviews, your Adviser Ratings reviews and people who already know you. That works, and it keeps you busy. It is also your own network, which is a hard thing to hand to somebody else.' },
-        { kind: 'p', text: 'The site was built about six years ago on Wix and most of it has sat still since. What I would like to do is rebuild it on WordPress, keeping your branding exactly as it is, and then do the search work that puts it in front of people looking for a financial planner in Sydney. You told me you have the patience for a six month lead time. That is the right expectation, and it is roughly how this work behaves.' },
-        { kind: 'p', text: 'Two things I want to be straight about before you read on. I work at a marketing agency and I do this alongside it, with a small team: one specialist on search, one on web design, and me across both and running the project. And I will not promise you a position in Google, because nobody controls that. What I can do is show you what we would build, what it costs, and how much of your time it takes.' },
+        { kind: 'p', text: 'The site was built about six years ago on Wix and most of it has sat still since. What I would like to do is rebuild it on WordPress, keeping your branding exactly as it is, and then do the SEO that puts it in front of people looking for a financial planner in Sydney. You told me you have the patience for a six month lead time. That is the right expectation, and it is roughly how this work behaves.' },
+        { kind: 'p', text: 'Two things I want to be straight about before you read on. I work at a marketing agency and I do this alongside it, with a small team: one specialist on SEO, one on web design, and me across both and running the project. And I will not promise you a position in Google, because nobody controls that. What I can do is show you what we would build, what it costs, and how much of your time it takes.' },
         { kind: 'p', text: 'You asked me two questions on the call: what the timeline looks like given my other commitments, and how much of your own time the ongoing work needs. Both are answered under **Timeline, start date and what we need**.' },
         { kind: 'p', text: 'Have a read. If something in here is wrong or does not fit, tell me and I will change it.' },
         {
           kind: 'kv',
           rows: [
             { term: 'From', value: '**Joji Shiotsuki**' },
-            { term: 'Role', value: 'Web development and search' },
+            { term: 'Role', value: 'Web development and SEO' },
             { term: 'Email', value: 'jojishiotsuki0@gmail.com' },
           ],
         },
@@ -137,7 +137,7 @@ export const innerWealth: Proposal = {
             '**Update the team page** with the current team.',
           ],
         },
-        { kind: 'h3', text: 'Part two, the ongoing search work' },
+        { kind: 'h3', text: 'Part two, the ongoing SEO' },
         {
           kind: 'ul',
           items: [
@@ -151,7 +151,7 @@ export const innerWealth: Proposal = {
         },
         { kind: 'p', text: 'One note on how the content gets written, because it comes up. Google\'s stated position is that it rewards helpful content regardless of how it was produced, and acts against unhelpful content produced at scale. So the standard we hold to is whether an article is accurate for your market and worth reading. That is why your input is built into the process rather than bolted on at the end.' },
         { kind: 'h3', text: 'Who does the work' },
-        { kind: 'p', text: 'A small team: a specialist on search, a specialist on web design, and me doing both and managing them. I work at a marketing agency and run this alongside it. I am your point of contact throughout, so you are never chasing three people.' },
+        { kind: 'p', text: 'A small team: a specialist on SEO, a specialist on web design, and me doing both and managing them. I work at a marketing agency and run this alongside it. I am your point of contact throughout, so you are never chasing three people.' },
       ],
     },
 
@@ -164,7 +164,7 @@ export const innerWealth: Proposal = {
         { kind: 'h3', text: 'Timeline' },
         { kind: 'p', text: 'The build takes roughly three to four weeks of production time once we have access and your sign-off on content. Where it stretches is photography and approvals rather than our end.' },
         { kind: 'p', text: 'Your existing site stays live and untouched the whole time. Nothing changes at innerwealth.com.au until you have seen the new site and said go.' },
-        { kind: 'p', text: 'On search, realistically it takes three to six months before movement is meaningful, and I would not read much into the first couple of months. At that point we review what has moved and adjust. That fits the six month lead time you described, which is why the timing suits this well.' },
+        { kind: 'p', text: 'On SEO, realistically it takes three to six months before movement is meaningful, and I would not read much into the first couple of months. At that point we review what has moved and adjust. That fits the six month lead time you described, which is why the timing suits this well.' },
         { kind: 'h3', text: 'What we need from you' },
         {
           kind: 'ul',
@@ -209,7 +209,7 @@ export const innerWealth: Proposal = {
     },
     {
       id: 'website-plus-seo',
-      name: 'Option B: Website plus search',
+      name: 'Option B: Website plus SEO',
       price: 'AUD 1,500',
       cadence: 'per month',
       summary: 'The same rebuild, included at no charge, plus the ongoing work that gets it found.',
@@ -217,8 +217,8 @@ export const innerWealth: Proposal = {
       highlight: 'Website build included at no charge',
       includes: [
         'Everything in Option A',
-        'Keyword research and search strategy',
-        'On-page and technical search work, ongoing',
+        'Keyword research and SEO strategy',
+        'On-page and technical SEO, ongoing',
         'Four articles a month, written with your input',
         'Google Business Profile management',
         'Monthly report and a review call',
@@ -250,7 +250,7 @@ export const innerWealth: Proposal = {
           ],
         },
         { kind: 'h3', text: 'Ending the monthly service' },
-        { kind: 'p', text: 'The search work is an ongoing monthly service, not a fixed term contract. There is no minimum term and you can stop it with 30 days notice at any time. The same applies in the other direction.' },
+        { kind: 'p', text: 'The SEO is an ongoing monthly service, not a fixed term contract. There is no minimum term and you can stop it with 30 days notice at any time. The same applies in the other direction.' },
         { kind: 'p', text: 'One condition, and it is the only one in this document. Under Option B the AUD 2,000 website build is included at no charge because the monthly work is what pays for it. If you end the monthly service within the first six months, the AUD 2,000 build becomes payable. After six months it does not, whatever happens. Six months is not an arbitrary number: it is the point at which this work has had a fair run, which is the same three to six months I described on the call.' },
         { kind: 'h3', text: 'Costs that sit outside these fees' },
         { kind: 'p', text: 'Moving off Wix means the site needs WordPress hosting, which the firm does not currently pay for. We will recommend a plan and set it up, the account goes in Inner Wealth\'s name, and you pay the host directly. It is a small monthly cost and it is yours, not ours, so you are never locked to us by your own hosting.' },

@@ -373,6 +373,19 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         from the same selection and has to agree too.
       */
       if (recorded) onSelectOption(recorded.id);
+      /*
+        Lock the Investment section too, which is the half selecting the option does not
+        do. `locked` inside this block only reaches the radios beside the receipt; the
+        pricing cards further up the document are the parent's, and they are frozen by
+        this callback and nothing else.
+
+        Missing it left a signed proposal with its option cards still live on a reload, so
+        a client could open a document they had already signed and change the price on the
+        page above their own receipt. The submit path had always called this; the
+        load-time path was new and did not, which is exactly the kind of half a feature
+        arrives with.
+      */
+      onSigned();
       setState('done');
     })();
     return () => {

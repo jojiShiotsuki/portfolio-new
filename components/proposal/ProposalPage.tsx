@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getProposal } from '../../lib/proposals';
+import { useTheme } from '../../ThemeContext';
 import type { Proposal, ProposalSection } from '../../lib/proposals/types';
 import Blocks from './Blocks';
 import ProposalToc from './ProposalToc';
@@ -106,6 +107,14 @@ const ProposalPage: React.FC = () => {
      what was agreed, not a control, so its radios go dead like every other control does. */
   const [signed, setSigned] = React.useState(false);
 
+  /* The proposal renders its own shell and carries no masthead on purpose, which also
+     removed the only way to change theme: a client reading at night got whatever their
+     machine was set to, with no say in it. Same control as the rest of the site, same
+     class names, so mono.css styles it without a line being added here. */
+  const { mode, toggleTheme } = useTheme();
+  const themeBtnRef = React.useRef<HTMLButtonElement>(null);
+  const isDark = mode === 'dark';
+
   const [selectedOptionId, setSelectedOptionId] = React.useState<string>(
     () => (proposal ? defaultOptionId(proposal) : ''),
   );
@@ -192,6 +201,22 @@ const ProposalPage: React.FC = () => {
             say yes. window.print() is the whole PDF story, and the print stylesheet is
             what makes the result worth keeping. */}
         <div className="pr-actions">
+          {/* First in the bar, and deliberately not a filled control: it is a reading
+              preference sitting beside the two things the page is actually for. The
+              reveal is anchored on the button so the new theme grows out of the thing
+              that was pressed, which is how the masthead does it. */}
+          <button
+            className="theme-btn pr-theme"
+            type="button"
+            ref={themeBtnRef}
+            onClick={() => toggleTheme(themeBtnRef.current?.getBoundingClientRect())}
+            aria-label={`Switch to the ${isDark ? 'light' : 'dark'} theme`}
+            aria-pressed={isDark}
+          >
+            <span className="theme-orb" aria-hidden="true" />
+            <span>{isDark ? 'Light' : 'Dark'}</span>
+          </button>
+
           <button type="button" className="pr-dl" onClick={() => window.print()}>
             Download PDF
           </button>

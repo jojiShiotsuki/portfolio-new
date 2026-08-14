@@ -9,7 +9,15 @@ ALLOWED_ORIGIN = "https://jojishiotsuki.com"
 NOTIFY_EMAIL = "jojishiotsuki0@gmail.com"
 # The from address. It must sit on a domain verified inside Resend, or Resend rejects the
 # send. Signing still succeeds if it does, the email just does not arrive.
-NOTIFY_FROM = "proposals@jojishiotsuki.com"
+#
+# 15 August: set to Resend's own shared sender rather than proposals@jojishiotsuki.com,
+# which was never verified and would therefore have been rejected on every send. The shared
+# sender needs no DNS at all, and its one restriction does not bite here: it can only
+# deliver to the address that owns the Resend account, and the only recipient is
+# NOTIFY_EMAIL above, which is that address. This notifies Joji and nobody else, so it never
+# needs to look like it came from the business. Switch to the domain sender only if this
+# email is ever pointed at a client.
+NOTIFY_FROM = "onboarding@resend.dev"
 
 # Its own namespace, not the chat worker's RATE_LIMIT one. Signed proposals and chat rate
 # counters have different lifetimes and very different consequences if one wipes the other.

@@ -29,14 +29,6 @@ const formatDate = (iso: string): string => {
 };
 
 /*
-  The number the pricing block shows, or an empty string for none.
-
-  The proposal data numbers its own sections and its terms. When those two runs leave a
-  gap (sections end at 04 and the terms are 06), the pricing is what the gap was left for
-  and it takes 05. When they run straight on, the pricing carries no number rather than
-  pushing the terms out of step with the document the client may already have read.
-*/
-/*
   Every numbered block in the document, in the order it renders, numbered once.
 
   This is the only place numbering happens. The contents list and the headings both read
@@ -100,6 +92,10 @@ const Section: React.FC<SectionProps> = ({ section, n }) => (
 const ProposalPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const proposal = getProposal(slug);
+
+  /* Set once the signature is recorded. From then on the pricing block is a statement of
+     what was agreed, not a control, so its radios go dead like every other control does. */
+  const [signed, setSigned] = React.useState(false);
 
   const [selectedOptionId, setSelectedOptionId] = React.useState<string>(
     () => (proposal ? defaultOptionId(proposal) : ''),
@@ -244,6 +240,7 @@ const ProposalPage: React.FC = () => {
                         n={chapter.n}
                         selectedOptionId={selectedOptionId}
                         onSelectOption={setSelectedOptionId}
+                        locked={signed}
                       />
                     );
                   case 'signature':
@@ -260,6 +257,7 @@ const ProposalPage: React.FC = () => {
               <SignatureBlock
                 n={chapters[chapters.length - 1]?.n ?? ''}
                 slug={proposal.slug}
+                onSigned={() => setSigned(true)}
                 signature={proposal.signature}
                 options={proposal.options}
                 selectedOptionId={selectedOptionId}

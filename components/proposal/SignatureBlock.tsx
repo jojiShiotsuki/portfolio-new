@@ -10,6 +10,8 @@ interface SignatureBlockProps {
   options: ProposalOption[];
   selectedOptionId: string;
   onSelectOption: (id: string) => void;
+  /** Fired once, when the server has accepted the signature. Locks the pricing block. */
+  onSigned: () => void;
 }
 
 type SubmitState = 'idle' | 'submitting' | 'done' | 'error';
@@ -119,6 +121,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   options,
   selectedOptionId,
   onSelectOption,
+  onSigned,
 }) => {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
   const ctxRef = React.useRef<CanvasRenderingContext2D | null>(null);
@@ -137,6 +140,20 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   const [email, setEmail] = React.useState('');
   const [state, setState] = React.useState<SubmitState>('idle');
   const [reference, setReference] = React.useState('');
+  /*
+    What was actually submitted, frozen at the moment the server accepted it.
+
+    The receipt used to render from the live selection, and the pricing radios stayed
+    enabled after signing, so one tap on the other option card rewrote what the receipt
+    said had been accepted, with no network call and nothing on screen saying it changed.
+    The client's downloaded PDF could then name Option A next to the reference the server
+    had recorded against Option B, a AUD 16,000 disagreement between his copy and ours.
+    A receipt is a record of what happened, so it reads from a snapshot, never from state
+    that anything can still move.
+  */
+  const [signedOption, setSignedOption] = React.useState<ProposalOption | null>(null);
+  const [signedName, setSignedName] = React.useState('');
+  const [signedEmail, setSignedEmail] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const locked = state === 'submitting' || state === 'done';
@@ -367,7 +384,11 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
 
     if (result.ok && result.reference) {
       setReference(result.reference);
+      setSignedOption(selectedOption ?? null);
+      setSignedName(trimmedName);
+      setSignedEmail(trimmedEmail);
       setState('done');
+      onSigned();
       return;
     }
     // Nothing typed or drawn is touched here. An error must cost the client a button
@@ -413,7 +434,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       {state === 'done' ? (
         <div className="pr-sign-done">
           <p className="pr-p">
-            Signed and recorded. Thank you, {trimmedName}.
+            Signed and recorded. Thank you, {signedName}.
           </p>
           <dl className="pr-kv">
             <div className="r">
@@ -424,12 +445,12 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
             <div className="r">
               <dt>Option accepted</dt>
               <span className="leader" aria-hidden="true" />
-              <dd>{selectedOption ? selectedOption.name : ''}</dd>
+              <dd>{signedOption ? signedOption.name : ''}</dd>
             </div>
             <div className="r">
               <dt>Copy sent to</dt>
               <span className="leader" aria-hidden="true" />
-              <dd>{trimmedEmail}</dd>
+              <dd>{signedEmail}</dd>
             </div>
           </dl>
           <p className="pr-sign-note">

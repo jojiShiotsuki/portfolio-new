@@ -8,6 +8,13 @@ interface InvestmentProps {
   n?: string;
   selectedOptionId: string;
   onSelectOption: (id: string) => void;
+  /*
+    True once the proposal has been signed. Every other control in the flow already takes
+    a locked flag; these radios were the one place in the pattern that missed it, and the
+    gap was not cosmetic: the receipt could be made to name an option the client never
+    signed, and it printed that way.
+  */
+  locked?: boolean;
 }
 
 /*
@@ -28,6 +35,7 @@ const Investment: React.FC<InvestmentProps> = ({
   n,
   selectedOptionId,
   onSelectOption,
+  locked = false,
 }) => {
   if (options.length === 0) return null;
 
@@ -82,13 +90,16 @@ const Investment: React.FC<InvestmentProps> = ({
                   name="proposal-option"
                   value={option.id}
                   checked={isSelected}
+                  disabled={locked}
                   onChange={() => onSelectOption(option.id)}
                 />
                 {/* A bare text run, not a span. The flex gap spaces it from the radio
                     either way, and a wrapper would be a class the stylesheet does not
                     know about. The accessible name of the radio is the whole card, which
                     is right: nobody should pick an option without hearing its price. */}
-                {isSelected ? 'Selected' : 'Choose this option'}
+                {locked
+                  ? (isSelected ? 'Accepted' : '')
+                  : (isSelected ? 'Selected' : 'Choose this option')}
               </span>
             </label>
           );

@@ -52,6 +52,44 @@ const FALLBACK_SIZE = { w: 600, h: 170 };
 const CANVAS_OPTIONS: CanvasRenderingContext2DSettings = { willReadFrequently: true };
 
 /*
+  The typed-name signature is set in a script face, not in the document's mono, because a
+  name in Azeret Mono reads as a field someone filled in rather than as a signature.
+
+  It is a canvas draw, and that is the whole difficulty. A canvas does not wait for a font:
+  if the face has not loaded when fillText runs it silently paints the fallback and never
+  tells you. That is how the pad and the recorded PNG end up disagreeing, one in script and
+  one in mono, with the client having checked the one that was not sent. So nothing here
+  assumes the font is ready. `loadSignatureFont` is awaited and the pad repainted, and the
+  first paint before it resolves is deliberate too: an empty pad while a webfont downloads
+  is worse than a correct name in the wrong face for 200ms.
+
+  The size ratio is larger than the mono it replaced (0.30) because a script face carries a
+  much smaller x-height at the same pixel size, and the baseline sits higher up the pad to
+  keep the long descenders of a script capital clear of the label underneath.
+*/
+const SIGNATURE_FAMILY = "'Dancing Script', cursive";
+const SIGNATURE_WEIGHT = 600;
+const SIGNATURE_SIZE_RATIO = 0.42;
+const SIGNATURE_BASELINE = 0.52;
+
+/**
+ * Resolve when the signature face is usable for this exact name.
+ *
+ * The name is passed to `fonts.load` rather than a fixed string because Google serves the
+ * family in unicode-range subsets, so loading it for "abc" does not guarantee the subset a
+ * name with an accent or a non-Latin character needs. Never rejects: a font that fails to
+ * load is a cosmetic problem and must not stop somebody signing.
+ */
+const loadSignatureFont = async (name: string): Promise<void> => {
+  if (typeof document === 'undefined' || !('fonts' in document)) return;
+  try {
+    await document.fonts.load(`${SIGNATURE_WEIGHT} 64px ${SIGNATURE_FAMILY}`, name);
+  } catch {
+    /* Cosmetic only. The fallback face still paints a name. */
+  }
+};
+
+/*
   Colours come out of the design tokens, read off the live element, so this file contains
   no colour of its own and dark mode needs no special case. --ink and --paper are declared
   on .mono and inherit down to the canvas.
@@ -123,15 +161,19 @@ const paintTypedName = (
      PNG in the record were both cut off at the right edge. It is measured now, then shrunk
      by exactly the amount it overruns, so the whole name is always on the pad. */
   const usable = width * 0.88;
-  let size = Math.max(16, height * 0.3);
-  ctx.font = `${Math.round(size)}px ${palette.family}`;
+  let size = Math.max(16, height * SIGNATURE_SIZE_RATIO);
+  ctx.font = `${SIGNATURE_WEIGHT} ${Math.round(size)}px ${SIGNATURE_FAMILY}`;
   const measured = ctx.measureText(name).width;
   if (measured > usable) size = Math.max(8, (size * usable) / measured);
 
-  ctx.font = `${Math.round(size)}px ${palette.family}`;
-  ctx.fillText(name, width * 0.06, height * 0.56);
-  ctx.font = `${Math.max(10, Math.round(size * 0.34))}px ${palette.family}`;
-  ctx.fillText('Typed signature', width * 0.06, height * 0.82);
+  ctx.font = `${SIGNATURE_WEIGHT} ${Math.round(size)}px ${SIGNATURE_FAMILY}`;
+  ctx.fillText(name, width * 0.06, height * SIGNATURE_BASELINE);
+
+  /* The label stays in the document's own mono. It is a statement about the record, not
+     part of the signature, and setting it in the same script would read as if the words
+     had been signed too. */
+  ctx.font = `${Math.max(10, Math.round(size * 0.28))}px ${palette.family}`;
+  ctx.fillText('Typed signature', width * 0.06, height * 0.86);
 };
 
 /* Whether the pad actually has ink on it, asked of the pixels rather than of a flag. A
@@ -324,8 +366,19 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
      letter of the name repaints the mark, so the client signs while looking at the same
      image the server is about to be sent, not at an empty box. */
   React.useEffect(() => {
-    typedRef.current = { on: useTypedSignature, name: fullName.trim() };
+    const name = fullName.trim();
+    typedRef.current = { on: useTypedSignature, name };
     setupCanvas();
+
+    /* Then again once the script face is actually available for these characters. Without
+       this second paint the pad keeps whatever the fallback drew, and since the exported
+       PNG is taken from this same canvas, the record would carry the fallback too. */
+    if (!useTypedSignature || !name) return;
+    let cancelled = false;
+    void loadSignatureFont(name).then(() => {
+      if (!cancelled) setupCanvas();
+    });
+    return () => { cancelled = true; };
   }, [useTypedSignature, fullName, setupCanvas]);
 
   /* Success is the one outcome in this document that has to be handed to the reader. The
@@ -495,6 +548,15 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!canSubmit || !selectedOption) return;
+
+    /* The export paints onto a NEW canvas, so it needs the script face just as much as the
+       pad did, and there is a real window where it would not have it: type a name, and hit
+       Sign before the webfont finishes downloading. The pad and the export would agree at
+       that instant, both showing the fallback, so nothing would look wrong; then the pad
+       would repaint into script a moment later and the record would keep the fallback for
+       good. Awaiting here costs nothing once the font is cached, which it is by the time
+       anybody has finished filling in three fields. */
+    if (useTypedSignature) await loadSignatureFont(trimmedName);
 
     const drawing = useTypedSignature
       ? exportTypedSignature(trimmedName)

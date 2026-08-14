@@ -26,8 +26,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Azeret Mono is the Mono Index design's only family and is needed for first paint
-         on / and /projects. The rest serve the older /freelance and /talk pages. -->
-    <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+         on / and /projects. The rest serve the older /freelance and /talk pages.
+         Dancing Script is used in exactly one place, the typed-name signature on a proposal,
+         where it is painted onto a canvas rather than set as text. It is loaded here rather
+         than lazily with the proposal route on purpose: a canvas silently falls back to a
+         default face if the font is not ready when it draws, which would put plain text on
+         the pad and script in the recorded image, or the reverse. -->
+    <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Dancing+Script:wght@600&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Anti-flash: settle the theme before first paint.
          No saved choice means follow the operating system, which is what ThemeContext
          also does on mount. If these two disagree the page flashes the wrong theme. -->

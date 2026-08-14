@@ -15,6 +15,9 @@ NOTIFY_FROM = "proposals@jojishiotsuki.com"
 # counters have different lifetimes and very different consequences if one wipes the other.
 [[kv_namespaces]]
 binding = "SIGNATURES"
-# Created by `wrangler kv namespace create SIGNATURES`. That command prints an id. Paste it
-# between the quotes below and save. See README.md, step 2.
-id = ""
+# Created by `wrangler kv namespace create SIGNATURES` on 15 August 2026.
+# Note for next time: that command cannot be run from THIS folder while the id below is
+# empty, because wrangler validates the whole config before running any command and an
+# empty id fails validation. Run it from any folder without a wrangler.toml, then paste the
+# id here. See README.md, step 2.
+id = "fb22964770af4bc9805948a53afdfaf0"

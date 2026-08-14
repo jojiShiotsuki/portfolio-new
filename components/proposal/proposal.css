@@ -341,10 +341,18 @@
 }
 .mono .proposal .pr-body { margin-top: clamp(1.5rem, 3.5vw, 2.25rem) }
 
-/* The document column beside the contents rail. All it needs of its own is permission
-   to shrink: without min-width:0 a long unbroken string anywhere inside it would push
-   the grid track wider than its share and drag the rail off the screen. */
-.mono .proposal .pr-main { min-width: 0 }
+/* The document column beside the contents rail.
+
+   min-width:0 is permission to shrink: without it a long unbroken string anywhere
+   inside would push the grid track wider than its share and drag the rail off screen.
+
+   max-width is what stops a section rule running wider than the words underneath it.
+   The cap used to sit on each text block instead, so .pr-sec drew its hairline across
+   the full column while every paragraph beneath stopped at the measure: 349px of rule
+   over nothing at 1024, 418px at 1099. Capping the column instead means the rule ends
+   where the text ends at every width, and it costs no media query, because above
+   1100px --pr-measure is already 100% and this resolves to no cap at all. */
+.mono .proposal .pr-main { min-width: 0; max-width: var(--pr-measure) }
 
 /* ---------------------------------------------------------------- quotes */
 /* The client quotes band, sat directly under the opening letter. The figure inside it
@@ -711,6 +719,14 @@
    in the full-strength ink rule rather than the hairline grey. */
 .mono .proposal .pr-sign {
   margin-block: clamp(1rem, 3vw, 2rem) var(--gap);
+  /* A cap, unlike the prose around it. Once the document was allowed to use the width
+     of the screen this block followed it to 1366px at 1920, which made the signature
+     pad 1290 wide against roughly 190 tall: a letterbox nobody can sign a name into
+     with a mouse, and a form whose two name fields ran 620px each for input that is
+     never longer than a few words. 60rem holds it near the proportions the block was
+     designed and reviewed at. Below 1100px the column is already narrower than this,
+     so the cap does nothing there and no media query is needed. */
+  max-width: 60rem;
   padding: clamp(1.25rem, 4vw, 2.25rem);
   border: 1px solid var(--ink);
 }
@@ -1136,6 +1152,47 @@
   /* The bar is pinned to the viewport, so it has to be told about the rail too or it
      runs underneath it. */
   .mono .proposal .pr-actions { left: var(--pr-rail) }
+
+  /* ------------------------------------------------ the document's own width
+
+     Measured at 1920 before this block existed: the sheet was 1120px, the section
+     rules inside it ran 1014px, and every paragraph under those rules stopped at
+     601px. So 413px of hairline hung over nothing at the end of every section and
+     the sheet's own border sat a further 466px out past that. It read as a document
+     with its right hand side cut off, which is what it was.
+
+     The answer is not a longer line at the old size. It is to let the sheet use the
+     screen, drop the reading cap so the words reach the rules drawn around them, and
+     put the type up to 16px so the longer line stays comfortable to read.
+
+     All of it is gated at 1100px, the width where the rail goes fixed. Below that the
+     sheet is already close to the full window and nothing here applies. */
+  .mono .proposal .sheet {
+    max-width: none;
+    /* A true 10% of the window down the right hand side. On the left the rail is
+       15.5rem, which is wider than 10% of any screen this rule can reach, so the
+       margin collapses to zero and the document starts at the rail's edge. The max()
+       is what keeps that correct if the rail is ever narrowed. */
+    margin-left: max(0px, calc(10vw - var(--pr-rail)));
+    margin-right: 10vw;
+  }
+
+  .mono .proposal {
+    --pr-measure: 100%;
+    font-size: 16px;
+  }
+
+  /* Blocks carrying their own narrower cap. Left alone they stop short of everything
+     around them, which is the same defect this block exists to remove, one level in.
+     The cover's title, subtitle and fact list are deliberately NOT here: that is a
+     title page and it is meant to sit left against open space. */
+  .mono .proposal .pr-callout,
+  .mono .proposal .pr-kv { max-width: none }
+
+  /* The bar's controls line up with the sheet's right edge and the sheet just moved.
+     10vw reaches the sheet's margin and --pad carries it in to the text edge, which is
+     what the old max() against 70rem was doing. */
+  .mono .proposal .pr-actions { --pr-gutter: calc(10vw + var(--pad)) }
 }
 
 /* -------------------------------------------------------- reduced motion */
@@ -1307,10 +1364,22 @@
   .mono .proposal :has(> .pr-toc) { display: block }
   .mono .proposal .sheet {
     max-width: none;
+    /* The screen rule at 1100px holds the sheet off both edges by 10vw. A print surface
+       is narrower than 1100px in CSS pixels so it never matches, but these are reset
+       anyway: if that gate is ever widened or a printer reports a wide page box, the
+       margins would silently take 20% off the printed measure of every page. */
+    margin-left: 0;
+    margin-right: 0;
     padding-inline: 0;
     border-left: 0;
     border-right: 0;
   }
+  /* The column cap is a SCREEN fix and must not reach paper. A print surface is under
+     1100px so --pr-measure is still 66ch there, which capped the printed column at
+     572px of a 786px A4 page: a 214px empty gutter down the right of all thirteen
+     pages, and a silent change to a PDF that had already been reviewed and signed off.
+     Print keeps the full page width it has always had. */
+  .mono .proposal .pr-main { max-width: none }
 
   /* Keep together only the things that fit on a sheet.
      .pr-sec and .pr-invest used to be in this list and both are routinely taller than an

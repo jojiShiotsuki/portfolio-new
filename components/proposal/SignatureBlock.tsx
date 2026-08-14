@@ -838,8 +838,18 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
               focus blurs it to <body>, which drops a keyboard user at the top of a
               12,000px document at the exact moment the answer arrives. handleSubmit
               refuses a second press instead. */}
-          <button type="submit" className="pr-sign-submit" disabled={submitDisabled}>
-            {state === 'submitting' ? 'Signing' : 'Sign and accept'}
+          {/* The spinner is aria-hidden and carries no text of its own. What a screen
+              reader gets is the live region below, which already announces "Signing your
+              acceptance now": a second announcement from inside the button would say the
+              same thing twice, half a second apart. The word stays next to it because a
+              lone spinner on a page this quiet reads as something being wrong. */}
+          <button type="submit" className="pr-sign-submit" disabled={submitDisabled} aria-busy={state === 'submitting'}>
+            {state === 'submitting' ? (
+              <>
+                <span className="pr-sign-spin" aria-hidden="true" />
+                Signing
+              </>
+            ) : 'Sign and accept'}
           </button>
         </form>
       )}

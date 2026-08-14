@@ -967,6 +967,54 @@
   .mono .proposal .pr-sign-submit { width: 100% }
 }
 
+/*
+  The spinner shown while a signature is in flight.
+
+  A word alone was not enough here. The button already said "Signing", but a text swap on a
+  button that keeps its size and colour is easy to miss, and this is the one action on the
+  page where a person needs to know something is happening: the request can take a couple of
+  seconds on a good connection and up to twenty on a bad one, and the alternative to knowing
+  is pressing the button again.
+
+  Drawn as a border rather than an image or a background, for the same reason as every other
+  mark in this document: Chrome prints with background graphics off. This one is hidden in
+  print anyway, but a spinner that survives into a PDF as a stray grey ring would be worse
+  than one that does not, so it is drawn the safe way regardless.
+
+  It borrows the button's own text colour via currentColor, so it needs no colour of its own
+  and follows the hover and dark states without a single extra rule.
+*/
+.mono .proposal .pr-sign-spin {
+  flex: 0 0 auto;
+  width: .85em;
+  height: .85em;
+  border: 2px solid currentColor;
+  /* One quadrant left open is what makes the rotation visible on a ring this small. */
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: pr-sign-spin 640ms linear infinite;
+}
+
+@keyframes pr-sign-spin {
+  to { transform: rotate(360deg) }
+}
+
+/*
+  Reduced motion gets a pulse rather than a rotation. It is deliberately NOT nothing: the
+  block below flattens every transition in this file, and a person who asked for less motion
+  still needs to be told the button is working, or they are the one most likely to press it
+  twice. Opacity alone moves nothing across the screen, which is the part that causes harm.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .mono .proposal .pr-sign-spin {
+    animation: pr-sign-fade 1.4s ease-in-out infinite;
+  }
+  @keyframes pr-sign-fade {
+    0%, 100% { opacity: 1 }
+    50% { opacity: .35 }
+  }
+}
+
 .mono .proposal .pr-sign-note {
   margin-top: 1.15rem;
   max-width: 62ch;

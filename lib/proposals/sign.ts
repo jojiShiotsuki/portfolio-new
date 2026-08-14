@@ -26,8 +26,15 @@ export const SIGN_ENDPOINT = 'https://proposal-sign.joji-dev.workers.dev/sign';
 export type SignatureRequest = SignaturePayload & { typedSignature?: boolean };
 
 /* Long enough for a cold worker to wake up, short enough that a dead network shows as an
-   error rather than as a button that spins forever. */
+   error rather than as a button that spins forever.
+
+   This is PER ATTEMPT and there are two, so a total dead network now takes about 21
+   seconds to report rather than 20. That is the price of the retry and it is only paid by
+   someone who was going to be told it failed anyway. */
 const TIMEOUT_MS = 20000;
+
+/* The pause between the two attempts. */
+const RETRY_DELAY_MS = 600;
 
 /* Every error the client sees ends with a way out that does not depend on this page
    working, because if they are reading it, this page is the thing that failed. */
@@ -44,25 +51,57 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
  * client can act on, because the caller renders it directly.
  */
 export async function submitSignature(payload: SignatureRequest): Promise<SignatureResult> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  /*
+    One post, with one silent retry if the connection itself fails.
 
-  let response: Response;
-  try {
-    response = await fetch(SIGN_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    });
-  } catch {
-    clearTimeout(timer);
+    This exists because of a measured fault rather than a theoretical one. Reaching the
+    worker from Joji's network repeatedly failed at the TCP level on the FIRST attempt and
+    then succeeded in about 26ms on the second, on the same URL, seconds apart. Left alone
+    that is a client staring at a spinner for twenty seconds and then being told nothing was
+    recorded, when pressing the same button again would have worked. A worker cold start is
+    single digit milliseconds, so a twenty second failure is never the server thinking.
+
+    Only a CONNECTION failure is retried. A response, of any status, is an answer from the
+    worker and is returned as it is. Retrying a real response is how a signature gets
+    recorded twice: the record is written before the reply is sent, so a 500 read as
+    "try again" would store two acceptances for one signature.
+
+    The retry is silent on purpose. The client is told what happened only once both attempts
+    have failed, because a message that appears and then resolves itself teaches a person to
+    distrust the next one.
+  */
+  let response: Response | null = null;
+
+  for (let attempt = 0; attempt < 2 && response === null; attempt += 1) {
+    if (attempt > 0) {
+      // Long enough for a failed route to be re-resolved, short enough to be unnoticed
+      // inside a twenty second budget the person is already waiting out.
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    try {
+      response = await fetch(SIGN_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+    } catch {
+      /* Connection refused, DNS, or the timeout above firing. Nothing reached the worker,
+         so nothing was written and posting the identical body again is safe. */
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  if (response === null) {
     return {
       ok: false,
       error: `The signature could not be sent, so nothing has been recorded. Check your connection and press Sign again. ${FALLBACK}`,
     };
   }
-  clearTimeout(timer);
 
   let parsed: unknown;
   try {

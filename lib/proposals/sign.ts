@@ -64,6 +64,77 @@ export interface SignedStatus {
 }
 
 /*
+  The signer's own copy of what they signed, kept on their own device.
+
+  The server deliberately does not return the name, email or signature image: /status is
+  reachable by anyone holding the link, and a signature image is the last thing to hand out
+  on those terms. That is right, and it left the person who actually signed with a thinner
+  receipt after a reload than the one they had a second earlier, and different words under
+  it, which reads as the page changing its mind about what happened.
+
+  So the browser that signed keeps its own copy. Nothing new is exposed: it is their
+  signature, on their machine, from their own act. It is only ever trusted when the server
+  agrees a signature exists AND the reference matches, so a stale or tampered local copy
+  cannot invent an acceptance or contradict the record.
+*/
+export interface LocalSignature {
+  reference: string;
+  optionId: string;
+  typedName: string;
+  typedTitle: string;
+  email: string;
+  drawing: string;
+  signedAt: string;
+}
+
+const localKey = (slug: string): string => `pr-signed:${slug}`;
+
+/** Never throws. Storage can be full, disabled, or absent in private modes. */
+export function rememberSignature(slug: string, record: LocalSignature): void {
+  try {
+    localStorage.setItem(localKey(slug), JSON.stringify(record));
+  } catch {
+    /* The receipt on screen is already correct. This only affects a later reload, and the
+       server-backed fallback still shows the acceptance and its reference. */
+  }
+}
+
+/**
+ * The local copy, but only if it is the same signature the server is holding.
+ *
+ * `expectedReference` is the server's. A mismatch means this device's copy belongs to some
+ * earlier signature that is no longer the record, so it is discarded rather than shown.
+ */
+export function recallSignature(slug: string, expectedReference: string): LocalSignature | null {
+  try {
+    const raw = localStorage.getItem(localKey(slug));
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (!isRecord(parsed)) return null;
+    if (typeof parsed.reference !== 'string' || parsed.reference !== expectedReference) {
+      localStorage.removeItem(localKey(slug));
+      return null;
+    }
+    const str = (k: string): string => (typeof parsed[k] === 'string' ? (parsed[k] as string) : '');
+    /* Without the image this path has nothing the server did not already provide, so it
+       falls back rather than rendering a receipt with an empty signature. */
+    const drawing = str('drawing');
+    if (!drawing) return null;
+    return {
+      reference: parsed.reference,
+      optionId: str('optionId'),
+      typedName: str('typedName'),
+      typedTitle: str('typedTitle'),
+      email: str('email'),
+      drawing,
+      signedAt: str('signedAt'),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/*
   Short, and it has to be. This runs while a client is waiting to read the proposal, and
   the answer only changes whether they see a receipt or a signing form. Being slow to say
   "not signed" would be worse than being wrong about it, because the lock catches a second

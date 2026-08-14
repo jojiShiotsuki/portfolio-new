@@ -1,6 +1,11 @@
 import React from 'react';
 import type { ProposalOption, ProposalSignature } from '../../lib/proposals/types';
-import { submitSignature, fetchSignedStatus } from '../../lib/proposals/sign';
+import {
+  submitSignature,
+  fetchSignedStatus,
+  rememberSignature,
+  recallSignature,
+} from '../../lib/proposals/sign';
 
 interface SignatureBlockProps {
   /** Its number in the document, derived in ProposalPage so this cannot disagree. */
@@ -276,6 +281,17 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
   /* The receipt takes focus on success, so a keyboard or screen reader user lands on the
      confirmation instead of at the top of a 12,000px document. */
   const doneRef = React.useRef<HTMLDivElement | null>(null);
+  /*
+    Whether this page reached its signed state by somebody pressing the button, as opposed
+    to opening a proposal that was already signed.
+
+    Only the first deserves to move focus. It used to be inferred from the already-signed
+    flag, which broke the moment a device could restore its own full receipt on load: that
+    path is indistinguishable from a fresh signature by its state alone, so it would have
+    thrown the reader to the bottom of a 12,000px document on arrival. The distinction is
+    an event, so it is recorded when the event happens rather than guessed from the result.
+  */
+  const cameFromSubmitRef = React.useRef(false);
 
   const [hasInk, setHasInk] = React.useState(false);
   const [useTypedSignature, setUseTypedSignature] = React.useState(false);
@@ -355,6 +371,32 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         return;
       }
       const recorded = options.find(o => o.id === status.optionId) ?? null;
+
+      /*
+        If this is the device that signed, give back the receipt it had.
+
+        Only when the reference matches the server's, so a local copy can never invent an
+        acceptance or disagree with the record: the server decides THAT it was signed and
+        which option, and the device only fills in the parts the server will not hand out.
+        The result is that a reload changes nothing at all for the person who signed, which
+        is the whole point. A different device, or cleared storage, still gets the reduced
+        receipt and the reply-to-email line.
+      */
+      const mine = recallSignature(slug, status.reference);
+      if (mine) {
+        setReference(status.reference);
+        setSignedOption(recorded);
+        setSignedName(mine.typedName);
+        setSignedTitle(mine.typedTitle);
+        setSignedEmail(mine.email);
+        setSignedImage(mine.drawing);
+        setSignedAt(mine.signedAt || status.serverTime || '');
+        if (recorded) onSelectOption(recorded.id);
+        onSigned();
+        setState('done');
+        return;
+      }
+
       setReference(status.reference);
       setSignedOption(recorded);
       setSignedAt(status.serverTime ?? '');
@@ -494,8 +536,8 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
       the reader past the entire document to the last section of a thing they came to read.
       That is the load-time check quietly undoing the reason the document exists.
     */
-    if (state === 'done' && alreadySigned !== 'onLoad') doneRef.current?.focus();
-  }, [state, alreadySigned]);
+    if (state === 'done' && cameFromSubmitRef.current) doneRef.current?.focus();
+  }, [state]);
 
   /* Ink drawn in one theme is invisible in the other, so a theme change repaints it in
      the new token colour. The class carries no colour of its own, so this is the only
@@ -734,6 +776,7 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
         setSignedImage('');
         setSignedAt(result.recordedAt ?? '');
         setAlreadySigned('onAttempt');
+        cameFromSubmitRef.current = true;
         setState('done');
         onSigned();
         return;
@@ -748,6 +791,19 @@ const SignatureBlock: React.FC<SignatureBlockProps> = ({
          that was sent, and the pad it came from is about to be unmounted. */
       setSignedImage(drawing);
       setSignedAt(clientTime);
+      /* Kept on this device so a reload gives back this exact receipt rather than the
+         thinner server-only one. Written after the server has accepted, never before, so
+         nothing is remembered that was not actually recorded. */
+      rememberSignature(slug, {
+        reference: result.reference,
+        optionId: selectedOption.id,
+        typedName: trimmedName,
+        typedTitle: roleTitle.trim(),
+        email: trimmedEmail,
+        drawing,
+        signedAt: clientTime,
+      });
+      cameFromSubmitRef.current = true;
       setState('done');
       onSigned();
       return;
